@@ -92,7 +92,7 @@ Route::group(['prefix' => 'v2/seller', 'middleware' => ['app_language', 'auth:sa
         Route::POST('generate-quote', 'store');
         Route::post('quote/view', 'view');
         Route::get('quotationInvoice',  'quotation_invoice_download');
-        Route::get('quote/view/{id}', 'quoteView')->name('quote-view-id');
+        Route::post('quote/savedview', 'save_quote_view')->name('save_quote_view');
         Route::post('quote/sendMail', 'sendMail')->name('quotation.sendMail');
 
         Route::POST('saved-quote', 'savedquote')->name('quotation.savedquote');
