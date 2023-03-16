@@ -30,6 +30,9 @@ use Response;
 class GenerateQuoteController extends Controller
 {
     public function store(Request $request){
+        $product_id = $request->id;
+        $variant = $request->variant;
+        $quantity= $request->quantity;
         if (auth()->user() == null) {
             return response()->json([
                 'result' => false,
@@ -47,7 +50,7 @@ class GenerateQuoteController extends Controller
             $data['user_id'] = $user_id;
             $carts = Quotation::where('user_id', $user_id)->whereNull('quotation_id')->get();
         }
-        if ($product == 0) {
+        if ($product == '') {
             return response()->json(['result' => false, 'message' => "Invalid Product code"], 200);
         }
 
@@ -58,26 +61,18 @@ class GenerateQuoteController extends Controller
         $tax = 0;
         if ($product->auction_product == 0) {
 
-            if ($request->has('color')) {
-                $str = $request['color'];
-            }
-            if ($product->digital != 1) {
-                //Gets all the choice values of customer choice option and generate a string like Black-S-Cotton
-                foreach (json_decode(Product::find($request->id)->choice_options) as $key => $choice) {
-                    if ($str != null) {
-                        $str .= '-' . str_replace(' ', '', $request['attribute_id_' . $choice->attribute_id]);
-                    } else {
-                        $str .= str_replace(' ', '', $request['attribute_id_' . $choice->attribute_id]);
-                    }
-                }
-            }
 
-            $data['variation'] = $str;
 
-            $product_stock = $product->stocks->where('variant', $str)->first();
+            $data['variation'] = $variant;
+            if ($variant == ''){
+                $product_stock = $product->stocks->where('product_id', $product_id)->first();
+                $price = $product->unit_price;
+            }
+            else {
+            $product_stock = $product->stocks->where('variant', $variant)->first();
             $price = $product_stock->price;
-
-            if ($product->wholesale_product) {
+        }
+        if ($product->wholesale_product) {
                 $wholesalePrice = $product_stock->wholesalePrices->where('min_qty', '<=', $request->quantity)->where('max_qty', '>=', $request->quantity)->first();
                 if ($wholesalePrice) {
                     $price = $wholesalePrice->price;
@@ -147,28 +142,15 @@ class GenerateQuoteController extends Controller
             if ($carts && count($carts) > 0) {
                 $foundInCart = false;
 
+
                 foreach ($carts as $key => $cartItem) {
                     $cart_product = Product::where('id', $cartItem['product_id'])->first();
-                    // if($cart_product->auction_product == 1){
-                        //     return array(
-                            //         'status' => 0,
-                            //         'cart_count' => count($carts),
-                    //         'modal_view' => view('frontend.partials.auctionProductAlredayAddedCart')->render(),
-                    //         'nav_cart_view' => view('frontend.partials.cart')->render(),
-                    //     );
-                    // }
 
                     if ($cartItem['product_id'] == $request->id) {
-                        $product_stock = $cart_product->stocks->where('variant', $str)->first();
+
                         $quantity = $product_stock->qty;
-                        // if($quantity < $cartItem['quantity'] + $request['quantity']){
-                            //     return array(
-                                //         'status' => 0,
-                                //         'cart_count' => count($carts),
-                                //         'modal_view' => view('frontend.partials.outOfStockCart')->render(),
-                                //         'nav_cart_view' => view('frontend.partials.cart')->render(),
-                                //     );
-                                // }
+
+
                                 if (($str != null && $cartItem['variation'] == $str) || $str == null) {
                                     $foundInCart = true;
 
@@ -187,6 +169,7 @@ class GenerateQuoteController extends Controller
                         }
                     }
                 }
+               // dd($data);
                 if (!$foundInCart) {
                    Quotation::create($data);
                 }
@@ -232,8 +215,9 @@ class GenerateQuoteController extends Controller
                 $carts = Quotation::where('temp_user_id', $temp_user_id)->whereNull('quotation_id')->get();
             }
             return response()->json([
-                'result' => false,
-                'cart_count' => count($carts),]);
+                'result' => true,
+                'message' => translate('Product added to cart successfully')
+            ]);
         }
     }
 
@@ -316,21 +300,21 @@ class GenerateQuoteController extends Controller
                             $IGST_total += $cartItem->tax * $cartItem['quantity'];
                         }
 
-                      $quotationlist[] = array('quotation_ids'              =>  intval($cartItem['id']),
+                      $quotationlist[] = array('id'              =>  intval($cartItem['id']),
                                                 'owner_id'                  =>intval($cartItem['owner_id']),
                                                 'user_id'                   =>intval($cartItem['user_id']),
                                                 'product_id'                =>intval($cartItem['product_id']),
                                                 'product_thumbnail_image'   =>   uploaded_asset($product['thumbnail_img']),
                                                 'product_name'              =>   $product_name_with_choice,
                                                 'variation'                 =>   $cartItem['variation'],
-                                                'price'                     => $cartItem['price'],
+                                                'price'                     => (double)$cartItem['price'],
                                                 'shipping_cost'             =>$cartItem['shipping_cost'],
                                                 'currency_symbol'           =>$currency_symbol,
-                                                'tax'                       =>single_price($CGST_total+$SGST_total+$IGST_total),
-                                                'cartprice'                 => cart_product_price($cartItem, $product, true, false),
+                                                'tax'                       =>intval($CGST_total+$SGST_total+$IGST_total),
+                                                'cartprice'                 => (double)cart_product_price($cartItem, $product, true, false),
                                                 'quantity'                  =>$product->stocks['0']['qty'],
                                                 'lower_limit'               =>$product->min_qty,
-                                                'upper_limit'               =>intval($product->stocks->where('variant', $cartItem['variation'])->first()->qty),
+                                                'upper_limit'               =>'5', //static
                                         // 'cgst'                      =>$CGST,
                                         // 'cgst_amount'               =>$CGST_Amount,
                                         // 'cgst_total'                => $CGST_total,
@@ -394,23 +378,20 @@ class GenerateQuoteController extends Controller
 
     public function savedquote(Request $request){
 
-
-
-        if (auth()->user() != null) {
+        $quotation_ids = explode(",", $request->quotation_ids);
+       // $email =Auth::user()->email;
+        $i=0;
+        foreach($quotation_ids as $quotation){
             $user_id = Auth::user()->id;
             $email = Auth::user()->email;
-            if(isset($request->quotation_ids) && is_array($request->quotation_ids)){
+            if(isset($quotation_ids[$i]) && is_array($quotation_ids)){
                 $carts = Quotation::where('user_id', $user_id)->whereNull('quotation_id')->get();
             }else{
-                $carts = Quotation::where('user_id', $user_id)->where('quotation_id',$request->quotation_ids)->get();
+                $carts = Quotation::where('user_id', $user_id)->where('quotation_id',$quotation_ids[$i])->get();
             }
-            // old flow
-            // $carts = Quotation::where('user_id', $user_id)->whereNull('quotation_id')->get();
-        } else {
-            $temp_user_id = $request->session()->get('temp_user_id1');
-            $email =  $request->email;
-            $carts = Quotation::where('temp_user_id', $temp_user_id)->whereNull('quotation_id')->get();
-        }
+
+                $i++;
+
         if (empty($email)) {
 
             return Response::json(['error' => 1,'message' => 'Please enter email'], 404);
@@ -428,9 +409,10 @@ class GenerateQuoteController extends Controller
         $taxAvailable = checkAuthUserAddress();
         $quotationOtherDetails['taxAvailable'] = $taxAvailable;
         // get quotation estimate number
-        if(isset($request->quotation_ids) && $request->quotation_ids > '0' && !is_array($request->quotation_ids)){
+        if(isset($quotation_ids[$i]) && $quotation_ids[$i] > '0' && !is_array($quotation_ids)){
             $quotationOtherDetails['quotation_estimate_number'] = (!empty($carts[0]->quotation_estimate_number) ) ? $carts[0]->quotation_estimate_number : "";
         }
+
         // Get User address details
         $addressDetails = getUserAddressDetails();
         $quotationOtherDetails['state_id'] = (!empty($addressDetails) && !empty($addressDetails['state_id'])) ? $addressDetails['state_id'] : "";
@@ -444,19 +426,26 @@ class GenerateQuoteController extends Controller
 
         $array['quotationOtherDetails'] = $quotationOtherDetails;
 
+
         try {
             $max_quotation_id = \DB::table('quotations')->max('quotation_id');
+
             if (auth()->user() != null) {
-                if(isset($request->quotation_ids) && is_array($request->quotation_ids)){
+
+                if(isset($quotation_ids[$i]) && is_array($quotation_ids)){
 
                     // TODO: Ticket(0000255) - Update estimate number in business settings & quotation table
                    $estimateNumber = updateQuotationEstimateNumber();
+                   $quotationid = $quotation_ids[$i];
+                   //dd($estimateNumber);
+
 
                     $user_id = Auth::user()->id;
-                    $carts = Quotation::where('user_id', $user_id)->whereNull('quotation_id')->whereIn('id',$request->quotation_ids)->update(['quotation_id' => $max_quotation_id+1,'quote_total' => $request->total,'quotation_estimate_number' => $estimateNumber]);
-
+                    $carts = Quotation::where('user_id', $user_id)->whereNull('quotation_id')->where('id',$quotationid)->update(['quotation_id' => $max_quotation_id+1,'quote_total' => $request->total,'quotation_estimate_number' => $estimateNumber]);
+                   // dd($carts);
                 }
-                if(isset($request->quotation_ids) && $request->quotation_ids > '0' && !is_array($request->quotation_ids)){
+
+                if(isset($quotation_ids[$i]) && $quotation_ids[$i] > '0' && !is_array($quotation_ids)){
                     Mail::to($email)->queue(new QuotationMail($array));
                 }
 
@@ -464,10 +453,6 @@ class GenerateQuoteController extends Controller
 
                 // $user_id = Auth::user()->id;
                 // $carts = Quotation::where('user_id', $user_id)->whereNull('quotation_id')->whereIn('id',$request->quotation_ids)->update(['quotation_id' => $max_quotation_id+1,'quote_total' => $request->total]);
-            } else {
-                Mail::to($email)->queue(new QuotationMail($array));
-                $temp_user_id = $request->session()->get('temp_user_id1');
-                $carts = Quotation::where('temp_user_id', $temp_user_id)->whereNull('quotation_id')->whereIn('id',$request->quotation_ids)->update(['quotation_id' => $max_quotation_id+1,'quote_total' => $request->total]);
             }
             return response()->json([
                 'result' => true,
@@ -483,28 +468,29 @@ class GenerateQuoteController extends Controller
 
         }
     }
+    }
 
 
     public function quoteupdate(Request $request){
-       // dd($request->input());
 
+       $quotation_ids = explode(",", $request->id);
+       $quotation_quantities = explode(",", $request->quantities);
 
-        $cartItem = Quotation::findOrFail($request->id);
-
-        $quotationlist = array();
-
-        if ($cartItem['id'] == $request->id) {
-            $product = Product::find($cartItem['product_id']);
-            $product_stock = $product->stocks->where('variant', $cartItem['variation'])->first();
+       if(!empty($quotation_ids)){
+        $i = 0;
+        foreach ($quotation_ids as $quotation_id) {
+            $cartItem = Quotation::findOrFail($quotation_ids[$i]);
+            if($cartItem == ''){
+                return response()->json(['result' => false, 'message' => translate('Invalid Quotation id')], 200);
+            }
+            $product = Product::where('id', $cartItem['product_id'])->first();
+            if($product->variant_product == '1'){
+                $product_stock = $product->stocks->where('variant', $cartItem['variation'])->first();
+            }else{
+                $product_stock = $product->stocks->where('product_id', $product->id)->first();
+            }
             $quantity = $product_stock->qty;
-
             $price = $product_stock->price;
-
-
-
-            //$price = $product_stock->price;
-
-            //discount calculation
             $discount_applicable = false;
 
             if ($product->discount_start_date == null) {
@@ -515,7 +501,6 @@ class GenerateQuoteController extends Controller
             ) {
                 $discount_applicable = true;
             }
-
             if ($discount_applicable) {
                 if ($product->discount_type == 'percent') {
                     $price -= ($price * $product->discount) / 100;
@@ -524,86 +509,31 @@ class GenerateQuoteController extends Controller
                 }
             }
 
-            if ($quantity >= $request->quantity) {
-                if ($request->quantity >= $product->min_qty) {
-                    $cartItem['quantity'] = $request->quantity;
+            if ($quantity >= $quotation_quantities[$i]) {
+                if ($quotation_quantities[$i] >= $product->min_qty) {
+                    $cartItem['quantity'] =  $quotation_quantities[$i];
                 }
             }
-
             if ($product->wholesale_product) {
-                $wholesalePrice = $product_stock->wholesalePrices->where('min_qty', '<=', $request->quantity)->where('max_qty', '>=', $request->quantity)->first();
+                $wholesalePrice = $product_stock->wholesalePrices->where('min_qty', '<=', $quotation_quantities[$i])->where('max_qty', '>=', $quotation_quantities[$i])->first();
                 if ($wholesalePrice) {
                     $price = $wholesalePrice->price;
                 }
             }
-            // $cartItem['tax1_amount'] =(($price * $cartItem['tax1']) / 100);
-            // $cartItem['tax2_amount'] =(($price * $cartItem['tax2']) / 100);
-            // $cartItem['price'] = $price +  $cartItem['tax1_amount'] +  $cartItem['tax2_amount'];
+            //dd($cartItem);
             $cartItem['price'] = $price;
-
-            dd($cartItem);
             $cartItem->save();
-        }
-
-        if (auth()->user() != null) {
-            $user_id = Auth::user()->id;
-            $carts = Quotation::where('user_id', $user_id)->whereNull('quotation_id')->get();
-        } else {
-            $temp_user_id = $request->session()->get('temp_user_id1');
-            $carts = Quotation::where('temp_user_id', $temp_user_id)->whereNull('quotation_id')->get();
-        }
-        $total = 0;
-        $subTotal = 0;
-        $IGST = 0;
-        $IGST_Amount = 0;
-        $IGST_total = 0;
-        $CGST_total = 0;
-        $SGST_total = 0;
+            $i++;
 
 
-        foreach ($carts as $key => $cartItem){
-            $product = Product::find($cartItem['product_id']);
-            $product_stock = $product->stocks->where('variant', $cartItem['variation'])->first();
-            $total = $total + ($cartItem['price']  + $cartItem['tax']) * $cartItem['quantity'];
-            $subTotal = $subTotal + ($cartItem['price']) * $cartItem['quantity'];
-            $product_name_with_choice = $product->getTranslation('name');
-            if ($cartItem['variation'] != null) {
-                $product_name_with_choice = $product->getTranslation('name').' - '.$cartItem['variation'];
-            }
-
-
-            $quotationlist[] = array('quotation_ids'      =>  $cartItem->id,
-            'thumbnail'                =>   uploaded_asset($product->thumbnail_img),
-          'product_name'                =>   $product_name_with_choice,
-            'price'                     => single_price($cartItem['price']),
-            'cartprice'                 => cart_product_price($cartItem, $product, true, false),
-            'quantity'                  =>$quantity,
-            'cgst'                      =>$cartItem->tax1,
-            'cgst_amount'               =>$cartItem->tax1_amount * $cartItem['quantity'],
-            'cgst_total'                =>  $CGST_total += $cartItem->tax1_amount * $cartItem['quantity'],
-            'sgst'                      =>$cartItem->tax2,
-            'sgst_amount'               =>$cartItem->tax2_amount * $cartItem['quantity'],
-            'sgst_total'                => $SGST_total += $cartItem->tax2_amount * $cartItem['quantity'],
-            'igst'                      =>$IGST,
-            'igst_amount'               =>$IGST_Amount,
-            'igst_total'                => $IGST_total,
-            'total'                     =>single_price(($cartItem['price'] ) * $cartItem['quantity']),
-            'subtotal'                  =>single_price($subTotal),
-            'totalcgst'                 => single_price($CGST_total),
-            'totalsgst'                 => single_price($SGST_total),
-            'totaligst'                 => single_price($IGST_total),
-            'overalltotal'              =>  single_price($total));
         }
 
 
+        return response()->json(['result' => true, 'message' => translate('Cart updated')], 200);
 
-        return response()->json([
-            'result' => true,
-            'cart_count'=>count($quotationlist),
-            'quotationlist' =>$quotationlist,
-
-        ]);
-
+       }else{
+        return response()->json(['result' => false, 'message' => translate('Quotation is empty')], 200);
+       }
 
     }
 
