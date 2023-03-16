@@ -90,7 +90,7 @@ Route::group(['prefix' => 'v2/seller', 'middleware' => ['app_language', 'auth:sa
      //Seller Package
      Route::controller(GenerateQuoteController::class)->group(function () {
         Route::POST('generate-quote', 'store');
-        Route::get('quote/view', 'view');
+        Route::post('quote/view', 'view');
         Route::get('quotationInvoice',  'quotation_invoice_download');
         Route::get('quote/view/{id}', 'quoteView')->name('quote-view-id');
         Route::post('quote/sendMail', 'sendMail')->name('quotation.sendMail');
