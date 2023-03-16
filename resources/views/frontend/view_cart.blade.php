@@ -84,23 +84,38 @@
                                 <ul class="list-group list-group-flush">
                                     @php
                                         $total = 0;
-                                        $subTotal = 0; 
+                                        $subTotal = 0;
                                     @endphp
                                     @foreach ($carts as $key => $cartItem)
                                         @php
                                             $product = \App\Models\Product::find($cartItem['product_id']);
+                                            if($product->variant_product == 0){
+                                                //single product
+                                                $product_stock = \App\Models\ProductStock::where('product_id',$product->id)->first();
+
+                                            }else{
+                                                //varient product
+                                                $product_stock = \App\Models\ProductStock::where('product_id',$product->id)->where('variant',$cartItem['variation'])->first();
+
+                                            }
+
                                             //$product_price = home_discounted_price2($product);
-                                            $product_price = discounted_variant_price($product,false);
-                                            $product_stock = $product->stocks->where('variant', $cartItem['variation'])->first();
+                                            $product_price = discounted_cart_variant_price($cartItem['variation'],$product,false);
+
                                             if(!empty($checkUserAddress)){
-                                                $total = $total + ($product_price) * $cartItem['quantity'];
+                                                //$total = $total + ($product_price) * $cartItem['quantity'];
+                                                $total = $total + ($product_price + $cartItem['tax']) * $cartItem['quantity'];
                                             }
                                             else{
-                                                $total = $total + ($product_price) * $cartItem['quantity'];
+                                                //$total = $total + ($product_price) * $cartItem['quantity'];
+                                                $total = $total + cart_product_price($cartItem, $product, false) * $cartItem['quantity'];
                                             }
-                                            
+
                                             //$total = $total + cart_product_price($cartItem, $product, false) * $cartItem['quantity'];
-                                            $subTotal = $subTotal + ($cartItem['price']) * $cartItem['quantity'];
+                                            $subTotal = $subTotal + ($product_price) * $cartItem['quantity'];
+
+
+
                                             $product_name_with_choice = $product->getTranslation('name');
                                             if ($cartItem['variation'] != null) {
                                                 $product_name_with_choice = $product->getTranslation('name') . ' - ' . $cartItem['variation'];
@@ -186,11 +201,11 @@
                                                         <span
                                                             class="fw-600 fs-16">{{ $cartItem->tax1_amount * $cartItem['quantity']}}</span>
                                                         @php
-                                                           $CGST_total += $cartItem->tax1_amount * $cartItem['quantity']; 
+                                                           $CGST_total += $cartItem->tax1_amount * $cartItem['quantity'];
                                                         @endphp
                                                     </div>
 
-                                                
+
                                                     <div class="col-lg col-4 order-2 order-lg-0 my-3 my-lg-0">
                                                         <span
                                                         class="opacity-60 fs-12 d-block d-lg-none">{{ translate('SGST %') }}</span>
@@ -226,7 +241,7 @@
                                                         @endphp
                                                     </div>
                                                 @endif
-                                                
+
                                                 <div class="col-lg col-4 order-3 order-lg-0 my-3 my-lg-0">
                                                     <span
                                                         class="opacity-60 fs-12 d-block d-lg-none">{{ translate('Total') }}</span>
