@@ -540,7 +540,7 @@
                    url: '{{ route('cart.addToCart') }}',
                    data: $('#option-choice-form').serializeArray(),
                    success: function(data){
-                       if(data.status == 1){
+                       if(data == 1){
 
                             $('#addToCart-modal-body').html(data.modal_view);
                             updateNavCart(data.nav_cart_view,data.cart_count);
