@@ -97,7 +97,7 @@ Route::group(['prefix' => 'v2/seller', 'middleware' => ['app_language', 'auth:sa
 
         Route::POST('saved-quote', 'savedquote')->name('quotation.savedquote');
         Route::POST('quoteadd', 'quoteupdate')->name('quotation.quoteupdate'); // use cart process
-        Route::POST('removequotation', 'removeQuotation')->name('quotation.removeQuotation'); // method name change delete
+        Route::delete('removequotation', 'removeQuotation')->name('quotation.removeQuotation'); // method name change delete
     });
 
 
