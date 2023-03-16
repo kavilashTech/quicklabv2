@@ -47,6 +47,9 @@ class GenerateQuoteController extends Controller
             $data['user_id'] = $user_id;
             $carts = Quotation::where('user_id', $user_id)->whereNull('quotation_id')->get();
         }
+        if ($product == 0) {
+            return response()->json(['result' => false, 'message' => "Invalid Product code"], 200);
+        }
 
         $data['product_id'] = $product->id;
         $data['owner_id'] = $product->user_id;
@@ -240,6 +243,7 @@ class GenerateQuoteController extends Controller
 
 
         //
+        $currency_symbol = currency_symbol();
         $savequotations = array();
         $quotation_expire = array();
         $quotationlist = array();
@@ -319,7 +323,7 @@ class GenerateQuoteController extends Controller
                                                 'product_thumbnail_image'   =>   uploaded_asset($product['thumbnail_img']),
                                                 'product_name'              =>   $product_name_with_choice,
                                                 'variation'                 =>   $cartItem['variation'],
-                                                'price'                     => translate('Price'),
+                                                'price'                     => $cartItem['price'],
                                                 'shipping_cost'             =>$cartItem['shipping_cost'],
                                                 'currency_symbol'           =>$currency_symbol,
                                                 'tax'                       =>single_price($CGST_total+$SGST_total+$IGST_total),
@@ -901,7 +905,11 @@ class GenerateQuoteController extends Controller
         ]);
     }
 
-
+    public function destroy($id)
+    {
+        Quotation::destroy($id);
+        return response()->json(['result' => true, 'message' => translate('Product is successfully removed from your Quotation')], 200);
+    }
 
 
 
