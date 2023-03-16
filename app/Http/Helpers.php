@@ -697,15 +697,66 @@ if (!function_exists('home_price2')) {
         }
     }
 }
+
+if (!function_exists('discounted_cart_variant_price')) {
+    function discounted_cart_variant_price($variation,$product, $formatted = true)
+    {
+
+
+        if($product->variant_product == 0){
+            //single product
+            $product_stock = ProductStock::where('product_id',$product->id)->first();
+
+        }else{
+            //varient product
+            $product_stock = ProductStock::where('product_id',$product->id)->where('variant',$variation)->first();
+
+        }
+
+        // get first variant price
+        if (Session::get('currency_code') == 'USD') {
+            $variantPrice = $product_stock->price;
+        } else {
+            $variantPrice = $product_stock->price;
+        }
+
+        $discount_applicable = false;
+
+        if ($product->discount_start_date == null) {
+            $discount_applicable = true;
+        } elseif (
+            strtotime(date('d-m-Y H:i:s')) >= $product->discount_start_date &&
+            strtotime(date('d-m-Y H:i:s')) <= $product->discount_end_date
+        ) {
+            $discount_applicable = true;
+        }
+
+        if ($discount_applicable) {
+            if ($product->discount_type == 'percent') {
+                $variantPrice -= ($variantPrice * $product->discount) / 100;
+            } elseif ($product->discount_type == 'amount') {
+                $variantPrice -= $product->discount;
+            }
+        }
+
+        if ($formatted) {
+            return format_price(convert_price($variantPrice));
+        } else {
+            return $variantPrice;
+        }
+    }
+}
+
+
 //TODO: get the product variant first price
 if (!function_exists('discounted_variant_price')) {
     function discounted_variant_price($product, $formatted = true)
     {
         // get first variant price
         if (Session::get('currency_code') == 'USD') {
-            $variantPrice = $product->stocks[0]['price']; 
+            $variantPrice = $product->stocks[0]['price'];
         } else {
-            $variantPrice = $product->stocks[0]['price']; 
+            $variantPrice = $product->stocks[0]['price'];
         }
 
         $discount_applicable = false;

@@ -162,6 +162,8 @@ class CartController extends Controller
                 }
             }
 
+
+
             //calculation of taxes
             $data['tax1'] =  0.00;
             $data['tax1_amount'] =  0.00;
@@ -207,6 +209,7 @@ class CartController extends Controller
 
 
             $cut_pr = round($price * $pproduct_tax / (100 + $pproduct_tax),2);
+
             $total_show_product_price = round($price - $cut_pr,2);
 
             $data['price'] = $total_show_product_price ;
@@ -265,6 +268,7 @@ class CartController extends Controller
                         }
                     }
                 }
+                //dd($data);
                 if (!$foundInCart) {
                     Cart::create($data);
                 }
