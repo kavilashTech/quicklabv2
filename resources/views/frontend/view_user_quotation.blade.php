@@ -36,15 +36,18 @@
                                 <ul class="list-group list-group-flush">
                                     @php
                                         $total = 0;
-                                        $subTotal = 0; 
+                                        $subTotal = 0;
                                     @endphp
                                     @foreach ($quotation as $key => $cartItem)
                                         @php
                                             $product = \App\Models\Product::find($cartItem['product_id']);
                                             $product_stock = $product->stocks->where('variant', $cartItem['variation'])->first();
                                             // $total = $total + ($cartItem['price'] + $cartItem['tax']) * $cartItem['quantity'];
-                                            $total = $total + cart_product_price($cartItem, $product, false) * $cartItem['quantity'];
-                                            $subTotal = $subTotal + ($cartItem['price']) * $cartItem['quantity'];
+                                            $product_price = discounted_cart_variant_price($cartItem['variation'],$product,false);
+                                           // $total = $total + cart_product_price($cartItem, $product, false) * $cartItem['quantity'];
+                                           $total = $total + ( $product_price - $cartItem['tax'] + $cartItem['tax']) * $cartItem['quantity'];
+                                            //$subTotal = $subTotal + ($cartItem['price']) * $cartItem['quantity'];
+                                            $subTotal = $subTotal + ($product_price - $cartItem['tax']) * $cartItem['quantity'];
                                             $product_name_with_choice = $product->getTranslation('name');
                                             if ($cartItem['variation'] != null) {
                                                 $product_name_with_choice = $product->getTranslation('name') . ' - ' . $cartItem['variation'];
@@ -61,7 +64,7 @@
                                                     </span>
                                                     <span class="d-block fs-14 opacity-60">{{ $product_name_with_choice }}</span>
                                                 </div>
-                                                    @php 
+                                                    @php
                                                         $priceWithoutTax = $cartItem['price'] - $cartItem['tax'];
                                                     @endphp
                                                 <div class="col-lg col-4 order-1 order-lg-0 my-3 my-lg-0">
@@ -118,10 +121,10 @@
                                                     <span
                                                         class="fw-600 fs-16">{{ $cartItem->tax1_amount * $cartItem['quantity']}}</span>
                                                     @php
-                                                       $CGST_total += $cartItem->tax1_amount * $cartItem['quantity']; 
+                                                       $CGST_total += $cartItem->tax1_amount * $cartItem['quantity'];
                                                     @endphp
                                                 </div>
-                                                
+
                                                 <div class="col-lg col-4 order-2 order-lg-0 my-3 my-lg-0">
                                                     <span
                                                     class="opacity-60 fs-12 d-block d-lg-none">{{ translate('SGST %') }}</span>
@@ -305,7 +308,7 @@
                     $('#getQuotationButton').show();
                     AIZ.plugins.notify('success', "Your quotation sent to email");
                 },
-                error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
                     $('.sendingMail').hide();
                     $('#getQuotationButton').show();
                     if(XMLHttpRequest?.responseJSON?.message){
@@ -313,7 +316,7 @@
                     } else{
                         AIZ.plugins.notify('danger', "Something went wrong");
                     }
-                }      
+                }
             });
         }
         // Country Code
