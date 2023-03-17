@@ -145,13 +145,14 @@
                                             $product_price = discounted_cart_variant_price($cartItem['variation'],$product,false);
                                             if(!empty($quotationOtherDetails['taxAvailable'])){
                                                 //$total = $total + (cart_product_price($cartItem, $product, false) + $cartItem['tax']) * $cartItem['quantity'];
-                                                $total = $total + ($product_price + $cartItem['tax']) * $cartItem['quantity'];
+                                                $total = $total + ($product_price - $cartItem['tax']) * $cartItem['quantity'];
                                             }else{
-                                                $total = $total + cart_product_price($cartItem, $product, false) * $cartItem['quantity'];
+                                                $total = $total + ( $product_price - $cartItem['tax'] + $cartItem['tax']) * $cartItem['quantity'];
 
                                             }
 
-                                            $subTotal = $subTotal + ($cartItem['price']) * $cartItem['quantity'];
+                                            //$subTotal = $subTotal + ($cartItem['price']) * $cartItem['quantity'];
+                                            $subTotal = $subTotal + ($product_price - $cartItem['tax']) * $cartItem['quantity'];
                                             $product_name_with_choice = $product->getTranslation('name');
                                             if ($cartItem['variation'] != null) {
                                                 $product_name_with_choice = $product->getTranslation('name') . ' - ' . $cartItem['variation'];

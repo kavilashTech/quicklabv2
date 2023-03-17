@@ -49,8 +49,9 @@
                                 @php
                                     $product = \App\Models\Product::find($cartItem['product_id']);
                                     $product_stock = $product->stocks->where('variant', $cartItem['variation'])->first();
-                                    $total = $total + ($cartItem['price']  + $cartItem['tax']) * $cartItem['quantity'];
-                                    $subTotal = $subTotal + ($cartItem['price']) * $cartItem['quantity'];
+                                    $product_price = discounted_cart_variant_price($cartItem['variation'],$product,false);
+                                    $total = $total + ( $product_price - $cartItem['tax'] + $cartItem['tax']) * $cartItem['quantity'];
+                                    $subTotal = $subTotal + ($product_price - $cartItem['tax']) * $cartItem['quantity'];
                                     $product_name_with_choice = $product->getTranslation('name');
                                     if ($cartItem['variation'] != null) {
                                         $product_name_with_choice = $product->getTranslation('name').' - '.$cartItem['variation'];

@@ -482,10 +482,11 @@ class GenerateQuoteController extends Controller
             $temp_user_id = $request->session()->get('temp_user_id1');
             $carts = Quotation::where('temp_user_id', $temp_user_id)->whereNull('quotation_id')->get();
         }
+        $taxAvailable = checkAuthUserAddress();
 
         return array(
             'cart_count' => count($carts),
-            'cart_view' => view('frontend.partials.quotation_details', compact('carts'))->render(),
+            'cart_view' => view('frontend.partials.quotation_details', compact('carts','taxAvailable'))->render(),
             'nav_cart_view' => view('frontend.partials.quotation')->render(),
         );
     }

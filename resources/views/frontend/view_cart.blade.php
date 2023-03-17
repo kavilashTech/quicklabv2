@@ -104,7 +104,7 @@
 
                                             if(!empty($checkUserAddress)){
                                                 //$total = $total + ($product_price) * $cartItem['quantity'];
-                                                $total = $total + ($product_price + $cartItem['tax']) * $cartItem['quantity'];
+                                                $total = $total + ($cartItem['price'] + $cartItem['tax']) * $cartItem['quantity'];
                                             }
                                             else{
                                                 //$total = $total + ($product_price) * $cartItem['quantity'];
@@ -112,7 +112,7 @@
                                             }
 
                                             //$total = $total + cart_product_price($cartItem, $product, false) * $cartItem['quantity'];
-                                            $subTotal = $subTotal + ($product_price) * $cartItem['quantity'];
+                                            $subTotal = $subTotal + ($product_price - $cartItem['tax']) * $cartItem['quantity'];
 
 
 
