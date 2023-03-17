@@ -104,7 +104,8 @@
 
                                             if(!empty($checkUserAddress)){
                                                 //$total = $total + ($product_price) * $cartItem['quantity'];
-                                                $total = $total + ($cartItem['price'] + $cartItem['tax']) * $cartItem['quantity'];
+                                                //$total = $total + ($cartItem['price'] + $cartItem['tax']) * $cartItem['quantity'];
+                                                $total = $total + ( $product_price - $cartItem['tax'] + $cartItem['tax']) * $cartItem['quantity'];
                                             }
                                             else{
                                                 //$total = $total + ($product_price) * $cartItem['quantity'];
