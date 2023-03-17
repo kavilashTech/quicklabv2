@@ -153,25 +153,59 @@ class GenerateQuoteController extends Controller
             if ($request['quantity'] == null) {
                 $data['quantity'] = 1;
             }
+
             foreach ($product->taxes as $product_tax) {
-                $tax_name = Tax::where('id', $product_tax->tax_id)->first();
-                if ($product_tax->tax_type == 'percent') {
+                $tax_name = Tax::where('id',$product_tax->tax_id)->first();
+
+                $pproduct_tax = $product_tax->tax;
+                $cut_pr = round($price * $pproduct_tax / (100 + $pproduct_tax),2);
+
+                if($product_tax->tax_type == 'percent'){
                     $tax += ($price * $product_tax->tax) / 100;
-                } elseif ($product_tax->tax_type == 'amount') {
-                    $tax += $product_tax->tax;
                 }
+               /* elseif($product_tax->tax_type == 'amount'){
+                    $tax += $product_tax->tax;
+                }*/
+
+                if(!empty($tax_name) && $tax_name->name == 'GST'){
+                    $data['tax'] = $cut_pr;
+                    $data['tax_percentage'] =  $product_tax->tax;
+                }
+
                 $splitTax = $product_tax->tax / 2;
-                if (!empty($tax_name) && $tax_name->name == 'GST') {
+                if(!empty($tax_name) && $tax_name->name == 'GST'){
                     $data['tax1'] =  $splitTax;
-                    $data['tax1_amount'] = (($price * $data['tax1']) / 100);
+                    $data['tax1_amount'] =(($cut_pr) / 2);
 
                     $data['tax2'] =  $splitTax;
-                    $data['tax2_amount'] = (($price * $data['tax2']) / 100);
+                    $data['tax2_amount'] =(($cut_pr) / 2);
                 }
-
             }
-            $data['price'] = $price;
-            $data['tax'] = $tax;
+
+            // foreach ($product->taxes as $product_tax) {
+            //     $tax_name = Tax::where('id', $product_tax->tax_id)->first();
+            //     if ($product_tax->tax_type == 'percent') {
+            //         $tax += ($price * $product_tax->tax) / 100;
+            //     } elseif ($product_tax->tax_type == 'amount') {
+            //         $tax += $product_tax->tax;
+            //     }
+            //     $splitTax = $product_tax->tax / 2;
+            //     if (!empty($tax_name) && $tax_name->name == 'GST') {
+            //         $data['tax1'] =  $splitTax;
+            //         $data['tax1_amount'] = (($price * $data['tax1']) / 100);
+
+            //         $data['tax2'] =  $splitTax;
+            //         $data['tax2_amount'] = (($price * $data['tax2']) / 100);
+            //     }
+
+            // }
+            $cut_pr = round($price * $pproduct_tax / (100 + $pproduct_tax),2);
+
+            $total_show_product_price = round($price - $cut_pr,2);
+           // dd($product->taxes);
+            $data['price'] = $price ;
+            //$data['price'] = $total_show_product_price ;
+            //$data['tax'] = $tax;
             //$data['shipping'] = 0;
             $data['shipping_cost'] = 0;
             $data['product_referral_code'] = null;
@@ -249,11 +283,40 @@ class GenerateQuoteController extends Controller
         } else {
             $price = $product->bids->max('amount');
 
+            // foreach ($product->taxes as $product_tax) {
+            //     if ($product_tax->tax_type == 'percent') {
+            //         $tax += ($price * $product_tax->tax) / 100;
+            //     } elseif ($product_tax->tax_type == 'amount') {
+            //         $tax += $product_tax->tax;
+            //     }
+            // }
+
+
             foreach ($product->taxes as $product_tax) {
-                if ($product_tax->tax_type == 'percent') {
+                $tax_name = Tax::where('id',$product_tax->tax_id)->first();
+
+                $pproduct_tax = $product_tax->tax;
+                $cut_pr = round($price * $pproduct_tax / (100 + $pproduct_tax),2);
+
+                if($product_tax->tax_type == 'percent'){
                     $tax += ($price * $product_tax->tax) / 100;
-                } elseif ($product_tax->tax_type == 'amount') {
+                }
+               /* elseif($product_tax->tax_type == 'amount'){
                     $tax += $product_tax->tax;
+                }*/
+
+                if(!empty($tax_name) && $tax_name->name == 'GST'){
+                    $data['tax'] = $cut_pr;
+                    $data['tax_percentage'] =  $product_tax->tax;
+                }
+
+                $splitTax = $product_tax->tax / 2;
+                if(!empty($tax_name) && $tax_name->name == 'GST'){
+                    $data['tax1'] =  $splitTax;
+                    $data['tax1_amount'] =(($cut_pr) / 2);
+
+                    $data['tax2'] =  $splitTax;
+                    $data['tax2_amount'] =(($cut_pr) / 2);
                 }
             }
 
