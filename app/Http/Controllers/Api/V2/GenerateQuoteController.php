@@ -111,22 +111,36 @@ class GenerateQuoteController extends Controller
                 $data['quantity'] = 1;
             }
             foreach ($product->taxes as $product_tax) {
-                $tax_name = Tax::where('id', $product_tax->tax_id)->first();
-                if ($product_tax->tax_type == 'percent') {
+                $tax_name = Tax::where('id',$product_tax->tax_id)->first();
+
+                $pproduct_tax = $product_tax->tax;
+                $cut_pr = round($price * $pproduct_tax / (100 + $pproduct_tax),2);
+
+                if($product_tax->tax_type == 'percent'){
                     $tax += ($price * $product_tax->tax) / 100;
-                } elseif ($product_tax->tax_type == 'amount') {
+                }
+               /* elseif($product_tax->tax_type == 'amount'){
                     $tax += $product_tax->tax;
+                }*/
+
+                if(!empty($tax_name) && $tax_name->name == 'GST'){
+                    $data['tax'] = $cut_pr;
+                    $data['tax_percentage'] =  $product_tax->tax;
                 }
+
                 $splitTax = $product_tax->tax / 2;
-                if (!empty($tax_name) && $tax_name->name == 'GST') {
-                    $data['tax1'] = $splitTax;
-                    $data['tax1_amount'] = (($price * $data['tax1']) / 100);
+                if(!empty($tax_name) && $tax_name->name == 'GST'){
+                    $data['tax1'] =  $splitTax;
+                    $data['tax1_amount'] =(($cut_pr) / 2);
 
-                    $data['tax2'] = $splitTax;
-                    $data['tax2_amount'] = (($price * $data['tax2']) / 100);
+                    $data['tax2'] =  $splitTax;
+                    $data['tax2_amount'] =(($cut_pr) / 2);
                 }
-
             }
+            $cut_pr = round($price * $pproduct_tax / (100 + $pproduct_tax),2);
+
+            $total_show_product_price = round($price - $cut_pr,2);
+
             $data['price'] = $price;
             $data['tax'] = $tax;
             //$data['shipping'] = 0;
@@ -329,7 +343,7 @@ class GenerateQuoteController extends Controller
                                 'currency_symbol' => $currency_symbol,
                                 'tax' => intval($CGST_total + $SGST_total + $IGST_total),
                                 'cartprice' => (double) cart_product_price($cartItem, $product, true, false),
-                                'quantity' => $product->stocks['0']['qty'],
+                                'quantity' => $cartItem['quantity'],
                                 'lower_limit' => $product->min_qty,
                                 'upper_limit' => intval($product_stock->qty), //static
                                 // 'cgst'                      =>$CGST,
@@ -614,11 +628,11 @@ class GenerateQuoteController extends Controller
     public function sendMail(Request $request)
     {
 
-        $request->quotation_ids = decrypt($request->quotation_ids);
+        $request->quotation_ids = $request->quotation_ids;
 
         if (auth()->user() != null) {
             $user_id = Auth::user()->id;
-            $email = Auth::user()->email;
+            $email = 'vetri654vel@gmail.com';
             if (isset($request->quotation_ids) && is_array($request->quotation_ids)) {
                 $carts = Quotation::where('user_id', $user_id)->whereNull('quotation_id')->get();
             } else {
