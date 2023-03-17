@@ -142,10 +142,13 @@
                                         @php
                                             $product = \App\Models\Product::find($cartItem['product_id']);
                                             $product_stock = $product->stocks->where('variant', $cartItem['variation'])->first();
+                                            $product_price = discounted_cart_variant_price($cartItem['variation'],$product,false);
                                             if(!empty($quotationOtherDetails['taxAvailable'])){
-                                                $total = $total + (cart_product_price($cartItem, $product, false) + $cartItem['tax']) * $cartItem['quantity'];
+                                                //$total = $total + (cart_product_price($cartItem, $product, false) + $cartItem['tax']) * $cartItem['quantity'];
+                                                $total = $total + ($product_price + $cartItem['tax']) * $cartItem['quantity'];
                                             }else{
                                                 $total = $total + cart_product_price($cartItem, $product, false) * $cartItem['quantity'];
+
                                             }
 
                                             $subTotal = $subTotal + ($cartItem['price']) * $cartItem['quantity'];
@@ -169,7 +172,7 @@
                                                 <div class="col-lg col-4 order-1 order-lg-0 my-3 my-lg-0">
                                                     <span
                                                         class="opacity-60 fs-12 d-block d-lg-none">{{ translate('Price') }}</span>
-                                                        @php 
+                                                        @php
                                                             $priceWithoutTax = $cartItem['price'] - $cartItem['tax'];
                                                         @endphp
                                                     <span
