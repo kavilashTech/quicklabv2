@@ -412,41 +412,40 @@ class CartController extends Controller
             }
 
             if ($discount_applicable) {
-                if($product->discount_type == 'percent'){
-                    $price -= ($price*$product->discount)/100;
-                }
-                elseif($product->discount_type == 'amount'){
+                if ($product->discount_type == 'percent') {
+                    $price -= ($price * $product->discount) / 100;
+                } elseif ($product->discount_type == 'amount') {
                     $price -= $product->discount;
                 }
             }
 
-            if($quantity >= $request->quantity) {
-                if($request->quantity >= $product->min_qty){
+            if ($quantity >= $request->quantity) {
+                if ($request->quantity >= $product->min_qty) {
                     $cartItem['quantity'] = $request->quantity;
                 }
             }
 
-            if($product->wholesale_product){
+            if ($product->wholesale_product) {
                 $wholesalePrice = $product_stock->wholesalePrices->where('min_qty', '<=', $request->quantity)->where('max_qty', '>=', $request->quantity)->first();
-                if($wholesalePrice){
+                if ($wholesalePrice) {
                     $price = $wholesalePrice->price;
                 }
             }
 
-            $pproduct_tax = 0;
-            foreach ($product->taxes as $product_tax) {
-                $tax_name = Tax::where('id',$product_tax->tax_id)->first();
-                $pproduct_tax = $product_tax->tax;
-            }
+            // $pproduct_tax = 0;
+            // foreach ($product->taxes as $product_tax) {
+            //     $tax_name = Tax::where('id',$product_tax->tax_id)->first();
+            //     $pproduct_tax = $product_tax->tax;
+            // }
 
-            $cartItem['tax1_amount'] =(($cartItem['tax'] * $cartItem['quantity']) / 2);
-            $cartItem['tax2_amount'] =(($cartItem['tax'] * $cartItem['quantity']) / 2);
-            // $cartItem['price'] = $price +  $cartItem['tax1_amount'] +  $cartItem['tax2_amount'];
+            // $cartItem['tax1_amount'] =(($cartItem['tax'] * $cartItem['quantity']) / 2);
+            // $cartItem['tax2_amount'] =(($cartItem['tax'] * $cartItem['quantity']) / 2);
+            // // $cartItem['price'] = $price +  $cartItem['tax1_amount'] +  $cartItem['tax2_amount'];
 
-            $cut_pr = round($price * $pproduct_tax / (100 + $pproduct_tax),2);
-            $total_show_product_price = round($price - $cut_pr,2);
+            // $cut_pr = round($price * $pproduct_tax / (100 + $pproduct_tax),2);
+            // $total_show_product_price = round($price - $cut_pr,2);
 
-            $cartItem['price'] = $total_show_product_price;
+           // $cartItem['price'] = $price;
             $cartItem->save();
         }
 
