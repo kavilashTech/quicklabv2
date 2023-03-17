@@ -84,7 +84,7 @@
                     <b>: {{$quotationOtherDetails['state_name']}} ({{$quotationOtherDetails['state_id']}})</b>
                   </td>
                 </tr>
-                
+
               </table>
             </td>
           </tr>
@@ -197,7 +197,7 @@
           <tbody>
           	@php
       				$total = 0;
-      				$subTotal = 0; 
+      				$subTotal = 0;
               $CGST_total = '0.00';
               $SGST_total = '0.00';
               $IGST_total = 0.00;
@@ -206,18 +206,22 @@
 	          	@php
       					$product = \App\Models\Product::find($cartItem['product_id']);
       					$product_stock = $product->stocks->where('variant', $cartItem['variation'])->first();
-                $total = $total + cart_product_price($cartItem, $product, false) * $cartItem['quantity'];
-      					$subTotal = $subTotal + ($cartItem['price']) * $cartItem['quantity'];
+                          $product_price = discounted_cart_variant_price($cartItem['variation'],$product,false);
+                //$total = $total + cart_product_price($cartItem, $product, false) * $cartItem['quantity'];
+                $total = $total + ( $product_price - $cartItem['tax'] + $cartItem['tax']) * $cartItem['quantity'];
+      					//$subTotal = $subTotal + ($cartItem['price']) * $cartItem['quantity'];
+
+                        $subTotal = $subTotal + ($product_price - $cartItem['tax']) * $cartItem['quantity'];
       					$product_name_with_choice = $product->getTranslation('name');
       					if ($cartItem['variation'] != null) {
       						$product_name_with_choice = $product->getTranslation('name') . ' - ' . $cartItem['variation'];
       					}
 
-                  $CGST_total += $cartItem->tax1_amount * $cartItem['quantity']; 
+                  $CGST_total += $cartItem->tax1_amount * $cartItem['quantity'];
                   $SGST_total += $cartItem->tax2_amount * $cartItem['quantity'];
                   $IGST_total += $cartItem->tax * $cartItem['quantity'];
               @endphp
-				     
+
             <tr>
               <td style="vertical-align: top;text-align: center;padding: 4px 8px;border-bottom: 1px solid;">
                 <img src="{{ uploaded_asset($product->thumbnail_img) }}" alt="{{  $product->getTranslation('name')  }}" width="80px">
@@ -236,7 +240,7 @@
                 @endif
                 <p style="margin: 0;padding: 2px 0;text-align: right;"> {{ strtoupper($product->unit) }} </p>
               </td>
-              @php 
+              @php
                   $priceWithoutTax = $cartItem['price'] - $cartItem['tax'];
               @endphp
               <td style="padding: 4px 8px;border-bottom: 1px solid;border-left: 1px solid; ">
@@ -278,7 +282,7 @@
           <tr>
             <td style="padding: 8px;vertical-align: top;width: 60%;">
               <p style="margin: 0;padding: 2px 0;"></p>
-              
+
               <p style="margin: 0;padding: 2px 0 30px;">
                 Shipping Charges are mentioned as per DHL rate.<BR>
 				Mode of Shipment:By Air
