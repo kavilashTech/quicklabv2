@@ -29,27 +29,31 @@
                                 <div class="col fw-600">{{ translate('IGST %') }}</div>
                                 <div class="col fw-600">{{ translate('IGST Amount') }}</div>
                             @endif
-                           
+
                             <div class="col fw-600">{{ translate('Total')}}</div>
                             <div class="col-auto fw-600">{{ translate('Remove')}}</div>
                         </div>
                         <ul class="list-group list-group-flush">
                             @php
                                 $total = 0;
-                                $subTotal = 0; 
+                                $subTotal = 0;
                             @endphp
                             @foreach ($carts as $key => $cartItem)
                                 @php
                                     $product = \App\Models\Product::find($cartItem['product_id']);
-                                    $product_price = home_discounted_price2($product);
+                                    $product_price = discounted_cart_variant_price($cartItem['variation'],$product,false);
                                     $product_stock = $product->stocks->where('variant', $cartItem['variation'])->first();
                                     if(!empty($checkUserAddress)){
-                                        $total = $total + ($cartItem['price']  + $cartItem['tax']) * $cartItem['quantity'];
+                                       // $total = $total + ($cartItem['price']  + $cartItem['tax']) * $cartItem['quantity'];
+                                       $total = $total + ( $product_price - $cartItem['tax'] + $cartItem['tax']) * $cartItem['quantity'];
                                     }
                                     else{
-                                        $total = $total + ($cartItem['price']) * $cartItem['quantity'];
+                                        //$total = $total + ($cartItem['price']) * $cartItem['quantity'];
+                                        $total = $total + cart_product_price($cartItem, $product, false) * $cartItem['quantity'];
                                     }
-                                    $subTotal = $subTotal + ($cartItem['price']) * $cartItem['quantity'];
+                                    //$subTotal = $subTotal + ($cartItem['price']) * $cartItem['quantity'];
+                                    $subTotal = $subTotal + ($product_price - $cartItem['tax']) * $cartItem['quantity'];
+
                                     $product_name_with_choice = $product->getTranslation('name');
                                     if ($cartItem['variation'] != null) {
                                         $product_name_with_choice = $product->getTranslation('name').' - '.$cartItem['variation'];
@@ -119,7 +123,7 @@
                                                 <span
                                                         class="fw-600 fs-16">{{ $cartItem->tax1_amount * $cartItem['quantity']}}</span>
                                                 @php
-                                                    $CGST_total += $cartItem->tax1_amount * $cartItem['quantity']; 
+                                                $CGST_total += $cartItem->tax1_amount * $cartItem['quantity'];
                                                 @endphp
                                             </div>
 
@@ -136,7 +140,7 @@
                                                 <span
                                                         class="fw-600 fs-16">{{ $cartItem->tax2_amount * $cartItem['quantity']}}</span>
                                                 @php
-                                                    $SGST_total += $cartItem->tax2_amount * $cartItem['quantity'];
+                                                $SGST_total += $cartItem->tax2_amount * $cartItem['quantity'];
                                                 @endphp
                                             </div>
                                         @endif
@@ -155,7 +159,7 @@
                                                 <span
                                                 class="fw-600 fs-16">{{ $cartItem->tax * $cartItem['quantity']}}</span>
                                                 @php
-                                                   $IGST_total += $cartItem->tax * $cartItem['quantity'];
+                                                $IGST_total += $cartItem->tax * $cartItem['quantity'];
                                                 @endphp
                                             </div>
                                         @endif
