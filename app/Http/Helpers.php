@@ -163,7 +163,7 @@ if (!function_exists('get_system_default_currency')) {
     {
         return Cache::remember('system_default_currency', 86400, function () {
             //$ip = getRealUserIp();
-            $ip = '152.58.214.63'; //india
+           $ip = '152.58.214.63'; //india
             //$ip = '27.122.14.74';  //kong
             $service_url = 'http://ip-api.com/php/' . $ip;
             $curl = curl_init($service_url);
@@ -226,11 +226,45 @@ if (!function_exists('convert_price')) {
 if (!function_exists('currency_symbol')) {
     function currency_symbol()
     {
-        if (Session::has('currency_symbol')) {
+        if(auth()->user() != null) {
+            $code = auth()->user()->country ;
 
-            return Session::get('currency_symbol');
+            $currency = Currency::find($code);
+            if($currency != ''){
+                if($currency->code == 'INR'){
+                    session()->put('currency_code', $currency->code);
+                    session()->put('currency_symbol', $currency->symbol);
+                    return Session::get('currency_symbol');
+
+                }else{
+                    $code = 'USD';
+                    $currency = Currency::where('code', $code)->first();
+                    session()->put('currency_code', $currency->code);
+                    session()->put('currency_symbol', $currency->symbol);
+                    return Session::get('currency_symbol');
+                }
+
+            }else{
+                    $code = 'USD';
+                    $currency = Currency::where('code', $code)->first();
+                    session()->put('currency_code', $currency->code);
+                    session()->put('currency_symbol', $currency->symbol);
+                    return Session::get('currency_symbol');
+
+            }
+
+
+
+
+        }else{
+            if (Session::has('currency_symbol')) {
+
+                return Session::get('currency_symbol');
+            }
+            return get_system_default_currency()->symbol;
+
         }
-        return get_system_default_currency()->symbol;
+
     }
 }
 
@@ -595,14 +629,9 @@ if (!function_exists('carts_coupon_discount')) {
 //Shows Price on page based on low to high
 if (!function_exists('single_currency_price')) {
     function single_currency_price($product, $formatted = true){
-        //dd($product);
-        if (Session::get('currency_code') == 'USD') {
-            $product_stock = ProductStock::where('product_id',$product->product_id)->first();
 
-            $price = ($product_stock != '') ? $product_stock->usd_price : '99443'.$product->product_id;
-        }else{
         $price = $product->price;
-        }
+
         return $price;
 
     }
@@ -715,7 +744,7 @@ if (!function_exists('discounted_cart_variant_price')) {
 
         // get first variant price
         if (Session::get('currency_code') == 'USD') {
-            $variantPrice = $product_stock->price;
+            $variantPrice = $product_stock->usd_price;
         } else {
             $variantPrice = $product_stock->price;
         }
@@ -754,7 +783,7 @@ if (!function_exists('discounted_variant_price')) {
     {
         // get first variant price
         if (Session::get('currency_code') == 'USD') {
-            $variantPrice = $product->stocks[0]['price'];
+            $variantPrice = $product->stocks[0]['usd_price'];
         } else {
             $variantPrice = $product->stocks[0]['price'];
         }
@@ -874,12 +903,24 @@ if (!function_exists('home_discounted_price2')) {
 
         if ($product->variant_product) {
             foreach ($product->stocks as $key => $stock) {
-                if ($lowest_price > $stock->price) {
-                    $lowest_price = $stock->price;
+                if (Session::get('currency_code') == 'USD') {
+                    if ($lowest_price > $stock->usd_price) {
+                        $lowest_price = $stock->usd_price;
+                    }
+                    if ($highest_price < $stock->usd_price) {
+                        $highest_price = $stock->usd_price;
+                    }
+
+                }else{
+                    if ($lowest_price > $stock->price) {
+                        $lowest_price = $stock->price;
+                    }
+                    if ($highest_price < $stock->price) {
+                        $highest_price = $stock->price;
+                    }
+
                 }
-                if ($highest_price < $stock->price) {
-                    $highest_price = $stock->price;
-                }
+
             }
         }
 
@@ -1785,15 +1826,20 @@ if (!function_exists('checkAuthUserAddress')) {
         if(auth()->user() != null) {
             $userId = Auth::user()->id;
             $userDetails = User::where('id', $userId)->first();
-            if(!empty($userDetails)){
-                if(!empty($userDetails->postal_code) && !empty($userDetails->state)){
-                    if($userDetails->state == $tamilnaduStateId) {   //35-Tamilnadu state id
-                        $userWithinTamilnadu = 1;
-                    }else{
-                        $userWithinTamilnadu = 2;
-                    }
+            $code = auth()->user()->country ;
+
+            $currency = Currency::find($code);
+            if(!empty($currency)){
+                if($currency->code == 'INR'){
+                    $userWithinTamilnadu = 1;
+                }else{
+                    $userWithinTamilnadu = 2;
                 }
+
             }
+        }else{
+
+            $userWithinTamilnadu = (Session::get('currency_code') == 'USD') ? 2 : 1;
         }
 
         return $userWithinTamilnadu;
