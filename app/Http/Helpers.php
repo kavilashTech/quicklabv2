@@ -228,8 +228,11 @@ if (!function_exists('currency_symbol')) {
     {
         if(auth()->user() != null) {
             $code = auth()->user()->country ;
+            $country_data = Country :: find(auth()->user()->country);
+            $code = ($country_data->code == 'IN') ?'INR' :'USD';
 
-            $currency = Currency::find($code);
+
+            $currency =Currency::where('code', $code)->first();
             if($currency != ''){
                 if($currency->code == 'INR'){
                     session()->put('currency_code', $currency->code);
@@ -1826,9 +1829,10 @@ if (!function_exists('checkAuthUserAddress')) {
         if(auth()->user() != null) {
             $userId = Auth::user()->id;
             $userDetails = User::where('id', $userId)->first();
-            $code = auth()->user()->country ;
+            $country_data = Country :: find(auth()->user()->country);
+            $code = ($country_data->code == 'IN') ?'INR' :'USD';
 
-            $currency = Currency::find($code);
+            $currency =Currency::where('code', $code)->first();
             if(!empty($currency)){
                 if($currency->code == 'INR'){
                     $userWithinTamilnadu = 1;
