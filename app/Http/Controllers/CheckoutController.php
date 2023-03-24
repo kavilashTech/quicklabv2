@@ -36,7 +36,7 @@ class CheckoutController extends Controller
         // Minumum order amount check
         if(get_setting('minimum_order_amount_check') == 1){
             $subtotal = 0;
-            foreach (Cart::where('user_id', Auth::user()->id)->get() as $key => $cartItem){ 
+            foreach (Cart::where('user_id', Auth::user()->id)->get() as $key => $cartItem){
                 $product = Product::find($cartItem['product_id']);
                 $subtotal += cart_product_price($cartItem, $product, false, false) * $cartItem['quantity'];
             }
@@ -46,13 +46,13 @@ class CheckoutController extends Controller
             }
         }
         // Minumum order amount check end
-        
+
         if ($request->payment_option != null) {
 
             (new OrderController)->store($request);
 
             $request->session()->put('payment_type', 'cart_payment');
-            
+
             $data['combined_order_id'] = $request->session()->get('combined_order_id');
             $request->session()->put('payment_data', $data);
 
@@ -96,7 +96,7 @@ class CheckoutController extends Controller
             $order->payment_status = 'paid';
             $order->payment_details = $payment;
             $order->save();
-            
+
             //TODO : Uncomment this for club point
             //calculateCommissionAffilationClubPoint($order);
 
@@ -170,15 +170,15 @@ class CheckoutController extends Controller
         if(empty($shipping_info)){
             $shipping_info = Address::where(['id'=>$carts[0]['address_id']])->first();
         }
-        
+
         $total = 0;
         $tax = 0;
         $shipping = 0;
         $subtotal = 0;
         $totalWeight = 0;
-        $productTotalWidth = "";
-        $productTotalHeight = "";
-        $productTotalBreadth = "";
+        $productTotalWidth = 0;
+        $productTotalHeight = 0;
+        $productTotalBreadth = 0;
 
         if ($carts && count($carts) > 0) {
             foreach ($carts as $key => $cartItem) {
@@ -203,7 +203,7 @@ class CheckoutController extends Controller
                     $cartItem['carrier_id'] = $request['carrier_id_' . $product->user_id];
                     $cartItem['shipping_cost'] = getShippingCost($carts, $key, $cartItem['carrier_id']);
                 }
-                
+
                 //Get dimensions details of the product
                 if(!empty($product->stocks)){
                     foreach ($product->stocks as $key => $stocks) {
@@ -268,12 +268,12 @@ class CheckoutController extends Controller
                                     ->get();
 
                     $coupon_discount = 0;
-                    
+
                     if ($coupon->type == 'cart_base') {
                         $subtotal = 0;
                         $tax = 0;
                         $shipping = 0;
-                        foreach ($carts as $key => $cartItem) { 
+                        foreach ($carts as $key => $cartItem) {
                             $product = Product::find($cartItem['product_id']);
                             $subtotal += cart_product_price($cartItem, $product, false, false) * $cartItem['quantity'];
                             $tax += cart_product_tax($cartItem, $product,false) * $cartItem['quantity'];
@@ -292,7 +292,7 @@ class CheckoutController extends Controller
 
                         }
                     } elseif ($coupon->type == 'product_base') {
-                        foreach ($carts as $key => $cartItem) { 
+                        foreach ($carts as $key => $cartItem) {
                             $product = Product::find($cartItem['product_id']);
                             foreach ($coupon_details as $key => $coupon_detail) {
                                 if ($coupon_detail->product_id == $cartItem['product_id']) {
@@ -323,7 +323,7 @@ class CheckoutController extends Controller
                         $response_message['response'] = 'warning';
                         $response_message['message'] = translate('This coupon is not applicable to your cart products!');
                     }
-                    
+
                 } else {
                     $response_message['response'] = 'warning';
                     $response_message['message'] = translate('You already used this coupon!');
@@ -395,7 +395,7 @@ class CheckoutController extends Controller
 
         //Session::forget('club_point');
         //Session::forget('combined_order_id');
-        
+
         foreach($combined_order->orders as $order){
             NotificationUtility::sendOrderPlacedNotification($order);
         }
@@ -404,7 +404,7 @@ class CheckoutController extends Controller
     }
     public function shiprocketAuthToken(){
         $response = Http::withHeaders([
-                    'Content-Type' => 'application/json' 
+                    'Content-Type' => 'application/json'
                 ])->post('https://apiv2.shiprocket.in/v1/external/auth/login', [
             //'email' => 'kavilashtech@gmail.com',
             //'password' => 'Kavilash@123#',
@@ -417,7 +417,7 @@ class CheckoutController extends Controller
     public function shipping_couriers_list(Request $request){
         //Get Auth token
         $result = $this->shiprocketAuthToken();
-        
+
         if(!empty($result) && !empty($result['token'])){
             $pickupPostcode = get_setting('pickup_point') ?? "";
             $deliveryPostcode = $request->postcode;
@@ -428,7 +428,7 @@ class CheckoutController extends Controller
 
             $loggedCountryId = Auth::user()->country;
 
-            if(!empty($loggedCountryId)){  
+            if(!empty($loggedCountryId)){
 
                 $country = Country::where('id', $loggedCountryId)->first();
 
@@ -472,6 +472,62 @@ class CheckoutController extends Controller
             echo json_encode($data);
         }
     }
+    public function shipping_currency_couriers_list(Request $request){
+        //Get Auth token
+        $result = $this->shiprocketAuthToken();
+
+        if(!empty($result) && !empty($result['token'])){
+
+            $productWidth = $request->productWidth;
+            $productHeight = $request->productHeight;
+            $prodTotalWeight = $request->prodTotalWeight;
+
+            $loggedCountryId = Auth::user()->country;
+
+            if(!empty($loggedCountryId)){
+
+                $country = Country::where('id', $loggedCountryId)->first();
+
+                $apiUrl = ($loggedCountryId == 101) ? 'https://apiv2.shiprocket.in/v1/external/courier/serviceability' : 'https://apiv2.shiprocket.in/v1/external/international/courier/serviceability';  // 101 - india country id
+
+                /*if($loggedCountryId == 101 && empty($deliveryPostcode)){
+                    $data['status'] = "postcode_empty";
+                    echo json_encode($data);
+                }*/
+                $response = Http::withToken($result['token'])->get($apiUrl,[
+
+                    'weight' => ($prodTotalWeight > 0) ? $prodTotalWeight : 1,
+                    'cod' =>  ($loggedCountryId == 101) ? '1' : '0',  //Todo - To check in future
+                    'delivery_country' => "AE",
+
+
+                ]);
+
+                $result = json_decode($response,true);
+                //dd($result);
+                $data = [];
+                if(!empty($result) && !empty($result['data']['available_courier_companies'])){
+                    foreach($result['data']['available_courier_companies'] as $key => $value){
+                        $rate = (!empty($value['rate']) && $loggedCountryId == 101) ? $value['rate'] : $value['rate']['rate'];
+                        $data['data'][$key]['estimated_delivery_date'] = $value['etd'];
+                        $data['data'][$key]['courier_name'] = $value['courier_name'];
+                        $data['data'][$key]['rate'] = $rate;
+                        $data['data'][$key]['freight_charge'] = $value['freight_charge'] ?? "";
+                    }
+                    $data['status']="success";
+                }else if($loggedCountryId == 101 && !empty($deliveryPostcode)){
+                    $data['status'] = "invalid_delivery_postcode";
+                }else{
+                    $data['status'] = "invalid_delivery_postcode";
+                    $data['message'] = "your location not available courier";
+                }
+                echo json_encode($data);
+            }
+        }else{
+            $data['status'] = "invalid_token";
+            echo json_encode($data);
+        }
+    }
     public function apply_shipping_charge(Request $request){
         $grandTotal = $request->grandTotal;
         $shipCost = $request->shipCost;
@@ -482,7 +538,7 @@ class CheckoutController extends Controller
         $total = $withoutShipCostTotal + $shipCost;
         $grandTotal = single_price($total);
         $shippingCost = single_price($shipCost);
-        
+
 
         $data['status'] = "success";
         $data['grandTotal'] = $grandTotal;
@@ -501,7 +557,7 @@ class CheckoutController extends Controller
         $loggedCountryId = Auth::user()->country;
 
         $currencyCode = ($loggedCountryId == 101) ? 'INR' : 'USD';  // 101 - india country id
-        
+
         if(!empty($tokenResult) && !empty($tokenResult['token'])){
             //Get the cart details
             $carts = Cart::where('user_id', Auth::user()->id)
@@ -617,7 +673,7 @@ class CheckoutController extends Controller
         $result = $this->shiprocketAuthToken();
 
         $loggedCountryId = Auth::user()->country;
-        
+
         if(!empty($result) && !empty($result['token'])){
             $pickupPostcode = get_setting('pickup_point') ?? "";
 
@@ -626,7 +682,7 @@ class CheckoutController extends Controller
                 $country = Country::where('id', $loggedCountryId)->first();
 
                 $apiUrl = ($loggedCountryId == 101) ? 'https://apiv2.shiprocket.in/v1/external/courier/serviceability' : 'https://apiv2.shiprocket.in/v1/external/courier/international/serviceability';  // 101 - india country id
-               
+
                 $response = Http::withToken($result['token'])->get($apiUrl,[
                     'pickup_postcode' => ($loggedCountryId == 101) ? $pickupPostcode : "",
                     'delivery_postcode' => ($loggedCountryId == 101) ? $deliveryPostcode : "",
@@ -645,10 +701,10 @@ class CheckoutController extends Controller
                     $courier = $result['data']['available_courier_companies'];
 
                     $rate = (!empty($courier[0]['rate']) && $loggedCountryId == 101) ? $courier[0]['rate'] : $courier[0]['rate']['rate'];
-                    
+
                     $data['courier_name'] = $courier[0]['courier_name'];
                     $data['rate'] = $courier[0]['rate'];
-                    
+
                     $data['status']="success";
                 }else{
                     $data['status'] = "failure";
@@ -663,8 +719,8 @@ class CheckoutController extends Controller
             return $data;
         }
     }
-    
+
 }
 
-    
+
 

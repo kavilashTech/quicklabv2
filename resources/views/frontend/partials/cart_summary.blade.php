@@ -83,18 +83,19 @@
                         $product = \App\Models\Product::find($cartItem['product_id']);
 
                         $product_shipping_cost = $cartItem['shipping_cost'];
-                        
+
                         $product_price = cart_product_price($cartItem, $product, false, false);
                         $product_txt = cart_product_tax($cartItem, $product,false);
                         $product_qty = $cartItem['quantity'];
                         $org_product_price = $cartItem['price'];
 
-                        $subtotal += $org_product_price * $cartItem['quantity'];
+                       // $subtotal += $org_product_price * $cartItem['quantity'];
+                        $subtotal = $subtotal + ($product_price - $cartItem['tax']) * $cartItem['quantity'];
                         $tax += $cartItem['tax'] * $cartItem['quantity'];
 
-                        
+
                         $shipping += $product_shipping_cost;
-                        
+
                         $product_name_with_choice = $product->getTranslation('name');
                         if ($cartItem['variant'] != null) {
                             $product_name_with_choice = $product->getTranslation('name') . ' - ' . $cartItem['variant'];
@@ -137,9 +138,15 @@
 
                 <tr class="cart-shipping">
                     <th>{{ translate('Total Shipping') }}</th>
-                        
+
                     <td class="text-right">
                         <span class="font-italic" id="shipping_charge">{{ single_price($shipping_courier_cost) }}</span>
+                        <div id="shipping_estimate_country">
+
+                            <span id="postcodeErr_us" style="color: red;"></span>
+
+                        </div>
+
                         <div id="shipping_estimate" style="display:none;">
                             <select name="country" id="country">
                                 @foreach ($countries as $country)
@@ -159,7 +166,7 @@
                 @endif
                 <table class="bordered">
                     <div id="shipping_couriers_list">
-                                
+
                     </div>
                 </table>
 
@@ -249,7 +256,7 @@
                                 <button type="button" id="coupon-apply"
                                     class="btn btn-primary">{{ translate('Apply') }}</button>
                             </div>
-                        </div> 
+                        </div>
                     </form> --}}
                 </div>
             @endif

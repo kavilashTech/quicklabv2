@@ -110,7 +110,7 @@ Route::controller(HomeController::class)->group(function () {
 
     //Home Page
     Route::get('/', 'index')->name('home');
-    
+
 
 
     Route::post('/home/section/featured', 'load_featured_section')->name('home.section.featured');
@@ -199,7 +199,7 @@ Route::controller(MercadopagoController::class)->group(function () {
     Route::any('/mercadopago/payment/done', 'paymentstatus')->name('mercadopago.done');
     Route::any('/mercadopago/payment/cancel', 'callback')->name('mercadopago.cancel');
 });
-//Mercadopago 
+//Mercadopago
 
 // SSLCOMMERZ Start
 Route::controller(SslcommerzController::class)->group(function () {
@@ -245,12 +245,12 @@ Route::group(['middleware' => ['user', 'verified', 'unbanned']], function() {
         Route::get('/franchisee-registration-form', 'franchiseeRegistrationForm')->name('franchisee-registration-form');
         Route::post('/franchisee-registration-request', 'franchiseeRegistrationRequest')->name('franchisee-registration-request');
     });
-    
+
     Route::controller(CustomerController::class)->group(function () {
         Route::get('customerfornices', [CustomerController::class, 'franciesindex'])->name('customer.franciesindex');
         Route::get('customer_list', [CustomerController::class, 'customerListindex'])->name('customer_list.franciesindex');
         Route::post('customerfornices_register', [CustomerController::class, 'customerFranchiseeRegister'])->name('customer.franchiee_customer_register');
-        
+
         Route::any('franchisee_sales_report', [CustomerController::class, 'franchiseeSalesReport'])->name('customer_list.franchisee_sales_report');
         Route::post('/franchisee_sales_report/download', 'downloadFranchiseSalesReport')->name('franchisee_sales_report.downloadFranchiseSalesReport');
         // Purchase History Franchise
@@ -261,7 +261,7 @@ Route::group(['middleware' => ['user', 'verified', 'unbanned']], function() {
             Route::get('/purchase_history_franchise/download', 'downloadPurchaseHistory')->name('purchase_history_franchise.downloadPurchaseHistory');
         });
     });
-    
+
     Route::get('/all-notifications', [NotificationController::class, 'index'])->name('all-notifications');
 
 });
@@ -282,8 +282,9 @@ Route::group(['middleware' => ['customer', 'verified', 'unbanned']], function() 
             Route::post('/remove_coupon_code', 'remove_coupon_code')->name('checkout.remove_coupon_code');
             //Club point
             Route::post('/apply-club-point', 'apply_club_point')->name('checkout.apply_club_point');
-            Route::post('/remove-club-point', 'remove_club_point')->name('checkout.remove_club_point'); 
+            Route::post('/remove-club-point', 'remove_club_point')->name('checkout.remove_club_point');
             Route::post('/shipping_couriers_list', 'shipping_couriers_list')->name('checkout.shipping_couriers_list');
+            Route::get('/shipping_currency_couriers_list', 'shipping_currency_couriers_list')->name('checkout.shipping_currency_couriers_list');
             Route::post('/apply_shipping_charge', 'apply_shipping_charge')->name('checkout.apply_shipping_charge');
         });
     });
@@ -333,20 +334,20 @@ Route::group(['middleware' => ['customer', 'verified', 'unbanned']], function() 
 });
 
 Route::group(['middleware' => ['auth']], function() {
-    
+
     Route::get('invoice/{order_id}', [InvoiceController::class, 'invoice_download'])->name('invoice.download');
     Route::get('quotationInvoice/{order_id}', [GenerateQuoteController::class, 'quotation_invoice_download'])->name('quotationInvoice.download');
 
     // Reviews
     Route::resource('/reviews', ReviewController::class);
-    
+
     // Product Conversation
     Route::resource('conversations', ConversationController::class);
     Route::controller(ConversationController::class)->group(function () {
         Route::get('/conversations/destroy/{id}', 'destroy')->name('conversations.destroy');
         Route::post('conversations/refresh', 'refresh')->name('conversations.refresh');
     });
-    
+
     // Product Query
     Route::resource('product-queries', ProductQueryController::class);
 
