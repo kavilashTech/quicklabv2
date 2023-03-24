@@ -581,6 +581,71 @@
 @section('script')
     <script type="text/javascript">
         $(document).ready(function() {
+            console.log('<?php echo Session::get('currency_code') ?>');
+            if ('<?php echo Session::get('currency_code') ?>' == 'USD') {
+                //alert('hello');
+
+
+            var countryId = '<?php echo Session::get('currency_code') ?>';
+            var postcode = $("#postcode").val();
+
+            var grandTotal = $("#total").val();
+            var totalWithCurrency = $("#totalWithCurrency").val();
+            var shipWithCurrency = $("#shipWithCurrency").val();
+
+            $("#grand_total").html(totalWithCurrency);
+            $("#shipping_charge").html(shipWithCurrency);
+
+            var prodTotalWeight = '<?= $prodDimensionDetails['totalWeight'] ?>';
+            var productTotalWidth = '<?=  $prodDimensionDetails['productTotalWidth'] ?>';
+            var productTotalHeight = '<?= $prodDimensionDetails['productTotalHeight'] ?>';
+            var productTotalBreadth = '<?= $prodDimensionDetails['productTotalBreadth'] ?>';
+
+            if(countryId != ""){
+
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    url: "{{route('checkout.shipping_currency_couriers_list')}}",
+                    type: 'GET',
+                    data: {
+                        prodTotalWeight:prodTotalWeight,
+
+                    },
+                    success: function (data) {
+                        var response = JSON.parse(data);
+                        //console.log(response);
+                        if(response != '' && response.status == "success") {
+                            $("#postcodeErr").html("");postcodeErr
+                            $("#shipping_couriers_list").html("");
+                            $.each(response.data, function(index, value){
+                                var courierName = value.courier_name;
+                                var rate = value.rate;
+                                $("#shipping_couriers_list").append('<tr class="courier-info" id="courier-list-'+ value.courier_name +'"><td class="text-right"><input type="radio" name="shipping-charge" id="shipping-charge-'+ value.courier_name +'" onclick="selectShippingCharge(this.value,\''+value.courier_name+'\')" value="'+value.rate+'"><span><b>'+ value.courier_name +'</span>(Delivery By '+ value.estimated_delivery_date +') :</td><td>'+ value.rate +'<b></td></tr>');
+                            });
+                        }else if(response.status == "invalid_delivery_postcode"){
+                            $("#postcodeErr_us").text("Invalid delivery postcode");
+                            $("#postcodeErr").html("Invalid delivery postcode");
+                        }else if(response.status == "postcode_empty"){
+                            $("#postcodeErr").html("Delivery postcode required");
+                        }else if(response.status == "invalid_token"){
+                            $("#postcodeErr").html("Invalid token");
+                        }else if(response.status == "invalid_inputs_data"){
+                            $("#postcodeErr").html("Invalid inputs data");
+                        }else{
+                             $("#postcodeErr").html("Invalid data");
+                        }
+                    }
+                });
+            }else{
+                $("#postcodeErr").html("Delivery postcode required");
+            }
+
+
+            }
+
+
             $(".online_payment").click(function() {
                 $('#manual_payment_description').parent().addClass('d-none');
             });
@@ -680,7 +745,7 @@
         function getShippingCouriers(){
             var countryId = $("#country").val();
             var postcode = $("#postcode").val();
-            
+
             var grandTotal = $("#total").val();
             var totalWithCurrency = $("#totalWithCurrency").val();
             var shipWithCurrency = $("#shipWithCurrency").val();
@@ -713,7 +778,7 @@
                         var response = JSON.parse(data);
                         //console.log(response);
                         if(response != '' && response.status == "success") {
-                            $("#postcodeErr").html("");
+                            $("#postcodeErr").html("");postcodeErr
                             $("#shipping_couriers_list").html("");
                             $.each(response.data, function(index, value){
                                 var courierName = value.courier_name;

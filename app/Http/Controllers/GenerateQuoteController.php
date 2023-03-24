@@ -104,7 +104,12 @@ class GenerateQuoteController extends Controller
             $data['variation'] = $str;
 
             $product_stock = $product->stocks->where('variant', $str)->first();
-            $price = $product_stock->price;
+            if (Session::get('currency_code') == 'USD') {
+                $price = ($product_stock != '') ? $product_stock->usd_price : '99443'.$product->id;
+            }else{
+                $price = $product_stock->price;
+            }
+            //$price = $product_stock->price;
 
             if ($product->wholesale_product) {
                 $wholesalePrice = $product_stock->wholesalePrices->where('min_qty', '<=', $request->quantity)->where('max_qty', '>=', $request->quantity)->first();
@@ -468,6 +473,7 @@ class GenerateQuoteController extends Controller
 
         }
 
+
         return view('frontend.save_quotation', compact('quotation','savequotations','business_settings'));
     }
 
@@ -661,13 +667,15 @@ class GenerateQuoteController extends Controller
 
     public function quoteView(Request $request,$id)
     {
+
         $quotations_id = decrypt($id);
+        $taxAvailable = checkAuthUserAddress();
 
         //
         if (auth()->user() != null && !empty($quotations_id)) {
             $user_id = Auth::user()->id;
             $quotation = Quotation::where('user_id', $user_id)->where('quotation_id',$quotations_id)->get();
-            return view('frontend.view_user_quotation', compact('quotation'));
+            return view('frontend.view_user_quotation', compact('quotation','taxAvailable'));
         }
     }
 

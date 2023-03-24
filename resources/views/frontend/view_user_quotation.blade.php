@@ -19,6 +19,7 @@
                             @php
                              $CGST_total = '0.00';
                              $SGST_total = '0.00';
+                             $IGST_total = 0.00;
                             @endphp
                             <div class="mb-4">
                                 <div class="row gutters-5 d-none d-lg-flex border-bottom mb-3 pb-3">
@@ -26,10 +27,17 @@
                                     <div class="col fw-600">{{ translate('Price') }}</div>
                                     <!-- <div class="col fw-600">{{ translate('Tax') }}</div> -->
                                     <div class="col fw-600">{{ translate('Quantity') }}</div>
+
+                                    @if(!empty($taxAvailable) && $taxAvailable == 1)
                                     <div class="col fw-600">{{ translate('CGST %') }}</div>
                                     <div class="col fw-600">{{ translate('CGST Amount') }}</div>
                                     <div class="col fw-600">{{ translate('SGST %') }}</div>
                                     <div class="col fw-600">{{ translate('SGST Amount') }}</div>
+                                    @endif
+                                    @if(!empty($taxAvailable) && $taxAvailable == 2)
+                                        <div class="col fw-600">{{ translate('IGST %') }}</div>
+                                        <div class="col fw-600">{{ translate('IGST Amount') }}</div>
+                                    @endif
                                     <div class="col fw-600">{{ translate('Total') }}</div>
                                     <!-- <div class="col-auto fw-600">{{ translate('Remove') }}</div> -->
                                 </div>
@@ -107,6 +115,7 @@
                                                         <span class="fw-600 fs-16">1</span>
                                                     @endif
                                                 </div>
+                                                @if(!empty($taxAvailable) && $taxAvailable == 1)
 
                                                 <div class="col-lg col-4 order-2 order-lg-0 my-3 my-lg-0">
                                                     <span
@@ -141,6 +150,28 @@
                                                        $SGST_total += $cartItem->tax2_amount * $cartItem['quantity'];
                                                     @endphp
                                                 </div>
+                                                @endif
+                                                @if(!empty($taxAvailable) && $taxAvailable == 2)
+                                                    <div class="col-lg col-4 order-2 order-lg-0 my-3 my-lg-0">
+                                                        <span
+                                                            class="opacity-60 fs-12 d-block d-lg-none">{{ translate('IGST %') }}</span>
+                                                        @php
+                                                           $IGST_tax_percentage = $cartItem->tax1 + $cartItem->tax2;
+                                                        @endphp
+                                                        <span
+                                                            class="fw-600 fs-16">{{ $IGST_tax_percentage }}</span>
+                                                    </div>
+
+                                                    <div class="col-lg col-4 order-2 order-lg-0 my-3 my-lg-0">
+                                                        <span
+                                                            class="opacity-60 fs-12 d-block d-lg-none">{{ translate('IGST Amount') }}</span>
+                                                        <span
+                                                            class="fw-600 fs-16">{{ $cartItem->tax * $cartItem['quantity']}}</span>
+                                                        @php
+                                                           $IGST_total += $cartItem->tax * $cartItem['quantity'];
+                                                        @endphp
+                                                    </div>
+                                                @endif
 
                                                 <div class="col-lg col-4 order-3 order-lg-0 my-3 my-lg-0">
                                                     <span
@@ -165,7 +196,7 @@
                                 <span class="opacity-60 fs-15">{{ translate('Subtotal') }}</span>
                                 <span class="fw-600 fs-17 pl-3">{{ single_price($subTotal) }}</span>
                             </div>
-
+                            @if(!empty($taxAvailable) && $taxAvailable == 1)
                             <div class="px-3 py-2 d-flex justify-content-end mt-n3">
                                 <span class="opacity-60 fs-15">{{ translate('CGST') }}</span>
                                 <span class="fw-600 fs-17 pl-3">{{ single_price($CGST_total) }}</span>
@@ -175,11 +206,19 @@
                                 <span class="opacity-60 fs-15">{{ translate('SGST') }}</span>
                                 <span class="fw-600 fs-17 pl-3">{{ single_price($SGST_total) }}</span>
                             </div>
+                            @endif
+                            @if(!empty($taxAvailable) && $taxAvailable == 2)
+                                <div class="px-3 py-2 d-flex justify-content-end mt-n3">
+                                    <span class="opacity-60 fs-15">{{ translate('IGST') }}</span>
+                                    <span class="fw-600 fs-17 pl-3">{{ single_price($IGST_total) }}</span>
+                                </div>
+                            @endif
 
                             <div class="px-3 py-2 d-flex justify-content-end mt-n3">
                                 <span class="opacity-60 fs-15">{{ translate('Total') }}</span>
                                 <span class="fw-600 fs-17 pl-3" id="total_quote_price">{{ single_price($total) }}</span>
                             </div>
+
 
                             <!-- <div class="px-3 py-2 d-flex justify-content-end mt-n3">
                                 <span class="opacity-60 fs-15">{{ translate('Balance Due') }}</span>
