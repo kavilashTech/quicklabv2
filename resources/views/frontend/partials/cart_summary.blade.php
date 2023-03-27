@@ -128,6 +128,10 @@
                         <span class="fw-600">{{ single_price($subtotal) }}</span>
                     </td>
                 </tr>
+                @php
+                if(Session::get('currency_code') == 'INR'){
+
+                @endphp
 
                 <tr class="cart-shipping">
                     <th>{{ translate('Tax') }}</th>
@@ -135,6 +139,9 @@
                         <span class="font-italic">{{ single_price($tax) }}</span>
                     </td>
                 </tr>
+                @php
+                    }
+                @endphp
 
                 <tr class="cart-shipping">
                     <th>{{ translate('Total Shipping') }}</th>
@@ -189,7 +196,14 @@
                 @endif
 
                 @php
+                if(Session::get('currency_code') == 'INR'){
                     $total = $subtotal + $tax + $shipping + $shipping_courier_cost;
+
+                }else{
+                    $total = $subtotal + $shipping + $shipping_courier_cost;
+                }
+
+
                     if (Session::has('club_point')) {
                         $total -= Session::get('club_point');
                     }

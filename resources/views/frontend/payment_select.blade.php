@@ -71,7 +71,7 @@
                             </div>
                             <div class="card-body text-center">
                                 <div class="row">
-                                    <div class="col-xxl-8 col-xl-10 mx-auto">
+                                    <div class="col-xxl-8 col-xl-10 mx-auto overall_online_payment">
                                         <div class="row gutters-10">
                                             @if (get_setting('paypal_payment') == 1)
                                                 <div class="col-6 col-md-4">
@@ -411,7 +411,7 @@
                                                     </label>
                                                 </div>
                                             @endif
-                                            @if (get_setting('cash_payment') == 1)
+                                            @if (get_setting('cash_payment') == 1 )
                                                 @php
                                                     $digital = 0;
                                                     $cod_on = 1;
@@ -425,7 +425,7 @@
                                                         }
                                                     }
                                                 @endphp
-                                                @if ($digital != 1 && $cod_on == 1)
+                                                @if ($digital != 1 && $cod_on == 1 && Session::get('currency_code') == 'INR')
                                                     <div class="col-6 col-md-4">
                                                         <label class="aiz-megabox d-block mb-3">
                                                             <input value="cash_on_delivery" class="online_payment"
@@ -562,9 +562,9 @@
                                     {{ translate('Return to shop') }}
                                 </a>
                             </div>
-                            <div class="col-6 text-right">
+                            <div class="col-6 text-right complete_order">
                                 <button type="button" onclick="submitOrder(this)"
-                                    class="btn btn-primary fw-600">{{ translate('Complete Order') }}</button>
+                                    class="btn btn-primary fw-600 ">{{ translate('Complete Order') }}</button>
                             </div>
                         </div>
                     </form>
@@ -625,8 +625,13 @@
                                 $("#shipping_couriers_list").append('<tr class="courier-info" id="courier-list-'+ value.courier_name +'"><td class="text-right"><input type="radio" name="shipping-charge" id="shipping-charge-'+ value.courier_name +'" onclick="selectShippingCharge(this.value,\''+value.courier_name+'\')" value="'+value.rate+'"><span><b>'+ value.courier_name +'</span>(Delivery By '+ value.estimated_delivery_date +') :</td><td>'+ value.rate +'<b></td></tr>');
                             });
                         }else if(response.status == "invalid_delivery_postcode"){
-                            $("#postcodeErr_us").text("Invalid delivery postcode");
-                            $("#postcodeErr").html("Invalid delivery postcode");
+                            $("#postcodeErr_us").text(response.message);
+                            $("#postcodeErr").html(response.message);
+                            $(".overall_online_payment").html("");
+                            $('.overall_online_payment').append('<Span style="color: red;">Shipping is not available to the selected country. Please contact Quicklab</span>');
+                            $('.complete_order').html('');
+                            $('.complete_order').append('<button type="button" class="btn btn-primary fw-600 ">Contenct Admin</button>');
+
                         }else if(response.status == "postcode_empty"){
                             $("#postcodeErr").html("Delivery postcode required");
                         }else if(response.status == "invalid_token"){

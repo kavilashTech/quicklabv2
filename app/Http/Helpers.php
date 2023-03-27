@@ -226,7 +226,7 @@ if (!function_exists('convert_price')) {
 if (!function_exists('currency_symbol')) {
     function currency_symbol()
     {
-        if(auth()->user() != null) {
+        if((auth()->user() != null) && (auth()->user()->user_type == 'customer')) {
             $code = auth()->user()->country ;
             $country_data = Country :: find(auth()->user()->country);
             $code = ($country_data->code == 'IN') ?'INR' :'USD';
@@ -1837,13 +1837,13 @@ if (!function_exists('checkAuthUserAddress')) {
                 if($currency->code == 'INR'){
                     $userWithinTamilnadu = 1;
                 }else{
-                    $userWithinTamilnadu = 2;
+                    $userWithinTamilnadu = 0;
                 }
 
             }
         }else{
 
-            $userWithinTamilnadu = (Session::get('currency_code') == 'USD') ? 2 : 1;
+            $userWithinTamilnadu = (Session::get('currency_code') == 'USD') ? 0 : 1;
         }
 
         return $userWithinTamilnadu;

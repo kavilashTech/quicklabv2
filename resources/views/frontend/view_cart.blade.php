@@ -64,10 +64,7 @@
                                     <div class="col fw-600">{{ translate('Price') }}</div>
                                     <!-- <div class="col fw-600">{{ translate('Tax') }}</div> -->
                                     <div class="col fw-600">{{ translate('Quantity') }}</div>
-                                    @if(empty($checkUserAddress))
-                                        <div class="col fw-600">{{ translate('GST %') }}</div>
-                                        <div class="col fw-600">{{ translate('GST Amount') }}</div>
-                                    @endif
+
                                     @if(!empty($checkUserAddress) && $checkUserAddress == 1)
                                         <div class="col fw-600">{{ translate('CGST %') }}</div>
                                         <div class="col fw-600">{{ translate('CGST Amount') }}</div>
@@ -173,21 +170,7 @@
                                                         <span class="fw-600 fs-16">1</span>
                                                     @endif
                                                 </div>
-                                                @if(empty($checkUserAddress))
-                                                    <div class="col-lg col-4 order-2 order-lg-0 my-3 my-lg-0">
-                                                        <span
-                                                            class="opacity-60 fs-12 d-block d-lg-none">{{ translate('GST %') }}</span>
-                                                        <span
-                                                            class="fw-600 fs-16">{{ $GST_total }}</span>
-                                                    </div>
 
-                                                    <div class="col-lg col-4 order-2 order-lg-0 my-3 my-lg-0">
-                                                        <span
-                                                            class="opacity-60 fs-12 d-block d-lg-none">{{ translate('GST Amount') }}</span>
-                                                        <span
-                                                            class="fw-600 fs-16">{{ $GST_total }}</span>
-                                                    </div>
-                                                @endif
                                                 @if(!empty($checkUserAddress) && $checkUserAddress == 1)
                                                     <div class="col-lg col-4 order-2 order-lg-0 my-3 my-lg-0">
                                                         <span
@@ -266,12 +249,7 @@
                                 <span class="opacity-60 fs-15">{{ translate('Subtotal') }}</span>
                                 <span class="fw-600 fs-17 pl-3">{{ single_price($subTotal) }}</span>
                             </div>
-                            @if(empty($checkUserAddress))
-                                <div class="px-3 py-2 d-flex justify-content-end mt-n3">
-                                    <span class="opacity-60 fs-15">{{ translate('GST Amount') }}</span>
-                                    <span class="fw-600 fs-17 pl-3">{{ single_price($GST_total) }}</span>
-                                </div>
-                            @endif
+
                             @if(!empty($checkUserAddress) && $checkUserAddress == 1)
                                 <div class="px-3 py-2 d-flex justify-content-end mt-n3">
                                     <span class="opacity-60 fs-15">{{ translate('CGST') }}</span>
