@@ -498,7 +498,7 @@ class CheckoutController extends Controller
 
                     'weight' => ($prodTotalWeight > 0) ? $prodTotalWeight : 1,
                     'cod' =>  ($loggedCountryId == 101) ? '1' : '0',  //Todo - To check in future
-                    'delivery_country' => "AE",
+                    'delivery_country' => $country->code,
 
 
                 ]);
@@ -519,7 +519,7 @@ class CheckoutController extends Controller
                     $data['status'] = "invalid_delivery_postcode";
                 }else{
                     $data['status'] = "invalid_delivery_postcode";
-                    $data['message'] = "your location not available courier";
+                    $data['message'] = "Shipping is not available to the selected country. Please contact Quicklab";
                 }
                 echo json_encode($data);
             }
