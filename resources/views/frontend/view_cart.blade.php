@@ -129,12 +129,21 @@
                                                     </span>
                                                     <span class="d-block fs-14 opacity-60">{{ $product_name_with_choice }}</span>
                                                 </div>
+                                                @php
+                                                        if (Session::get('currency_code') == 'USD') {
+                                                            $priceWithoutTax = $cartItem['price'] ;
+
+                                                        }else{
+                                                            $priceWithoutTax = $cartItem['price'] - $cartItem['tax'];
+                                                        }
+
+                                                        @endphp
 
                                                 <div class="col-lg col-4 order-1 order-lg-0 my-3 my-lg-0">
                                                     <span
                                                         class="opacity-60 fs-12 d-block d-lg-none">{{ translate('Price') }}</span>
                                                     <span
-                                                        class="fw-600 fs-16">{{ single_price(($cartItem['price'])) }}</span>
+                                                        class="fw-600 fs-16">{{ single_price(($priceWithoutTax)) }}</span>
                                                 </div>
                                                 <!-- <div class="col-lg col-4 order-2 order-lg-0 my-3 my-lg-0">
                                                     <span

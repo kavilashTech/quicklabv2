@@ -51,7 +51,8 @@
                                     $product_stock = $product->stocks->where('variant', $cartItem['variation'])->first();
                                     $product_price = discounted_cart_variant_price($cartItem['variation'],$product,false);
                                     $total = $total + ( $product_price - $cartItem['tax'] + $cartItem['tax']) * $cartItem['quantity'];
-                                    $subTotal = $subTotal + ($product_price - $cartItem['tax']) * $cartItem['quantity'];
+                                    //$subTotal = $subTotal + ($product_price - $cartItem['tax']) * $cartItem['quantity'];
+
                                     $product_name_with_choice = $product->getTranslation('name');
                                     if ($cartItem['variation'] != null) {
                                         $product_name_with_choice = $product->getTranslation('name').' - '.$cartItem['variation'];
@@ -72,9 +73,16 @@
                                         </div>
 
                                         <div class="col-lg col-4 order-1 order-lg-0 my-3 my-lg-0">
-                                            @php
-                                                $priceWithoutTax = $cartItem['price'] - $cartItem['tax'];
-                                            @endphp
+                                        @php
+                                                        if (Session::get('currency_code') == 'USD') {
+                                                            $priceWithoutTax = $cartItem['price'] ;
+
+                                                        }else{
+                                                            $priceWithoutTax = $cartItem['price'] - $cartItem['tax'];
+                                                        }
+                                                        $subTotal = $subTotal + ($priceWithoutTax) * $cartItem['quantity'];
+
+                                                        @endphp
                                             <span class="opacity-60 fs-12 d-block d-lg-none">{{ translate('Price')}}</span>
                                             <span class="fw-600 fs-16">{{ single_price($priceWithoutTax) }}</span>
                                         </div>

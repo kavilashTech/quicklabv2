@@ -212,7 +212,8 @@ class CartController extends Controller
 
             $total_show_product_price = round($price - $cut_pr,2);
 
-            $data['price'] = $total_show_product_price ;
+           // $data['price'] = $total_show_product_price ;
+            $data['price'] = $price ;
             //$data['tax'] = $tax;
             //$data['shipping'] = 0;
             $data['shipping_cost'] = 0;
@@ -384,6 +385,7 @@ class CartController extends Controller
     //updated the quantity for a cart item
     public function updateQuantity(Request $request)
     {
+
         $cartItem = Cart::findOrFail($request->id);
 
         if($cartItem['id'] == $request->id){
