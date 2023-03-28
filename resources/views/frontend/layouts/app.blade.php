@@ -1,26 +1,27 @@
 <!DOCTYPE html>
-@if(\App\Models\Language::where('code', Session::get('locale', Config::get('app.locale')))->first()->rtl == 1)
-<html dir="rtl" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+@if (\App\Models\Language::where('code', Session::get('locale', Config::get('app.locale')))->first()->rtl == 1)
+    <html dir="rtl" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 @else
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 @endif
+
 <head>
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="app-url" content="{{ getBaseURL() }}">
     <meta name="file-base-url" content="{{ getFileBaseURL() }}">
 
-    <title>@yield('meta_title', get_setting('website_name').' | '.get_setting('site_motto'))</title>
+    <title>@yield('meta_title', get_setting('website_name') . ' | ' . get_setting('site_motto'))</title>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="index, follow">
-    <meta name="description" content="@yield('meta_description', get_setting('meta_description') )" />
-    <meta name="keywords" content="@yield('meta_keywords', get_setting('meta_keywords') )">
+    <meta name="description" content="@yield('meta_description', get_setting('meta_description'))" />
+    <meta name="keywords" content="@yield('meta_keywords', get_setting('meta_keywords'))">
 
     @yield('meta')
 
-    @if(!isset($detailedProduct) && !isset($customer_product) && !isset($shop) && !isset($page) && !isset($blog))
+    @if (!isset($detailedProduct) && !isset($customer_product) && !isset($shop) && !isset($page) && !isset($blog))
         <!-- Schema.org markup for Google+ -->
         <meta itemprop="name" content="{{ get_setting('meta_title') }}">
         <meta itemprop="description" content="{{ get_setting('meta_description') }}">
@@ -31,7 +32,8 @@
         <meta name="twitter:site" content="@publisher_handle">
         <meta name="twitter:title" content="{{ get_setting('meta_title') }}">
         <meta name="twitter:description" content="{{ get_setting('meta_description') }}">
-        <meta name="twitter:creator" content="@author_handle">
+        <meta name="twitter:creator"
+            content="@author_handle">
         <meta name="twitter:image" content="{{ uploaded_asset(get_setting('meta_image')) }}">
 
         <!-- Open Graph data -->
@@ -51,12 +53,12 @@
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i,800,800i&display=swap" rel="stylesheet">
 
     <!-- CSS Files -->
-    <link rel="stylesheet" href="{{ static_asset('assets/css/vendors.css') }}">
-    @if(\App\Models\Language::where('code', Session::get('locale', Config::get('app.locale')))->first()->rtl == 1)
-    <link rel="stylesheet" href="{{ static_asset('assets/css/bootstrap-rtl.min.css') }}">
+    <link rel="stylesheet" href="{{ secure_asset('assets/css/vendors.css') }}">
+    @if (\App\Models\Language::where('code', Session::get('locale', Config::get('app.locale')))->first()->rtl == 1)
+    <link rel="stylesheet" href="{{ secure_asset('assets/css/bootstrap-rtl.min.css') }}">
     @endif
-    <link rel="stylesheet" href="{{ static_asset('assets/css/aiz-core.css') }}">
-    <link rel="stylesheet" href="{{ static_asset('assets/css/custom-style.css') }}">
+    <link rel="stylesheet" href="{{ secure_asset('assets/css/aiz-core.css') }}">
+    <link rel="stylesheet" href="{{ secure_asset('assets/css/custom-style.css') }}">
 
 
     <script>
@@ -93,7 +95,7 @@
         :root{
             --primary: {{ get_setting('base_color', '#e62d04') }};
             --hov-primary: {{ get_setting('base_hov_color', '#c52907') }};
-            --soft-primary: {{ hex2rgba(get_setting('base_color','#e62d04'),.15) }};
+            --soft-primary: {{ hex2rgba(get_setting('base_color', '#e62d04'), 0.15) }};
         }
 
         #map{
@@ -223,8 +225,8 @@
     @yield('modal')
 
     <!-- SCRIPTS -->
-    <script src="{{ static_asset('assets/js/vendors.js') }}"></script>
-    <script src="{{ static_asset('assets/js/aiz-core.js') }}"></script>
+    <script src="{{ secure_asset('assets/js/vendors.js') }}"></script>
+    <script src="{{ secure_asset('assets/js/aiz-core.js') }}"></script>
 
 
 
@@ -400,7 +402,7 @@
             @if (Auth::check() && Auth::user()->user_type == 'customer')
             $.ajax({
                 type:"POST",
-                url: '{{ route("generate-quote.store") }}',
+                url: '{{ route('generate-quote.store') }}',
                 data: $('#option-choice-form').serializeArray(),
                 success: function(data){
                     $('#quation_modal').modal('show');
@@ -496,7 +498,7 @@
         }
 
         function addToCart(){
-            @if(Auth::check() && Auth::user()->user_type != 'customer')
+            @if (Auth::check() && Auth::user()->user_type != 'customer')
                 AIZ.plugins.notify('warning', "{{ translate('Please Login as a customer to add products to the Cart.') }}");
                 return false;
             @endif
@@ -526,10 +528,9 @@
         }
 
         function buyNow(){
-            @if(Auth::check() && Auth::user()->user_type != 'customer')
+            @if (Auth::check() && Auth::user()->user_type != 'customer')
                 AIZ.plugins.notify('warning', "{{ translate('Please Login as a customer to add products to the Cart.') }}");
-                return false;
-            @endif
+                return false; @endif
 
             if(checkAddToCartValidity()) {
                 $('#addToCart-modal-body').html(null);
@@ -537,33 +538,16 @@
                 $('.c-preloader').show();
                 $.ajax({
                    type:"POST",
-                   url: '{{ route('cart.addToCart') }}',
-                   data: $('#option-choice-form').serializeArray(),
-                   success: function(data){
-                       if(data == 1){
+            url: '{{ route('cart.addToCart') }}' , data: $('#option-choice-form').serializeArray(), success:
+            function(data){ if(data==1){ $('#addToCart-modal-body').html(data.modal_view);
+            updateNavCart(data.nav_cart_view,data.cart_count); window.location.replace("{{ route('cart') }}"); } else{
+            $('#addToCart-modal-body').html(null); $('.c-preloader').hide(); $('#modal-size').removeClass('modal-lg');
+            $('#addToCart-modal-body').html(data.modal_view); } } }); } else{
+            AIZ.plugins.notify('warning', "{{ translate('Please choose all the options') }}" ); } } </script>
+        @yield('script')
+        @php
+            echo get_setting('footer_script');
+        @endphp
+        </body>
 
-                            $('#addToCart-modal-body').html(data.modal_view);
-                            updateNavCart(data.nav_cart_view,data.cart_count);
-
-                            window.location.replace("{{ route('cart') }}");
-                       }
-                       else{
-                            $('#addToCart-modal-body').html(null);
-                            $('.c-preloader').hide();
-                            $('#modal-size').removeClass('modal-lg');
-                            $('#addToCart-modal-body').html(data.modal_view);
-                       }
-                   }
-               });
-            }
-            else{
-                AIZ.plugins.notify('warning', "{{ translate('Please choose all the options') }}");
-            }
-        }
-    </script>
-    @yield('script')
-    @php
-        echo get_setting('footer_script');
-    @endphp
-</body>
-</html>
+        </html>

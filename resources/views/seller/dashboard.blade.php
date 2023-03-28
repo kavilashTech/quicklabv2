@@ -98,7 +98,8 @@
                                     <path id="Path_63" data-name="Path 63"
                                         d="M213.73,129.882h24a1,1,0,0,1,0,2h-24a1,1,0,1,1,0-2"
                                         transform="translate(1372.115 -1103.5)" fill="#FFFFFF" />
-                                    <path id="Path_64" data-name="Path 64" d="M210.23,129.382a2,2,0,1,0,2,2,2,2,0,0,0-2-2"
+                                    <path id="Path_64" data-name="Path 64"
+                                        d="M210.23,129.382a2,2,0,1,0,2,2,2,2,0,0,0-2-2"
                                         transform="translate(1367.615 -1104)" fill="#FFFFFF" />
                                     <line id="Line_3" data-name="Line 3" transform="translate(1609.643 -1015.618)"
                                         fill="none" stroke="red" stroke-linecap="round" stroke-linejoin="round"
@@ -140,7 +141,8 @@
 
                         </div>
                         <div class="col-auto text-right">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64.001" viewBox="0 0 64 64.001">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64.001"
+                                viewBox="0 0 64 64.001">
                                 <g id="Group_26" data-name="Group 26" transform="translate(-1571.385 1123.29)">
                                     <line id="Line_5" data-name="Line 5" transform="translate(1572.385 -1123.29)"
                                         fill="none" stroke="red" stroke-linecap="round" stroke-linejoin="round"
@@ -267,12 +269,12 @@
                     </div>
                     <div class="row align-items-center mb-4">
                         <div class="col-auto text-left">
-                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30"
-                                height="30" viewBox="0 0 30 30">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                width="30" height="30" viewBox="0 0 30 30">
                                 <defs>
                                     <clipPath id="clip-path">
-                                        <rect id="Rectangle_17198" data-name="Rectangle 17198" width="30" height="30"
-                                            transform="translate(0 0)" fill="none" />
+                                        <rect id="Rectangle_17198" data-name="Rectangle 17198" width="30"
+                                            height="30" transform="translate(0 0)" fill="none" />
                                     </clipPath>
                                 </defs>
                                 <g id="Group_23751" data-name="Group 23751" transform="translate(0 0.001)">
@@ -421,14 +423,14 @@
                 class="card mb-0 @if (addon_is_activated('seller_subscription')) px-4 py-5 @else p-5 h-100 @endif d-flex align-items-center justify-content-center">
                 @if (Auth::user()->shop->verification_status == 0)
                     <div class="my-n4 py-1 text-center">
-                        <img src="{{ static_asset('assets/img/non_verified.png') }}" alt=""
+                        <img src="{{ secure_asset('assets/img/non_verified.png') }}" alt=""
                             class="w-xxl-130px w-90px d-block">
                         <a href="{{ route('seller.shop.verify') }}"
                             class="btn btn-sm btn-primary">{{ translate('Verify Now') }}</a>
                     </div>
                 @else
                     <div class="my-2 py-1">
-                        <img src="{{ static_asset('assets/img/verified.png') }}" alt="" width="">
+                        <img src="{{ secure_asset('assets/img/verified.png') }}" alt="" width="">
                     </div>
                 @endif
             </div>
@@ -443,8 +445,8 @@
                     {{ translate('Money Withdraw') }}
                 </div>
                 <div class="m-3">
-                    <svg id="Group_22725" data-name="Group 22725" xmlns="http://www.w3.org/2000/svg" width="48" height="48"
-                        viewBox="0 0 48 48">
+                    <svg id="Group_22725" data-name="Group 22725" xmlns="http://www.w3.org/2000/svg" width="48"
+                        height="48" viewBox="0 0 48 48">
                         <path id="Path_108"
                             d="M24,28.5A1.538,1.538,0,0,1,25.5,30v6a1.5,1.5,0,0,1-3,0V30A1.538,1.538,0,0,1,24,28.5"
                             fill="#2E294E" />
@@ -467,10 +469,10 @@
                 <div class="m-3">
                     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48">
                         <g id="Group_22724" data-name="Group 22724" transform="translate(-1284 -875)">
-                            <rect id="Rectangle_17080" data-name="Rectangle 17080" width="2" height="48" rx="1"
-                                transform="translate(1307 875)" fill="#2E294E" />
-                            <rect id="Rectangle_17081" data-name="Rectangle 17081" width="2" height="48" rx="1"
-                                transform="translate(1332 898) rotate(90)" fill="#2E294E" />
+                            <rect id="Rectangle_17080" data-name="Rectangle 17080" width="2" height="48"
+                                rx="1" transform="translate(1307 875)" fill="#2E294E" />
+                            <rect id="Rectangle_17081" data-name="Rectangle 17081" width="2" height="48"
+                                rx="1" transform="translate(1332 898) rotate(90)" fill="#2E294E" />
                         </g>
                     </svg>
                 </div>
@@ -482,8 +484,8 @@
                     {{ translate('Shop Settings') }}
                 </div>
                 <div class=" m-3">
-                    <svg id="Group_31" data-name="Group 31" xmlns="http://www.w3.org/2000/svg" width="32" height="32"
-                        viewBox="0 0 32 32">
+                    <svg id="Group_31" data-name="Group 31" xmlns="http://www.w3.org/2000/svg" width="32"
+                        height="32" viewBox="0 0 32 32">
                         <path id="Path_78" data-name="Path 78"
                             d="M2,25.723a1,1,0,0,0,.629.928L16,32l3.361-1.344a.5.5,0,0,0-.186-.965.491.491,0,0,0-.185.036L16,30.923l-13-5.2v-11.6a4.428,4.428,0,0,1-1-.2Z"
                             fill="#2E294E" />
@@ -511,8 +513,8 @@
                     {{ translate('Payment Settings') }}
                 </div>
                 <div class=" m-3">
-                    <svg id="Group_30" data-name="Group 30" xmlns="http://www.w3.org/2000/svg" width="31.999" height="32"
-                        viewBox="0 0 31.999 32">
+                    <svg id="Group_30" data-name="Group 30" xmlns="http://www.w3.org/2000/svg" width="31.999"
+                        height="32" viewBox="0 0 31.999 32">
                         <path id="Path_83" data-name="Path 83"
                             d="M96.2,30.593a.5.5,0,0,1,.314-.464L103.6,27.3a.484.484,0,0,1,.185-.036.5.5,0,0,1,.185.965l-7.087,2.831a.5.5,0,0,1-.686-.464"
                             transform="translate(-92.946 -10)" fill="#2E294E" />
@@ -548,10 +550,10 @@
                             <div class="position-relative">
                                 <a href="{{ route('product', $product->slug) }}" class="d-block">
                                     <img class="img-fit lazyload mx-auto h-210px"
-                                        src="{{ static_asset('assets/img/placeholder.jpg') }}"
+                                        src="{{ secure_asset('assets/img/placeholder.jpg') }}"
                                         data-src="{{ uploaded_asset($product->thumbnail_img) }}"
                                         alt="{{ $product->getTranslation('name') }}"
-                                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';">
+                                        onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';">
                                 </a>
                             </div>
                             <div class="p-md-3 p-2 text-left">

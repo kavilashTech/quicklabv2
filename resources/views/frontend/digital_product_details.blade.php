@@ -40,7 +40,7 @@
                 <div class="row">
                     <div class="col-xl-5 col-lg-6">
                         <div class="sticky-top z-3 row gutters-10 flex-row-reverse">
-                            @if($detailedProduct->photos != null)
+                            @if ($detailedProduct->photos != null)
                                 @php
                                     $photos = explode(',',$detailedProduct->photos);
                                 @endphp
@@ -50,9 +50,9 @@
                                         <div class="carousel-box img-zoom rounded">
                                             <img
                                                 class="img-fluid lazyload"
-                                                src="{{ static_asset('assets/img/placeholder.jpg') }}"
+                                                src="{{ secure_asset('assets/img/placeholder.jpg') }}"
                                                 data-src="{{ uploaded_asset($photo) }}"
-                                                onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
+                                                onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';"
                                             >
                                         </div>
                                         @endforeach
@@ -64,9 +64,9 @@
                                         <div class="carousel-box c-pointer border p-1 rounded">
                                             <img
                                                 class="lazyload mw-100 size-60px mx-auto"
-                                                src="{{ static_asset('assets/img/placeholder.jpg') }}"
+                                                src="{{ secure_asset('assets/img/placeholder.jpg') }}"
                                                 data-src="{{ uploaded_asset($photo) }}"
-                                                onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
+                                                onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';"
                                             >
                                         </div>
                                         @endforeach
@@ -93,7 +93,7 @@
                                     <span class="rating">
                                         {{ renderStarRating($detailedProduct->rating) }}
                                     </span>
-                                    <span class="ml-1 opacity-50">({{ $total }} {{ translate('reviews')}})</span>
+                                    <span class="ml-1 opacity-50">({{ $total }} {{ translate('reviews') }})</span>
                                 </div>
                                 <div class="col-6 text-right">
                                     @php
@@ -107,12 +107,12 @@
                                             //$qty = $detailedProduct->current_stock;
                                         //}
                                     @endphp
-                                    <span class="badge badge-md badge-inline badge-pill badge-success">{{ translate('In stock')}}</span>
+                                    <span class="badge badge-md badge-inline badge-pill badge-success">{{ translate('In stock') }}</span>
                                 </div>
                             </div>
 
                             <hr>
-                            @if(isset($detailedProduct->stocks[0]['sku']) && $detailedProduct->stocks[0]['sku'] != '')
+                            @if (isset($detailedProduct->stocks[0]['sku']) && $detailedProduct->stocks[0]['sku'] != '')
                             <div class="row no-gutters mt-3">
                                 <div class="col-sm-2">
                                     <div class="opacity-50">SKU:</div>
@@ -122,7 +122,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(isset($detailedProduct->stocks[0]['hsn_code']) && $detailedProduct->stocks[0]['hsn_code'] != '')
+                            @if (isset($detailedProduct->stocks[0]['hsn_code']) && $detailedProduct->stocks[0]['hsn_code'] != '')
                             <div class="row no-gutters my-2">
                                 <div class="col-sm-2">
                                     <div class="opacity-50">HSN:</div>
@@ -137,16 +137,16 @@
 
                             <div class="row align-items-center">
                                 <div class="col-auto">
-                                    <small class="mr-2 opacity-50">{{ translate('Sold by')}}: </small><br>
+                                    <small class="mr-2 opacity-50">{{ translate('Sold by') }}: </small><br>
                                     @if ($detailedProduct->added_by == 'seller' && get_setting('vendor_system_activation') == 1)
                                         <a href="{{ route('shop.visit', $detailedProduct->user->shop->slug) }}" class="text-reset">{{ $detailedProduct->user->shop->name }}</a>
                                     @else
-                                        {{  translate('Inhouse product') }}
+                                        {{ translate('Inhouse product') }}
                                     @endif
                                 </div>
                                 @if (get_setting('conversation_system') == 1)
                                     <div class="col-auto">
-                                        <button class="btn btn-sm btn-soft-primary" onclick="show_chat_modal()">{{ translate('Message Seller')}}</button>
+                                        <button class="btn btn-sm btn-soft-primary" onclick="show_chat_modal()">{{ translate('Message Seller') }}</button>
                                     </div>
                                 @endif
 
@@ -159,17 +159,17 @@
 
                             <hr>
 
-                            @if(home_price($detailedProduct) != home_discounted_price($detailedProduct))
+                            @if (home_price($detailedProduct) != home_discounted_price($detailedProduct))
                                 
                                 <div class="row no-gutters mt-3">
                                     <div class="col-2">
-                                        <div class="opacity-50 mt-2">{{ translate('Price')}}:</div>
+                                        <div class="opacity-50 mt-2">{{ translate('Price') }}:</div>
                                     </div>
                                     <div class="col-10">
                                         <div class="fs-20 opacity-60">
                                             <del>
                                                 {{ home_price($detailedProduct) }}
-                                                @if($detailedProduct->unit != null)
+                                                @if ($detailedProduct->unit != null)
                                                     <span>/{{ $detailedProduct->getTranslation('unit') }}</span>
                                                 @endif
                                             </del>
@@ -179,14 +179,14 @@
 
                                 <div class="row no-gutters mt-2">
                                     <div class="col-2">
-                                        <div class="opacity-50">{{ translate('Discount Price')}}:</div>
+                                        <div class="opacity-50">{{ translate('Discount Price') }}:</div>
                                     </div>
                                     <div class="col-10">
                                         <div class="">
                                             <strong class="h2 fw-600 text-primary">
                                                 {{ home_discounted_price($detailedProduct) }}
                                             </strong>
-                                            @if($detailedProduct->unit != null)
+                                            @if ($detailedProduct->unit != null)
                                                 <span class="opacity-70">/{{ $detailedProduct->getTranslation('unit') }}</span>
                                             @endif
                                         </div>
@@ -195,14 +195,14 @@
                             @else
                                 <div class="row no-gutters mt-3">
                                     <div class="col-2">
-                                        <div class="opacity-50">{{ translate('Price')}}:</div>
+                                        <div class="opacity-50">{{ translate('Price') }}:</div>
                                     </div>
                                     <div class="col-10">
                                         <div class="">
                                             <strong class="h2 fw-600 text-primary">
                                                 {{ home_discounted_price($detailedProduct) }}
                                             </strong>
-                                            @if($detailedProduct->unit != null)
+                                            @if ($detailedProduct->unit != null)
                                                 <span class="opacity-70">/{{ $detailedProduct->getTranslation('unit') }}</span>
                                             @endif
                                         </div>
@@ -213,7 +213,7 @@
                             @if (addon_is_activated('club_point') && $detailedProduct->earn_point > 0)
                                 <div class="row no-gutters mt-4">
                                     <div class="col-2">
-                                        <div class="opacity-50">{{  translate('Club Point') }}:</div>
+                                        <div class="opacity-50">{{ translate('Club Point') }}:</div>
                                     </div>
                                     <div class="col-10">
                                         <div class="d-inline-block club-point bg-soft-base-1 border-light-base-1 border">
@@ -231,7 +231,7 @@
 
                                 <div class="row no-gutters pb-3 d-none" id="chosen_price_div">
                                     <div class="col-2">
-                                        <div class="opacity-50">{{ translate('Total Price')}}:</div>
+                                        <div class="opacity-50">{{ translate('Total Price') }}:</div>
                                     </div>
                                     <div class="col-10">
                                         <div class="product-price">
@@ -244,24 +244,24 @@
 
                             </form>
 
-                            @if(isset(Auth::user()->user_type) &&  Auth::user()->user_type == 'partner')
+                            @if (isset(Auth::user()->user_type) && Auth::user()->user_type == 'partner')
                                 <div class="mt-3">
                                     <button type="button" class="btn btn-soft-primary mr-2 add-to-cart fw-600" style="cursor: default" disabled>
                                         <i class="las la-shopping-bag"></i>
-                                        <span class="d-none d-md-inline-block"> {{ translate('Add to cart')}}</span>
+                                        <span class="d-none d-md-inline-block"> {{ translate('Add to cart') }}</span>
                                     </button>
                                     <button type="button" class="btn btn-primary buy-now fw-600" style="cursor: default" disabled>
-                                        <i class="la la-shopping-cart"></i> {{ translate('Buy Now')}}
+                                        <i class="la la-shopping-cart"></i> {{ translate('Buy Now') }}
                                     </button>
                                 </div>
                             @else
                                 <div class="mt-3">
                                     <button type="button" class="btn btn-soft-primary mr-2 add-to-cart fw-600" onclick="addToCart()">
                                         <i class="las la-shopping-bag"></i>
-                                        <span class="d-none d-md-inline-block"> {{ translate('Add to cart')}}</span>
+                                        <span class="d-none d-md-inline-block"> {{ translate('Add to cart') }}</span>
                                     </button>
                                     <button type="button" class="btn btn-primary buy-now fw-600" onclick="buyNow()">
-                                        <i class="la la-shopping-cart"></i> {{ translate('Buy Now')}}
+                                        <i class="la la-shopping-cart"></i> {{ translate('Buy Now') }}
                                     </button>
                                 </div>
                             @endif
@@ -270,13 +270,13 @@
                             <div class="d-table width-100 mt-3">
                                 <div class="d-table-cell">
                                     <!-- Add to wishlist button -->
-                                    @if(isset(Auth::user()->user_type) &&  Auth::user()->user_type == 'partner')
+                                    @if (isset(Auth::user()->user_type) && Auth::user()->user_type == 'partner')
                                         <button type="button" class="btn pl-0 btn-link fw-600" style="cursor: default" disabled>
-                                            {{ translate('Add to wishlist')}}
+                                            {{ translate('Add to wishlist') }}
                                         </button>
                                     @else
                                         <button type="button" class="btn pl-0 btn-link fw-600" onclick="addToWishList({{ $detailedProduct->id }})">
-                                            {{ translate('Add to wishlist')}}
+                                            {{ translate('Add to wishlist') }}
                                         </button>
                                     @endif
                                     <button type="button" class="btn pl-0 btn-link fw-600 float-end"
@@ -285,9 +285,14 @@
                                     </button>
                                     <!-- Add to compare button -->
                                     <!-- <button type="button" class="btn btn-link btn-icon-left fw-600" onclick="addToCompare({{ $detailedProduct->id }})">
-                                        {{ translate('Add to compare')}}
+                                        {{ translate('Add to compare') }}
                                     </button> -->
-                                    @if(Auth::check() && addon_is_activated('affiliate_system') && (\App\Models\AffiliateOption::where('type', 'product_sharing')->first()->status || \App\Models\AffiliateOption::where('type', 'category_wise_affiliate')->first()->status) && Auth::user()->affiliate_user != null && Auth::user()->affiliate_user->status)
+                                    @if (Auth::check() &&
+                                            addon_is_activated('affiliate_system') &&
+                                            (\App\Models\AffiliateOption::where('type', 'product_sharing')->first()->status ||
+                                                \App\Models\AffiliateOption::where('type', 'category_wise_affiliate')->first()->status) &&
+                                            Auth::user()->affiliate_user != null &&
+                                            Auth::user()->affiliate_user->status)
                                         @php
                                             if(Auth::check()){
                                                 if(Auth::user()->referral_code == null){
@@ -299,9 +304,9 @@
                                             }
                                         @endphp
                                         <div class="form-group">
-                                            <textarea id="referral_code_url" class="form-control" readonly type="text" style="display:none">{{$referral_code_url}}</textarea>
+                                            <textarea id="referral_code_url" class="form-control" readonly type="text" style="display:none">{{ $referral_code_url }}</textarea>
                                         </div>
-                                        <button type=button id="ref-cpurl-btn" class="btn btn-sm btn-secondary" data-attrcpy="{{ translate('Copied')}}" onclick="CopyToClipboard('referral_code_url')">{{ translate('Copy the Promote Link')}}</button>
+                                        <button type=button id="ref-cpurl-btn" class="btn btn-sm btn-secondary" data-attrcpy="{{ translate('Copied') }}" onclick="CopyToClipboard('referral_code_url')">{{ translate('Copy the Promote Link') }}</button>
                                     @endif
                                 </div>
                             </div>
@@ -314,14 +319,14 @@
                             @if (addon_is_activated('refund_request'))
                                 <div class="row no-gutters mt-3">
                                     <div class="col-2">
-                                        <div class="opacity-50 mt-2">{{ translate('Refund')}}:</div>
+                                        <div class="opacity-50 mt-2">{{ translate('Refund') }}:</div>
                                     </div>
                                     <div class="col-10">
                                         <a href="{{ route('returnpolicy') }}" target="_blank"> 
                                             @if ($refund_sticker != null) 
                                                 <img src="{{ uploaded_asset($refund_sticker) }}" height="36"> 
                                             @else 
-                                                <img src="{{ static_asset('assets/img/refund-sticker.jpg') }}" height="36"> 
+                                                <img src="{{ secure_asset('assets/img/refund-sticker.jpg') }}" height="36"> 
                                             @endif</a>
                                         <a href="{{ route('returnpolicy') }}" class="ml-2" target="_blank">{{ translate('View Policy') }}</a>
                                     </div>
@@ -330,13 +335,13 @@
                             @if ($detailedProduct->added_by == 'seller')
                                 <div class="row no-gutters mt-3">
                                     <div class="col-2">
-                                        <div class="product-description-label">{{ translate('Seller Guarantees')}}:</div>
+                                        <div class="product-description-label">{{ translate('Seller Guarantees') }}:</div>
                                     </div>
                                     <div class="col-10">
                                         @if ($detailedProduct->user->shop->verification_status == 1)
-                                            {{ translate('Verified seller')}}
+                                            {{ translate('Verified seller') }}
                                         @else
-                                            {{ translate('Non verified seller')}}
+                                            {{ translate('Non verified seller') }}
                                         @endif
                                     </div>
                                 </div>
@@ -375,7 +380,7 @@
                                         </svg>
                                     </div>
                                 @endif
-                                <div class="opacity-50 fs-12 border-bottom">{{ translate('Sold by')}}</div>
+                                <div class="opacity-50 fs-12 border-bottom">{{ translate('Sold by') }}</div>
                                 <a href="{{ route('shop.visit', $detailedProduct->user->shop->slug) }}" class="text-reset d-block fw-600">
                                     {{ $detailedProduct->user->shop->name }}
                                     @if ($detailedProduct->user->shop->verification_status == 1)
@@ -393,12 +398,12 @@
                                             {{ renderStarRating(0) }}
                                         @endif
                                     </div>
-                                    <div class="opacity-60 fs-12">({{ $total }} {{ translate('customer reviews')}})</div>
+                                    <div class="opacity-60 fs-12">({{ $total }} {{ translate('customer reviews') }})</div>
                                 </div>
                             </div>
                             <div class="row no-gutters align-items-center border-top">
                                 <div class="col">
-                                    <a href="{{ route('shop.visit', $detailedProduct->user->shop->slug) }}" class="d-block btn btn-soft-primary rounded-0">{{ translate('Visit Store')}}</a>
+                                    <a href="{{ route('shop.visit', $detailedProduct->user->shop->slug) }}" class="d-block btn btn-soft-primary rounded-0">{{ translate('Visit Store') }}</a>
                                 </div>
                                 <div class="col">
                                     <ul class="social list-inline mb-0">
@@ -429,7 +434,7 @@
                     @endif
                     <div class="bg-white rounded shadow-sm mb-3">
                         <div class="p-3 border-bottom fs-16 fw-600">
-                            {{ translate('Top Selling Products')}}
+                            {{ translate('Top Selling Products') }}
                         </div>
                         <div class="p-3">
                             <ul class="list-group list-group-flush">
@@ -440,10 +445,10 @@
                                             <a href="{{ route('product', $top_product->slug) }}" class="d-block text-reset">
                                                 <img
                                                     class="img-fit lazyload h-110px"
-                                                    src="{{ static_asset('assets/img/placeholder.jpg') }}"
+                                                    src="{{ secure_asset('assets/img/placeholder.jpg') }}"
                                                     data-src="{{ uploaded_asset($top_product->thumbnail_img) }}"
                                                     alt="{{ $top_product->getTranslation('name') }}"
-                                                    onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
+                                                    onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';"
                                                 >
                                             </a>
                                         </div>
@@ -468,14 +473,14 @@
                 <div class="col-xl-9">
                     <div class="bg-white mb-3 shadow-sm rounded">
                         <div class="nav border-bottom aiz-nav-tabs">
-                            <a href="#tab_default_1" data-toggle="tab" class="p-3 fs-16 fw-600 text-reset active show">{{ translate('Description')}}</a>
-                            @if($detailedProduct->video_link != null)
-                                <a href="#tab_default_2" data-toggle="tab" class="p-3 fs-16 fw-600 text-reset">{{ translate('Video')}}</a>
+                            <a href="#tab_default_1" data-toggle="tab" class="p-3 fs-16 fw-600 text-reset active show">{{ translate('Description') }}</a>
+                            @if ($detailedProduct->video_link != null)
+                                <a href="#tab_default_2" data-toggle="tab" class="p-3 fs-16 fw-600 text-reset">{{ translate('Video') }}</a>
                             @endif
-                            @if($detailedProduct->pdf != null)
-                                <a href="#tab_default_3" data-toggle="tab" class="p-3 fs-16 fw-600 text-reset">{{ translate('Downloads')}}</a>
+                            @if ($detailedProduct->pdf != null)
+                                <a href="#tab_default_3" data-toggle="tab" class="p-3 fs-16 fw-600 text-reset">{{ translate('Downloads') }}</a>
                             @endif
-                            <a href="#tab_default_4" data-toggle="tab" class="p-3 fs-16 fw-600 text-reset">{{ translate('Reviews')}}</a>
+                            <a href="#tab_default_4" data-toggle="tab" class="p-3 fs-16 fw-600 text-reset">{{ translate('Reviews') }}</a>
                         </div>
 
                         <div class="tab-content pt-0">
@@ -503,22 +508,22 @@
                             </div>
                             <div class="tab-pane" id="tab_default_3">
                                 <div class="p-4 text-center">
-                                    <a href="{{ uploaded_asset($detailedProduct->pdf) }}"  class="btn btn-primary">{{  translate('Download') }}</a>
+                                    <a href="{{ uploaded_asset($detailedProduct->pdf) }}"  class="btn btn-primary">{{ translate('Download') }}</a>
                                 </div>
                             </div>
                             <div class="tab-pane" id="tab_default_4">
                                 <div class="p-4">
                                     <ul class="list-group list-group-flush">
                                         @foreach ($detailedProduct->reviews as $key => $review)
-                                            @if($review->user != null)
+                                            @if ($review->user != null)
                                             <li class="media list-group-item d-flex">
 
                                                 <span class="avatar avatar-md mr-3">
                                                     <img
                                                         class="lazyload"
-                                                        src="{{ static_asset('assets/img/placeholder.jpg') }}"
-                                                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
-                                                        @if($review->user->avatar_original !=null)
+                                                        src="{{ secure_asset('assets/img/placeholder.jpg') }}"
+                                                        onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';"
+                                                        @if ($review->user->avatar_original != null)
                                                             data-src="{{ uploaded_asset($review->user->avatar_original) }}"
                                                         @else
                                                             data-src="{{ uploaded_asset('assets/img/placeholder.jpg') }}"
@@ -529,10 +534,10 @@
                                                     <div class="d-flex justify-content-between">
                                                         <h3 class="fs-15 fw-600 mb-0">{{ $review->user->name }}</h3>
                                                         <span class="rating rating-sm">
-                                                            @for ($i=0; $i < $review->rating; $i++)
+                                                            @for ($i = 0; $i < $review->rating; $i++)
                                                                 <i class="las la-star active"></i>
                                                             @endfor
-                                                            @for ($i=0; $i < 5-$review->rating; $i++)
+                                                            @for ($i = 0; $i < 5 - $review->rating; $i++)
                                                                 <i class="las la-star"></i>
                                                             @endfor
                                                         </span>
@@ -547,18 +552,22 @@
                                         @endforeach
                                     </ul>
 
-                                    @if(count($detailedProduct->reviews) <= 0)
+                                    @if (count($detailedProduct->reviews) <= 0)
                                         <div class="text-center fs-18 opacity-70">
-                                            {{  translate('There have been no reviews for this product yet.') }}
+                                            {{ translate('There have been no reviews for this product yet.') }}
                                         </div>
                                     @endif
 
-                                    @if(Auth::check())
+                                    @if (Auth::check())
                                         @php
                                             $commentable = false;
                                         @endphp
                                         @foreach ($detailedProduct->orderDetails as $key => $orderDetail)
-                                            @if($orderDetail->order != null && $orderDetail->order->user_id == Auth::user()->id && $orderDetail->delivery_status == 'delivered' && \App\Models\Review::where('user_id', Auth::user()->id)->where('product_id', $detailedProduct->id)->first() == null)
+                                            @if (
+                                                $orderDetail->order != null &&
+                                                    $orderDetail->order->user_id == Auth::user()->id &&
+                                                    $orderDetail->delivery_status == 'delivered' &&
+                                                    \App\Models\Review::where('user_id', Auth::user()->id)->where('product_id', $detailedProduct->id)->first() == null)
                                                 @php
                                                     $commentable = true;
                                                 @endphp
@@ -568,7 +577,7 @@
                                             <div class="pt-4">
                                                 <div class="border-bottom mb-4">
                                                     <h3 class="fs-17 fw-600">
-                                                        {{ translate('Write a review')}}
+                                                        {{ translate('Write a review') }}
                                                     </h3>
                                                 </div>
                                                 <form class="form-default" role="form" action="{{ route('reviews.store') }}" method="POST">
@@ -577,19 +586,19 @@
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label for="" class="text-uppercase c-gray-light">{{ translate('Your name')}}</label>
+                                                                <label for="" class="text-uppercase c-gray-light">{{ translate('Your name') }}</label>
                                                                 <input type="text" name="name" value="{{ Auth::user()->name }}" class="form-control" disabled required>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
-                                                                <label for="" class="text-uppercase c-gray-light">{{ translate('Email')}}</label>
+                                                                <label for="" class="text-uppercase c-gray-light">{{ translate('Email') }}</label>
                                                                 <input type="text" name="email" value="{{ Auth::user()->email }}" class="form-control" required disabled>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="form-group">
-                                                        <label class="opacity-60">{{ translate('Rating')}}</label>
+                                                        <label class="opacity-60">{{ translate('Rating') }}</label>
                                                         <div class="rating rating-input">
                                                             <label>
                                                                 <input type="radio" name="rating" value="1">
@@ -615,13 +624,13 @@
                                                     </div>
 
                                                     <div class="form-group">
-                                                        <label class="opacity-60">{{ translate('Comment')}}</label>
-                                                        <textarea class="form-control" rows="4" name="comment" placeholder="{{ translate('Your review')}}" required></textarea>
+                                                        <label class="opacity-60">{{ translate('Comment') }}</label>
+                                                        <textarea class="form-control" rows="4" name="comment" placeholder="{{ translate('Your review') }}" required></textarea>
                                                     </div>
 
                                                     <div class="text-right">
                                                         <button type="submit" class="btn btn-primary mt-3">
-                                                            {{ translate('Submit review')}}
+                                                            {{ translate('Submit review') }}
                                                         </button>
                                                     </div>
                                                 </form>
@@ -635,7 +644,7 @@
                     <div class="bg-white rounded shadow-sm">
                         <div class="border-bottom p-3">
                             <h3 class="fs-16 fw-600 mb-0 text-left">
-                                <span class="">{{ translate('Related products')}}</span>
+                                <span class="">{{ translate('Related products') }}</span>
                             </h3>
                         </div>
                         <div class="p-3">
@@ -647,16 +656,16 @@
                                             <a href="{{ route('product', $related_product->slug) }}" class="d-block">
                                                 <img
                                                     class="img-fit lazyload mx-auto h-140px h-md-210px"
-                                                    src="{{ static_asset('assets/img/placeholder.jpg') }}"
+                                                    src="{{ secure_asset('assets/img/placeholder.jpg') }}"
                                                     data-src="{{ uploaded_asset($related_product->thumbnail_img) }}"
                                                     alt="{{ $related_product->getTranslation('name') }}"
-                                                    onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
+                                                    onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';"
                                                 >
                                             </a>
                                         </div>
                                         <div class="p-md-3 p-2 text-left">
                                             <div class="fs-15">
-                                                @if(home_base_price($related_product) != home_discounted_base_price($related_product))
+                                                @if (home_base_price($related_product) != home_discounted_base_price($related_product))
                                                     <del class="fw-600 opacity-50 mr-1" >{{ home_base_price($related_product) }}</del>
                                                 @endif
                                                 <span class="fw-700 text-primary">{{ home_discounted_base_price($related_product) }}</span>
@@ -692,7 +701,7 @@
         <div class="modal-dialog modal-dialog-centered modal-dialog-zoom product-modal" id="modal-size" role="document">
             <div class="modal-content position-relative">
                 <div class="modal-header">
-                    <h5 class="modal-title fw-600 heading-5">{{ translate('Any question about this product?')}}</h5>
+                    <h5 class="modal-title fw-600 heading-5">{{ translate('Any question about this product?') }}</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -709,8 +718,8 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-outline-primary fw-600" data-dismiss="modal">{{ translate('Cancel')}}</button>
-                        <button type="submit" class="btn btn-primary fw-600">{{ translate('Send')}}</button>
+                        <button type="button" class="btn btn-outline-primary fw-600" data-dismiss="modal">{{ translate('Cancel') }}</button>
+                        <button type="submit" class="btn btn-primary fw-600">{{ translate('Send') }}</button>
                     </div>
                 </form>
             </div>
@@ -722,7 +731,7 @@
         <div class="modal-dialog modal-dialog-zoom" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h6 class="modal-title fw-600">{{ translate('Login')}}</h6>
+                    <h6 class="modal-title fw-600">{{ translate('Login') }}</h6>
                     <button type="button" class="close" data-dismiss="modal">
                         <span aria-hidden="true"></span>
                     </button>
@@ -733,46 +742,44 @@
                             @csrf
                             <div class="form-group">
                                 @if (addon_is_activated('otp_system'))
-                                    <input type="text" class="form-control h-auto form-control-lg {{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email') }}" placeholder="{{ translate('Email Or Phone')}}" name="email" id="email">
+                                    <input type="text" class="form-control h-auto form-control-lg {{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email') }}" placeholder="{{ translate('Email Or Phone') }}" name="email" id="email">
                                 @else
-                                    <input type="email" class="form-control h-auto form-control-lg {{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email') }}" placeholder="{{  translate('Email') }}" name="email">
+                                    <input type="email" class="form-control h-auto form-control-lg {{ $errors->has('email') ? ' is-invalid' : '' }}" value="{{ old('email') }}" placeholder="{{ translate('Email') }}" name="email">
                                 @endif
                                 @if (addon_is_activated('otp_system'))
-                                    <span class="opacity-60">{{  translate('Use country code before number') }}</span>
+                                    <span class="opacity-60">{{ translate('Use country code before number') }}</span>
                                 @endif
                             </div>
 
                             <div class="form-group">
-                                <input type="password" name="password" class="form-control h-auto form-control-lg" placeholder="{{ translate('Password')}}">
+                                <input type="password" name="password" class="form-control h-auto form-control-lg" placeholder="{{ translate('Password') }}">
                             </div>
 
                             <div class="row mb-2">
                                 <div class="col-6">
                                     <label class="aiz-checkbox">
                                         <input type="checkbox" name="remember" {{ old('remember') ? 'checked' : '' }}>
-                                        <span class=opacity-60>{{  translate('Remember Me') }}</span>
+                                        <span class=opacity-60>{{ translate('Remember Me') }}</span>
                                         <span class="aiz-square-check"></span>
                                     </label>
                                 </div>
                                 <div class="col-6 text-right">
-                                    <a href="{{ route('password.request') }}" class="text-reset opacity-60 fs-14">{{ translate('Forgot password?')}}</a>
+                                    <a href="{{ route('password.request') }}" class="text-reset opacity-60 fs-14">{{ translate('Forgot password?') }}</a>
                                 </div>
                             </div>
 
                             <div class="mb-5">
-                                <button type="submit" class="btn btn-primary btn-block fw-600">{{  translate('Login') }}</button>
+                                <button type="submit" class="btn btn-primary btn-block fw-600">{{ translate('Login') }}</button>
                             </div>
                         </form>
 
                         <div class="text-center mb-3">
-                            <p class="text-muted mb-0">{{ translate('Dont have an account?')}}</p>
-                            <a href="{{ route('user.registration') }}">{{ translate('Register Now')}}</a>
+                            <p class="text-muted mb-0">{{ translate('Dont have an account?') }}</p>
+                            <a href="{{ route('user.registration') }}">{{ translate('Register Now') }}</a>
                         </div>
-                        @if(get_setting('google_login') == 1 ||
-                            get_setting('facebook_login') == 1 ||
-                            get_setting('twitter_login') == 1)
+                        @if (get_setting('google_login') == 1 || get_setting('facebook_login') == 1 || get_setting('twitter_login') == 1)
                             <div class="separator mb-3">
-                                <span class="bg-white px-3 opacity-60">{{ translate('Or Login With')}}</span>
+                                <span class="bg-white px-3 opacity-60">{{ translate('Or Login With') }}</span>
                             </div>
                             <ul class="list-inline social colored text-center mb-5">
                                 @if (get_setting('facebook_login') == 1)
@@ -782,7 +789,7 @@
                                         </a>
                                     </li>
                                 @endif
-                                @if(get_setting('google_login') == 1)
+                                @if (get_setting('google_login') == 1)
                                     <li class="list-inline-item">
                                         <a href="{{ route('social.login', ['provider' => 'google']) }}" class="google">
                                             <i class="lab la-google"></i>
@@ -838,9 +845,8 @@
             @if (Auth::check())
                 $('#chat_modal').modal('show');
             @else
-                $('#login_modal').modal('show');
-            @endif
-        }
+                $('#login_modal').modal('show'); @endif
+            }
 
-    </script>
+        </script>
 @endsection

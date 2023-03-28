@@ -17,7 +17,8 @@
     <meta name="twitter:site" content="@publisher_handle">
     <meta name="twitter:title" content="{{ $detailedProduct->meta_title }}">
     <meta name="twitter:description" content="{{ $detailedProduct->meta_description }}">
-    <meta name="twitter:creator" content="@author_handle">
+    <meta name="twitter:creator"
+        content="@author_handle">
     <meta name="twitter:image" content="{{ uploaded_asset($detailedProduct->meta_img) }}">
     <meta name="twitter:data1" content="{{ single_price($detailedProduct->unit_price) }}">
     <meta name="twitter:label1" content="Price">
@@ -51,18 +52,18 @@
                                     @foreach ($photos as $key => $photo)
                                         <div class="carousel-box img-zoom rounded">
                                             <img class="img-fluid lazyload"
-                                                src="{{ static_asset('assets/img/placeholder.jpg') }}"
+                                                src="{{ secure_asset('assets/img/placeholder.jpg') }}"
                                                 data-src="{{ uploaded_asset($photo) }}"
-                                                onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';">
+                                                onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';">
                                         </div>
                                     @endforeach
                                     @foreach ($detailedProduct->stocks as $key => $stock)
                                         @if ($stock->image != null)
                                             <div class="carousel-box img-zoom rounded">
                                                 <img class="img-fluid lazyload"
-                                                    src="{{ static_asset('assets/img/placeholder.jpg') }}"
+                                                    src="{{ secure_asset('assets/img/placeholder.jpg') }}"
                                                     data-src="{{ uploaded_asset($stock->image) }}"
-                                                    onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';">
+                                                    onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';">
                                             </div>
                                         @endif
                                     @endforeach
@@ -75,9 +76,9 @@
                                     @foreach ($photos as $key => $photo)
                                         <div class="carousel-box c-pointer border p-1 rounded">
                                             <img class="lazyload mw-100 size-50px mx-auto"
-                                                src="{{ static_asset('assets/img/placeholder.jpg') }}"
+                                                src="{{ secure_asset('assets/img/placeholder.jpg') }}"
                                                 data-src="{{ uploaded_asset($photo) }}"
-                                                onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';">
+                                                onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';">
                                         </div>
                                     @endforeach
                                     @foreach ($detailedProduct->stocks as $key => $stock)
@@ -85,9 +86,9 @@
                                             <div class="carousel-box c-pointer border p-1 rounded"
                                                 data-variation="{{ $stock->variant }}">
                                                 <img class="lazyload mw-100 size-50px mx-auto"
-                                                    src="{{ static_asset('assets/img/placeholder.jpg') }}"
+                                                    src="{{ secure_asset('assets/img/placeholder.jpg') }}"
                                                     data-src="{{ uploaded_asset($stock->image) }}"
-                                                    onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';">
+                                                    onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';">
                                             </div>
                                         @endif
                                     @endforeach
@@ -123,7 +124,7 @@
                             </div>
 
                             <hr>
-                            @if(isset($detailedProduct->stocks[0]['sku']) && $detailedProduct->stocks[0]['sku'] != '')
+                            @if (isset($detailedProduct->stocks[0]['sku']) && $detailedProduct->stocks[0]['sku'] != '')
                             <div class="row no-gutters mt-3 sku_main">
                                 <div class="col-sm-2">
                                     <div class="opacity-50">SKU:</div>
@@ -133,7 +134,7 @@
                                 </div>
                             </div>
                             @endif
-                            @if(isset($detailedProduct->stocks[0]['hsn_code']) && $detailedProduct->stocks[0]['hsn_code'] != '')
+                            @if (isset($detailedProduct->stocks[0]['hsn_code']) && $detailedProduct->stocks[0]['hsn_code'] != '')
                             <div class="row no-gutters my-2 hsn_code_main">
                                 <div class="col-sm-2">
                                     <div class="opacity-50">HSN:</div>
@@ -248,11 +249,11 @@
                                     </div>
                                 @endif
                             @endif
-                            <!-- @if(!empty($detailedProduct->stocks->first()->hsn_code))
+                            <!-- @if (!empty($detailedProduct->stocks->first()->hsn_code))
                                 <div class="col-sm-2">
                                     <div class="opacity-50 my-2">HSN Code:</div>
                                 </div>
-                                <div class="col-sm-10"><span class="opacity-70">{{$detailedProduct->stocks->first()->hsn_code}}</span></div>
+                                <div class="col-sm-10"><span class="opacity-70">{{ $detailedProduct->stocks->first()->hsn_code }}</span></div>
                             @endif -->
 
                             @if (addon_is_activated('club_point') && $detailedProduct->earn_point > 0)
@@ -299,7 +300,7 @@
                                                                 class="model-radio"
                                                                 name="attribute_id_{{ $choice->attribute_id }}"
                                                                 value="{{ $value }}"
-                                                                data-sku="{{$sku_code}}"
+                                                                data-sku="{{ $sku_code }}"
                                                                 @if ($key == 0) checked @endif>
                                                             <span
                                                                 class="aiz-megabox-elem rounded d-flex align-items-center justify-content-center py-2 px-3 mb-2">
@@ -396,7 +397,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                @if(isset(Auth::user()->user_type) &&  Auth::user()->user_type == 'partner')
+                                @if (isset(Auth::user()->user_type) && Auth::user()->user_type == 'partner')
                                 <div class="row no-gutters pb-3 d-none" id="chosen_whole_price_div">
                                     <div class="col-sm-2">
                                         <div class="opacity-50 my-2">{{ translate('Franchisee Price') }}: </div>
@@ -419,7 +420,7 @@
                                         <i class="la la-share"></i> {{ translate($detailedProduct->external_link_btn) }}
                                     </a>
                                 @else
-                                    @if(isset(Auth::user()->user_type) &&  Auth::user()->user_type == 'partner')
+                                    @if (isset(Auth::user()->user_type) && Auth::user()->user_type == 'partner')
                                         <button type="button" class="btn btn-soft-primary mr-2 add-to-cart fw-600"
                                             style="cursor: default" disabled>
                                             <i class="las la-shopping-bag"></i>
@@ -449,7 +450,7 @@
                             <div class="d-table width-100 mt-3">
                                 <div class="d-table-cell">
                                     <!-- Add to wishlist button -->
-                                    @if(isset(Auth::user()->user_type) &&  Auth::user()->user_type == 'partner')
+                                    @if (isset(Auth::user()->user_type) && Auth::user()->user_type == 'partner')
                                         <button type="button" class="btn pl-0 btn-link fw-600"
                                         style="cursor: default" disabled>
                                         {{ translate('Add to wishlist') }}
@@ -469,7 +470,12 @@
                                         onclick="addToCompare({{ $detailedProduct->id }})">
                                         {{ translate('Add to compare') }}
                                     </button> -->
-                                    @if (Auth::check() && addon_is_activated('affiliate_system') && (\App\Models\AffiliateOption::where('type', 'product_sharing')->first()->status || \App\Models\AffiliateOption::where('type', 'category_wise_affiliate')->first()->status) && Auth::user()->affiliate_user != null && Auth::user()->affiliate_user->status)
+                                    @if (Auth::check() &&
+                                            addon_is_activated('affiliate_system') &&
+                                            (\App\Models\AffiliateOption::where('type', 'product_sharing')->first()->status ||
+                                                \App\Models\AffiliateOption::where('type', 'category_wise_affiliate')->first()->status) &&
+                                            Auth::user()->affiliate_user != null &&
+                                            Auth::user()->affiliate_user->status)
                                         @php
                                             if (Auth::check()) {
                                                 if (Auth::user()->referral_code == null) {
@@ -504,7 +510,7 @@
                                             @if ($refund_sticker != null)
                                                 <img src="{{ uploaded_asset($refund_sticker) }}" height="36">
                                             @else
-                                                <img src="{{ static_asset('assets/img/refund-sticker.jpg') }}"
+                                                <img src="{{ secure_asset('assets/img/refund-sticker.jpg') }}"
                                                     height="36">
                                             @endif
                                         </a>
@@ -521,11 +527,11 @@
                                     <div class="aiz-share"></div>
                                 </div>
                             </div> --}}
-                            @if($detailedProduct->returnable == 1)
-                            <img src="{{ static_asset('assets/img/return_icon_green.jpg') }}">
+                            @if ($detailedProduct->returnable == 1)
+                            <img src="{{ secure_asset('assets/img/return_icon_green.jpg') }}">
                             &nbsp;&nbsp;Returnable
                             @endif
-                            {{$detailedProduct->returnable_days}}
+                            {{ $detailedProduct->returnable_days }}
                         </div>
                     </div>
                 </div>
@@ -623,18 +629,17 @@
                         </div>
                         <div class="p-3">
                             <ul class="list-group list-group-flush">
-                                @foreach (filter_products(\App\Models\Product::where('user_id', $detailedProduct->user_id)->orderBy('num_of_sale', 'desc'))->limit(6)->get()
-        as $key => $top_product)
+                                @foreach (filter_products(\App\Models\Product::where('user_id', $detailedProduct->user_id)->orderBy('num_of_sale', 'desc'))->limit(6)->get() as $key => $top_product)
                                     <li class="py-3 px-0 list-group-item border-light">
                                         <div class="row gutters-10 align-items-center">
                                             <div class="col-5">
                                                 <a href="{{ route('product', $top_product->slug) }}"
                                                     class="d-block text-reset">
                                                     <img class="img-fit lazyload h-xxl-110px h-xl-80px h-120px"
-                                                        src="{{ static_asset('assets/img/placeholder.jpg') }}"
+                                                        src="{{ secure_asset('assets/img/placeholder.jpg') }}"
                                                         data-src="{{ uploaded_asset($top_product->thumbnail_img) }}"
                                                         alt="{{ $top_product->getTranslation('name') }}"
-                                                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';">
+                                                        onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';">
                                                 </a>
                                             </div>
                                             <div class="col-7 text-left">
@@ -715,11 +720,11 @@
                                                 <li class="media list-group-item d-flex">
                                                     <span class="avatar avatar-md mr-3">
                                                         <img class="lazyload"
-                                                            src="{{ static_asset('assets/img/placeholder.jpg') }}"
-                                                            onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
+                                                            src="{{ secure_asset('assets/img/placeholder.jpg') }}"
+                                                            onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';"
                                                             @if ($review->user->avatar_original != null) data-src="{{ uploaded_asset($review->user->avatar_original) }}"
                                                         @else
-                                                            data-src="{{ static_asset('assets/img/placeholder.jpg') }}" @endif>
+                                                            data-src="{{ secure_asset('assets/img/placeholder.jpg') }}" @endif>
                                                     </span>
                                                     <div class="media-body text-left">
                                                         <div class="d-flex justify-content-between">
@@ -764,8 +769,7 @@
                             <div class="aiz-carousel gutters-5 half-outside-arrow" data-items="5" data-xl-items="3"
                                 data-lg-items="4" data-md-items="3" data-sm-items="2" data-xs-items="2"
                                 data-arrows='true' data-infinite='true'>
-                                @foreach (filter_products(\App\Models\Product::where('category_id', $detailedProduct->category_id)->where('id', '!=', $detailedProduct->id))->limit(10)->get()
-        as $key => $related_product)
+                                @foreach (filter_products(\App\Models\Product::where('category_id', $detailedProduct->category_id)->where('id', '!=', $detailedProduct->id))->limit(10)->get() as $key => $related_product)
                                     <div class="carousel-box">
                                         <div
                                             class="aiz-card-box border border-light rounded hov-shadow-md my-2 has-transition">
@@ -773,10 +777,10 @@
                                                 <a href="{{ route('product', $related_product->slug) }}"
                                                     class="d-block">
                                                     <img class="img-fit lazyload mx-auto h-140px h-md-210px"
-                                                        src="{{ static_asset('assets/img/placeholder.jpg') }}"
+                                                        src="{{ secure_asset('assets/img/placeholder.jpg') }}"
                                                         data-src="{{ uploaded_asset($related_product->thumbnail_img) }}"
                                                         alt="{{ $related_product->getTranslation('name') }}"
-                                                        onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';">
+                                                        onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';">
                                                 </a>
                                             </div>
                                             <div class="p-md-3 p-2 text-left">
@@ -811,7 +815,7 @@
                         </div>
                     </div>
                     {{-- Product Query --}}
-                    @if(get_setting('product_query_activation') == 1)
+                    @if (get_setting('product_query_activation') == 1)
                         <div class="bg-white rounded shadow-sm mt-3">
                             <div class="border-bottom p-3">
                                 <h3 class="fs-18 fw-600 mb-0">
@@ -903,24 +907,24 @@
                                         @endforeach
                                     </div>
 
-                                @endif
-                            @endauth
+                                @endif @endauth
 
-                            <div class="pagination-area my-4 mb-0 ml-3">
-                                @include('frontend.partials.product_query_pagination')
-                            </div>
-                        </div>
-                    @endif
-                    {{-- End of Product Query --}}
-                </div>
-            </div>
-        </div>
+                            <div class="pagination-area
+        my-4 mb-0 ml-3">
+    @include('frontend.partials.product_query_pagination')
+    </div>
+    </div>
+    @endif
+    {{-- End of Product Query --}}
+    </div>
+    </div>
+    </div>
     </section>
 
 @endsection
 
 @section('modal')
-<div class="modal fade" id="quation_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    <div class="modal fade" id="quation_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-zoom product-modal" id="modal-size" role="document">
             <div class="modal-content position-relative">
@@ -931,13 +935,15 @@
                     </button>
                 </div>
 
-               <span>Your item has been added to quotation <a view ="view_quote" href={{ route('quote-view') }} style="
+                <span>Your item has been added to quotation <a view="view_quote" href={{ route('quote-view') }}
+                        style="
     color: green;
     text-decoration: underline;
     font-size: inherit;
     font-size: 18px;
     font-weight: 700;
-">View Quotation</a></span>
+">View
+                        Quotation</a></span>
             </div>
         </div>
     </div>
@@ -964,8 +970,7 @@
                                 required>
                         </div>
                         <div class="form-group">
-                            <textarea class="form-control" rows="8" name="message" required
-                                placeholder="{{ translate('Your Question') }}">{{ route('product', $detailedProduct->slug) }}</textarea>
+                            <textarea class="form-control" rows="8" name="message" required placeholder="{{ translate('Your Question') }}">{{ route('product', $detailedProduct->slug) }}</textarea>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -1055,8 +1060,7 @@
                                 @endif
                                 @if (get_setting('google_login') == 1)
                                     <li class="list-inline-item">
-                                        <a href="{{ route('social.login', ['provider' => 'google']) }}"
-                                            class="google">
+                                        <a href="{{ route('social.login', ['provider' => 'google']) }}" class="google">
                                             <i class="lab la-google"></i>
                                         </a>
                                     </li>
@@ -1125,9 +1129,9 @@
         $('.model-radio').on('change', function() {
             var skuValue = $(this).filter(':checked').data('sku');
             $('.sku_main').show();
-            if(skuValue){
+            if (skuValue) {
                 $('#sku_spec').text(skuValue);
-            }else{
+            } else {
                 $('.sku_main').hide();
             }
         });
