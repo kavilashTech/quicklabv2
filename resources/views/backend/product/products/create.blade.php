@@ -70,7 +70,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-md-3 col-from-label">{{translate('Tags')}} <span class="text-danger">*</span></label>
+                            <label class="col-md-3 col-from-label">{{translate('Tags')}} </label>
                             <div class="col-md-8">
                                 <input type="text" class="form-control aiz-tag-input" name="tags[]" placeholder="{{ translate('Type and hit enter to add a tag') }}">
                                 <small class="text-muted">{{translate('This is used for search. Input those words by which cutomer can find this product.')}}</small>
@@ -216,7 +216,7 @@
                         <div class="form-group row">
                             <label class="col-md-3 col-from-label">{{translate('Unit price')}} <span class="text-danger">*</span></label>
                             <div class="col-md-6">
-                                <input type="number" lang="en" min="0" value="0" step="0.01" placeholder="{{ translate('Unit price') }}" name="unit_price" class="form-control" required>
+                                <input type="number" lang="en" step="0.01" placeholder="{{ translate('Unit price') }}" name="unit_price" class="form-control" required>
                             </div>
                         </div>
 
@@ -230,7 +230,7 @@
                         <div class="form-group row">
                             <label class="col-md-3 col-from-label">{{translate('Discount')}} <span class="text-danger">*</span></label>
                             <div class="col-md-6">
-                                <input type="number" lang="en" min="0" value="0" step="0.01" placeholder="{{ translate('Discount') }}" name="discount" class="form-control" required>
+                                <input type="number" lang="en" step="0.01" placeholder="{{ translate('Discount') }}" name="discount" class="form-control" required>
                             </div>
                             <div class="col-md-3">
                                 <select class="form-control aiz-selectpicker" name="discount_type">
@@ -253,9 +253,9 @@
 
                         <div id="show-hide-div">
                             <div class="form-group row">
-                                <label class="col-md-3 col-from-label">{{translate('Quantity')}} <span class="text-danger">*</span></label>
+                                <label class="col-md-3 col-from-label">{{translate('Quantity')}}<small>({{ translate('In stock') }})</small> <span class="text-danger">*</span></label>
                                 <div class="col-md-6">
-                                    <input type="number" lang="en" min="0" value="0" step="1" placeholder="{{ translate('Quantity') }}" name="current_stock" class="form-control" required>
+                                    <input type="number" lang="en"  placeholder="{{ translate('Quantity') }}" name="current_stock" class="form-control" required>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -295,6 +295,7 @@
                             <div class="form-group row">
                                 <label class="col-md-3 col-from-label">
                                     {{translate('Franchisee price')}}
+                                    <span class="text-danger">*</span>
                                 </label>
                                 <div class="col-md-6">
                                     <input type="number" placeholder="{{ translate('Franchisee price') }}" id="wholesale_price" name="wholesale_price" class="form-control wholesale_price"  step='0.01'  >
@@ -523,8 +524,9 @@
                         <div class="form-group mb-3">
                             <label for="name">
                                 {{translate('Quantity')}}
+                                <span class="text-danger">*</span>
                             </label>
-                            <input type="number" name="low_stock_quantity" value="1" min="0" step="1" class="form-control">
+                            <input type="number" name="low_stock_quantity"  min="0" step="1" class="form-control">
                         </div>
                     </div>
                 </div>
@@ -694,7 +696,7 @@
 
                 <div class="card">
                     <div class="card-header">
-                        <h5 class="mb-0 h6">{{translate('GST')}}</h5>
+                        <h5 class="mb-0 h6">{{translate('GST')}}<span class="text-danger">*</span></h5>
                     </div>
                     <div class="card-body">
                         @foreach(\App\Models\Tax::where('tax_status', 1)->get() as $tax)
@@ -705,7 +707,7 @@
 
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <input type="number" lang="en" min="0" value="0" step="0.01" placeholder="{{ translate('Tax') }}" name="tax[]" class="form-control" required>
+                                <input type="number" lang="en"  step="0.01" placeholder="{{ translate('Tax') }}" name="tax[]" class="form-control" required>
                             </div>
                             <div class="form-group col-md-6">
                                 <select class="form-control aiz-selectpicker" name="tax_type[]">
@@ -736,6 +738,107 @@
 @endsection
 
 @section('script')
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" ></script>
+<script>
+        $(document).ready(function() {
+
+
+
+            $(document).find('#choice_form').validate({
+
+
+          rules:{
+            'name':
+            {
+              required:true,
+            },
+            'weight':
+            {
+              required:true,
+              min: 0.15,
+              number: true
+            },
+            'unit_price':
+            {
+              required:true,
+              min: 1,
+              number: true
+            },
+            'low_stock_quantity':
+            {
+              required:true,
+              min: 1,
+              number: true
+            },
+            'discount':
+            {
+              required:true,
+            },
+            'current_stock':
+            {
+              required:true,
+              min: 1,
+            },
+            'wholesale_price':
+            {
+              required:true,
+            },
+            'tax[]':
+            {
+              required:true,
+              min: 1,
+              number: true
+            },
+          },
+          messages:{
+            'name':
+            {
+              'required':'Product Name is Required.'
+            },
+            'weight':
+            {
+              'required':'Weight is Required',
+              'min'     :'Cannot be zero.',
+
+            },
+            'unit_price':
+            {
+              'required':'Unit is Required.',
+              'min'     :'Cannot be zero.',
+
+            },
+            'low_stock_quantity':
+            {
+              'required':'Low stock quantity warning is required.',
+              'min'     :'Cannot be zero.',
+
+            },
+            'discount':
+            {
+              'required':'Discount is Required.'
+            },
+            'current_stock':
+            {
+              'required':'Quantity is required',
+              'min'     :'Cannot be zero.',
+            },
+            'wholesale_price':
+            {
+              'required':'Franchisee Price is required.'
+            },
+            'tax[]':
+            {
+              'required':'GST is required.',
+              'min'     :'Can not be zero.',
+            },
+          },
+        });
+
+
+        });
+    </script>
+
 <script type="text/javascript">
     $('form').bind('submit', function (e) {
 		if ( $(".action-btn").attr('attempted') == 'true' ) {
