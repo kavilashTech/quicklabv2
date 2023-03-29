@@ -241,8 +241,15 @@
                 <p style="margin: 0;padding: 2px 0;text-align: right;"> {{ strtoupper($product->unit) }} </p>
               </td>
               @php
-                  $priceWithoutTax = $cartItem['price'] - $cartItem['tax'];
-              @endphp
+                                                        if (Session::get('currency_code') == 'USD') {
+                                                            $priceWithoutTax = $cartItem['price'] ;
+
+                                                        }else{
+                                                            $priceWithoutTax = $cartItem['price'] - $cartItem['tax'];
+                                                        }
+                                                        $subTotal = $subTotal + ($priceWithoutTax) * $cartItem['quantity'];
+
+                                                        @endphp
               <td style="padding: 4px 8px;border-bottom: 1px solid;border-left: 1px solid; ">
                 <p style="margin: 0;padding: 2px 0;text-align: right;"> {{ single_price($priceWithoutTax) }}</p>
               </td>

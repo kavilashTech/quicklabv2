@@ -152,7 +152,7 @@
                                             }
 
                                             //$subTotal = $subTotal + ($cartItem['price']) * $cartItem['quantity'];
-                                            $subTotal = $subTotal + ($product_price - $cartItem['tax']) * $cartItem['quantity'];
+                                           // $subTotal = $subTotal + ($product_price - $cartItem['tax']) * $cartItem['quantity'];
                                             $product_name_with_choice = $product->getTranslation('name');
                                             if ($cartItem['variation'] != null) {
                                                 $product_name_with_choice = $product->getTranslation('name') . ' - ' . $cartItem['variation'];
@@ -174,7 +174,14 @@
                                                     <span
                                                         class="opacity-60 fs-12 d-block d-lg-none">{{ translate('Price') }}</span>
                                                         @php
+                                                        if (Session::get('currency_code') == 'USD') {
+                                                            $priceWithoutTax = $cartItem['price'] ;
+
+                                                        }else{
                                                             $priceWithoutTax = $cartItem['price'] - $cartItem['tax'];
+                                                        }
+                                                        $subTotal = $subTotal + ($priceWithoutTax) * $cartItem['quantity'];
+
                                                         @endphp
                                                     <span
                                                         class="fw-600 fs-16">{{ single_price($priceWithoutTax) }}</span>

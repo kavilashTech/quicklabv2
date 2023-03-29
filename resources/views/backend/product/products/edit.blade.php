@@ -862,6 +862,106 @@
 
 @section('script')
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js" ></script>
+<script>
+        $(document).ready(function() {
+
+
+
+            $(document).find('#choice_form').validate({
+
+
+          rules:{
+            'name':
+            {
+              required:true,
+            },
+            'weight':
+            {
+              required:true,
+              min: 0.15,
+              number: true
+            },
+            'unit_price':
+            {
+              required:true,
+              min: 1,
+              number: true
+            },
+            'low_stock_quantity':
+            {
+              required:true,
+              min: 1,
+              number: true
+            },
+            'discount':
+            {
+              required:true,
+            },
+            'current_stock':
+            {
+              required:true,
+              min: 1,
+            },
+            'wholesale_price':
+            {
+              required:true,
+            },
+            'tax[]':
+            {
+              required:true,
+              min: 1,
+              number: true
+            },
+          },
+          messages:{
+            'name':
+            {
+              'required':'Product Name is Required.'
+            },
+            'weight':
+            {
+              'required':'Weight is Required',
+              'min'     :'Cannot be zero.',
+
+            },
+            'unit_price':
+            {
+              'required':'Unit is Required.',
+              'min'     :'Cannot be zero.',
+
+            },
+            'low_stock_quantity':
+            {
+              'required':'Low stock quantity warning is required.',
+              'min'     :'Cannot be zero.',
+
+            },
+            'discount':
+            {
+              'required':'Discount is Required.'
+            },
+            'current_stock':
+            {
+              'required':'Quantity is required',
+              'min'     :'Cannot be zero.',
+            },
+            'wholesale_price':
+            {
+              'required':'Franchisee Price is required.'
+            },
+            'tax[]':
+            {
+              'required':'GST is required.',
+              'min'     :'Can not be zero.',
+            },
+          },
+        });
+
+
+        });
+    </script>
+
 <script type="text/javascript">
     $(document).ready(function (){
         show_hide_shipping_div();
