@@ -17,7 +17,8 @@
     <meta name="twitter:site" content="@publisher_handle">
     <meta name="twitter:title" content="{{ $blog->meta_title }}">
     <meta name="twitter:description" content="{{ $blog->meta_description }}">
-    <meta name="twitter:creator" content="@author_handle">
+    <meta name="twitter:creator"
+        content="@author_handle">
     <meta name="twitter:image" content="{{ uploaded_asset($blog->meta_img) }}">
 
     <!-- Open Graph data -->
@@ -35,7 +36,7 @@
     <div class="container">
         <div class="mb-4">
             <img
-                src="{{ static_asset('assets/img/placeholder-rect.jpg') }}"
+                src="{{ secure_asset('assets/img/placeholder-rect.jpg') }}"
                 data-src="{{ uploaded_asset($blog->banner) }}"
                 alt="{{ $blog->title }}"
                 class="img-fluid lazyload w-100"
@@ -49,7 +50,7 @@
                             {{ $blog->title }}
                         </h1>
 
-                        @if($blog->category != null)
+                        @if ($blog->category != null)
                         <div class="mb-2 opacity-50">
                             <i>{{ $blog->category->category_name }}</i>
                         </div>
@@ -61,9 +62,8 @@
                     
                     @if (get_setting('facebook_comment') == 1)
                     <div>
-                        <div class="fb-comments" data-href="{{ route("blog",$blog->slug) }}" data-width="" data-numposts="5"></div>
-                    </div>
-                    @endif
+                        <div class="fb-comments" data-href="{{ route('blog', $blog->slug) }}" data-width="" data-numposts="5"></div>
+                    </div> @endif
                 </div>
             </div>
         </div>
@@ -75,7 +75,10 @@
 
 @section('script')
     @if (get_setting('facebook_comment') == 1)
-        <div id="fb-root"></div>
-        <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v9.0&appId={{ env('FACEBOOK_APP_ID') }}&autoLogAppEvents=1" nonce="ji6tXwgZ"></script>
+<div id="fb-root">
+    </div>
+    <script async defer crossorigin="anonymous"
+        src="https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v9.0&appId={{ env('FACEBOOK_APP_ID') }}&autoLogAppEvents=1"
+        nonce="ji6tXwgZ"></script>
     @endif
 @endsection

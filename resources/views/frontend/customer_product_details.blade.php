@@ -10,7 +10,8 @@
     <meta name="twitter:site" content="@publisher_handle">
     <meta name="twitter:title" content="{{ $customer_product->meta_title }}">
     <meta name="twitter:description" content="{{ $customer_product->meta_description }}">
-    <meta name="twitter:creator" content="@author_handle">
+    <meta name="twitter:creator"
+        content="@author_handle">
     <meta name="twitter:image" content="{{ uploaded_asset($customer_product->meta_img) }}">
     <meta name="twitter:data1" content="{{ single_price($customer_product->unit_price) }}">
     <meta name="twitter:label1" content="Price">
@@ -32,7 +33,7 @@
                 <div class="row ">
                     <div class="col-xl-5 col-lg-6 mb-4">
                         <div class="sticky-top z-3 row gutters-10">
-                            @if($customer_product->photos != null)
+                            @if ($customer_product->photos != null)
                                 @php
                                     $photos = explode(',',$customer_product->photos);
                                 @endphp
@@ -42,9 +43,9 @@
                                         <div class="carousel-box img-zoom rounded">
                                             <img
                                                 class="img-fluid lazyload"
-                                                src="{{ static_asset('assets/img/placeholder.jpg') }}"
+                                                src="{{ secure_asset('assets/img/placeholder.jpg') }}"
                                                 data-src="{{ uploaded_asset($photo) }}"
-                                                onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
+                                                onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';"
                                             >
                                         </div>
                                         @endforeach
@@ -56,9 +57,9 @@
                                         <div class="carousel-box c-pointer border p-1 rounded">
                                             <img
                                                 class="lazyload mw-100 size-60px mx-auto"
-                                                src="{{ static_asset('assets/img/placeholder.jpg') }}"
+                                                src="{{ secure_asset('assets/img/placeholder.jpg') }}"
                                                 data-src="{{ uploaded_asset($photo) }}"
-                                                onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
+                                                onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';"
                                             >
                                         </div>
                                         @endforeach
@@ -76,14 +77,14 @@
 
                             <div class="row no-gutters mt-3">
                                 <div class="col-2">
-                                    <div class="opacity-50 mt-2">{{ translate('Price')}}:</div>
+                                    <div class="opacity-50 mt-2">{{ translate('Price') }}:</div>
                                 </div>
                                 <div class="col-10">
                                     <div class="">
                                         <strong class="h2 fw-600 text-primary">
                                             {{ single_price($customer_product->unit_price) }}
                                         </strong>
-                                        @if($customer_product->unit != null || $customer_product->unit != '')
+                                        @if ($customer_product->unit != null || $customer_product->unit != '')
                                             <span class="opacity-70">/{{ $customer_product->getTranslation('unit') }}</span>
                                         @endif
                                     </div>
@@ -118,7 +119,7 @@
                                         </span>
                                         <div class="flex-grow-1">
                                             <h3 class="h5 fw-700 mb-0">
-                                                <span class="dummy">{{ str_replace(substr($customer_product->user->phone,3),'XXXXXXXX', $customer_product->user->phone) }}</span>
+                                                <span class="dummy">{{ str_replace(substr($customer_product->user->phone, 3), 'XXXXXXXX', $customer_product->user->phone) }}</span>
                                                 <span class="real d-none">{{ $customer_product->user->phone }}</span>
                                             </h3>
                                             <p class="mb-0 opacity-50">{{ translate('Click to show phone number') }}</p>
@@ -129,7 +130,7 @@
 
                             <div class="row no-gutters mt-5">
                                 <div class="col-2">
-                                    <div class="opacity-50 mt-2">{{ translate('Share')}}:</div>
+                                    <div class="opacity-50 mt-2">{{ translate('Share') }}:</div>
                                 </div>
                                 <div class="col-10">
                                     <div class="aiz-share"></div>
@@ -146,12 +147,12 @@
         <div class="container">
             <div class="bg-white mb-3 shadow-sm rounded">
                 <div class="nav border-bottom aiz-nav-tabs">
-                    <a href="#tab_default_1" data-toggle="tab" class="p-3 fs-16 fw-600 text-reset active show">{{ translate('Description')}}</a>
-                    @if($customer_product->video_link != null)
-                        <a href="#tab_default_2" data-toggle="tab" class="p-3 fs-16 fw-600 text-reset">{{ translate('Video')}}</a>
+                    <a href="#tab_default_1" data-toggle="tab" class="p-3 fs-16 fw-600 text-reset active show">{{ translate('Description') }}</a>
+                    @if ($customer_product->video_link != null)
+                        <a href="#tab_default_2" data-toggle="tab" class="p-3 fs-16 fw-600 text-reset">{{ translate('Video') }}</a>
                     @endif
-                    @if($customer_product->pdf != null)
-                        <a href="#tab_default_3" data-toggle="tab" class="p-3 fs-16 fw-600 text-reset">{{ translate('Downloads')}}</a>
+                    @if ($customer_product->pdf != null)
+                        <a href="#tab_default_3" data-toggle="tab" class="p-3 fs-16 fw-600 text-reset">{{ translate('Downloads') }}</a>
                     @endif
                 </div>
 
@@ -179,7 +180,7 @@
                     </div>
                     <div class="tab-pane" id="tab_default_3">
                         <div class="p-4 text-center ">
-                            <a href="{{ uploaded_asset($customer_product->pdf) }}" class="btn btn-primary">{{  translate('Download') }}</a>
+                            <a href="{{ uploaded_asset($customer_product->pdf) }}" class="btn btn-primary">{{ translate('Download') }}</a>
                         </div>
                     </div>
                 </div>
@@ -191,7 +192,7 @@
            <div class="bg-white shadow-sm rounded">
                 <div class="d-flex mb-3 align-items-baseline border-bottom px-3 py-2">
                     <h3 class="fs-16 fw-600 mb-0">
-                        {{ translate('Other Ads of') }} {{$customer_product->category->getTranslation('name') }}
+                        {{ translate('Other Ads of') }} {{ $customer_product->category->getTranslation('name') }}
                     </h3>
                     <a href="{{ route('customer_products.category', $customer_product->category->slug) }}" class="ml-auto mr-0 btn btn-primary btn-sm shadow-md">{{ translate('View More') }}</a>
                 </div>
@@ -207,47 +208,44 @@
                                     <a href="{{ route('customer.product', $product->slug) }}" class="d-block">
                                         <img
                                             class="img-fit lazyload mx-auto h-140px h-md-210px"
-                                            src="{{ static_asset('assets/img/placeholder.jpg') }}"
+                                            src="{{ secure_asset('assets/img/placeholder.jpg') }}"
                                             data-src="{{ uploaded_asset($product->thumbnail_img) }}"
-                                            alt="{{  $product->getTranslation('name')  }}"
-                                            onerror="this.onerror=null;this.src='{{ static_asset('assets/img/placeholder.jpg') }}';"
+                                            alt="{{ $product->getTranslation('name') }}"
+                                            onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';"
                                         >
                                     </a>
                                     <div class="absolute-top-left pt-2 pl-2">
-                                        @if($product->conditon == 'new')
-                                           <span class="badge badge-inline badge-success">{{translate('new')}}</span>
+                                        @if ($product->conditon == 'new')
+                                           <span class="badge badge-inline badge-success">{{ translate('new') }}</span>
                                        @elseif($product->conditon == 'used')
-                                           <span class="badge badge-inline badge-danger">{{translate('Used')}}</span>
-                                       @endif
+                                           <span class="badge badge-inline badge-danger">{{ translate('Used') }}</span> @endif
                                     </div>
                                 </div>
-                                <div class="p-md-3 p-2 text-left">
-                                    <div class="fs-15 mb-1">
-                                        <span class="fw-700 text-primary">{{ single_price($product->unit_price) }}</span>
-                                    </div>
-                                    <h3 class="fw-600 fs-13 text-truncate-2 lh-1-4 mb-0 h-35px">
-                                        <a href="{{ route('customer.product', $product->slug) }}" class="d-block text-reset">{{  $product->getTranslation('name')  }}</a>
-                                    </h3>
-                                </div>
-                           </div>
-                        </div>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
-        </div>
+                                <div class="p-md-3
+        p-2 text-left">
+    <div class="fs-15 mb-1">
+        <span class="fw-700 text-primary">{{ single_price($product->unit_price) }}</span>
+    </div>
+    <h3 class="fw-600 fs-13 text-truncate-2 lh-1-4 mb-0 h-35px">
+        <a href="{{ route('customer.product', $product->slug) }}"
+            class="d-block text-reset">{{ $product->getTranslation('name') }}</a>
+    </h3>
+    </div>
+    </div>
+    </div>
+    @endforeach
+    </div>
+    </div>
+    </div>
+    </div>
     </section>
-
-
 @endsection
 
 @section('script')
     <script type="text/javascript">
-
-        function show_number(el){
+        function show_number(el) {
             $(el).find('.dummy').addClass('d-none');
             $(el).find('.real').removeClass('d-none').addClass('d-block');
         }
-
     </script>
 @endsection

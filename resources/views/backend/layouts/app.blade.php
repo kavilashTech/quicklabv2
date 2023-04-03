@@ -22,7 +22,6 @@
 
 	<!-- aiz core css -->
 	<link rel="stylesheet" href="{{ static_asset('assets/css/vendors.css') }}">
-
     @if(\App\Models\Language::where('code', Session::get('locale', Config::get('app.locale')))->first()->rtl == 1)
     <link rel="stylesheet" href="{{ static_asset('assets/css/bootstrap-rtl.min.css') }}">
     @endif
@@ -32,9 +31,6 @@
         body {
             font-size: 12px;
         }
-        label.error  {
-            color: red;
-}
     </style>
 	<script>
     	var AIZ = AIZ || {};

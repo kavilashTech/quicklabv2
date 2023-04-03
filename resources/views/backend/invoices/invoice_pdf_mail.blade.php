@@ -22,7 +22,7 @@
                 <table align="center" border="0" cellspacing="0" cellpadding="0" style="width: 100%;">
                     <tr>
                         <td style="width:300px">
-                            <img src="{{ static_asset('assets/img/logo_invoice.png') }}" width="250"
+                            <img src="{{ secure_asset('assets/img/logo_invoice.png') }}" width="250"
                                 style="display:inline-block;" alt="invoice logo">
                         </td>
                         <td>
