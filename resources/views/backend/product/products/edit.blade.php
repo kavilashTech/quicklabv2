@@ -575,13 +575,13 @@
                     </div>
 
                     <!--                <div class="card">
-                        <div class="card-header">
-                            <h5 class="mb-0 h6">{{ translate('Product Shipping Cost') }}</h5>
-                        </div>
-                        <div class="card-body">
+                            <div class="card-header">
+                                <h5 class="mb-0 h6">{{ translate('Product Shipping Cost') }}</h5>
+                            </div>
+                            <div class="card-body">
 
-                        </div>
-                    </div>-->
+                            </div>
+                        </div>-->
                     @if (Auth::user()->user_type != 'staff')
                         <div class="card">
                             <div class="card-header">
@@ -999,8 +999,8 @@
                                     <div class="form-group col-md-6">
                                         <select class="form-control aiz-selectpicker" name="tax_type[]">
                                             <!-- <option value="amount" @if ($tax_type == 'amount') selected @endif>
-                                            {{ translate('Flat') }}
-                                        </option> -->
+                                                {{ translate('Flat') }}
+                                            </option> -->
                                             <option value="percent" @if ($tax_type == 'percent') selected @endif>
                                                 {{ translate('Percent') }}
                                             </option>
@@ -1025,6 +1025,90 @@
 @endsection
 
 @section('script')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+    <script>
+        $(document).ready(function() {
+
+
+
+            $(document).find('#choice_form').validate({
+
+
+                rules: {
+                    'name': {
+                        required: true,
+                    },
+                    'weight': {
+                        required: true,
+                        min: 0.15,
+                        number: true
+                    },
+                    'unit_price': {
+                        required: true,
+                        min: 1,
+                        number: true
+                    },
+                    'low_stock_quantity': {
+                        required: true,
+                        min: 1,
+                        number: true
+                    },
+                    'discount': {
+                        required: true,
+                    },
+                    'current_stock': {
+                        required: true,
+                        min: 1,
+                    },
+                    'wholesale_price': {
+                        required: true,
+                    },
+                    'tax[]': {
+                        required: true,
+                        min: 1,
+                        number: true
+                    },
+                },
+                messages: {
+                    'name': {
+                        'required': 'Product Name is Required.'
+                    },
+                    'weight': {
+                        'required': 'Weight is Required',
+                        'min': 'Cannot be zero.',
+
+                    },
+                    'unit_price': {
+                        'required': 'Unit is Required.',
+                        'min': 'Cannot be zero.',
+
+                    },
+                    'low_stock_quantity': {
+                        'required': 'Low stock quantity warning is required.',
+                        'min': 'Cannot be zero.',
+
+                    },
+                    'discount': {
+                        'required': 'Discount is Required.'
+                    },
+                    'current_stock': {
+                        'required': 'Quantity is required',
+                        'min': 'Cannot be zero.',
+                    },
+                    'wholesale_price': {
+                        'required': 'Franchisee Price is required.'
+                    },
+                    'tax[]': {
+                        'required': 'GST is required.',
+                        'min': 'Can not be zero.',
+                    },
+                },
+            });
+
+
+        });
+    </script>
+
     <script type="text/javascript">
         $(document).ready(function() {
             show_hide_shipping_div();
@@ -1057,18 +1141,19 @@
                 success: function(data) {
                     var obj = JSON.parse(data);
                     $('#customer_choice_options').append('\
-                    <div class="form-group row">\
-                        <div class="col-md-3">\
-                            <input type="hidden" name="choice_no[]" value="' + i + '">\
-                            <input type="text" class="form-control" name="choice[]" value="' + name +
+                        <div class="form-group row">\
+                            <div class="col-md-3">\
+                                <input type="hidden" name="choice_no[]" value="' + i + '">\
+                                <input type="text" class="form-control" name="choice[]" value="' + name +
                         '" placeholder="{{ translate('Choice Title') }}" readonly>\
-                        </div>\
-                        <div class="col-md-8">\
-                            <select class="form-control aiz-selectpicker attribute_choice" data-live-search="true" name="choice_options_' + i + '[]" multiple>\
-                                ' + obj + '\
-                            </select>\
-                        </div>\
-                    </div>');
+                            </div>\
+                            <div class="col-md-8">\
+                                <select class="form-control aiz-selectpicker attribute_choice" data-live-search="true" name="choice_options_' +
+                        i + '[]" multiple>\
+                                    ' + obj + '\
+                                </select>\
+                            </div>\
+                        </div>');
                     AIZ.plugins.bootstrapSelect('refresh');
                 }
             });
