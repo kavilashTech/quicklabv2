@@ -46,7 +46,12 @@
             <div class="row">
                 <div class="col-xl-8 mx-auto">
                     @php
-                        $first_order = $combined_order->orders->first()
+                        $first_order = $combined_order->orders->first();
+                        $CGST_total = '0.00';
+                        $SGST_total = '0.00';
+                        $IGST_total = 0.00;
+                        $GST_total = 0;
+                        $checkUserAddress = checkAuthUserAddress();
                     @endphp
                     <div class="text-center py-4 mb-4">
                         <i class="la la-check-circle la-3x text-success mb-3"></i>
@@ -77,6 +82,7 @@
                                 </table>
                             </div>
                             <div class="col-md-6">
+
                                 <table class="table">
                                     <tr>
                                         <td class="w-50 fw-600">{{ translate('Order status')}}:</td>
@@ -84,7 +90,7 @@
                                     </tr>
                                     <tr>
                                         <td class="w-50 fw-600">{{ translate('Total order amount')}}:</td>
-                                        <td>{{ single_price($combined_order->grand_total) }}</td>
+                                        <td>{{ single_price($combined_order->grand_total - $combined_order->orders->sum('shipping_courier_charge')) }}</td>
                                     </tr>
                                    <!--  <tr>
                                         <td class="w-50 fw-600">{{ translate('Shipping')}}:</td>
@@ -126,6 +132,8 @@
                                             </thead>
                                             <tbody>
                                                 @foreach ($order->orderDetails as $key => $orderDetail)
+
+
                                                     <tr>
                                                         <td>{{ $key+1 }}</td>
                                                         <td>
@@ -147,6 +155,18 @@
                                                         <td>
                                                             {{ $orderDetail->variation }}
                                                         </td>
+
+                                                        @if(!empty($checkUserAddress) && $checkUserAddress == 1)
+                    @php
+                        $CGST_total += $orderDetail->tax1_amount * $orderDetail['quantity'];
+                        $SGST_total += $orderDetail->tax2_amount * $orderDetail['quantity'];
+                    @endphp
+                @endif
+                @if(!empty($checkUserAddress) && $checkUserAddress == 2)
+                    @php
+                    $IGST_total += $orderDetail->tax * $orderDetail['quantity'];
+                    @endphp
+                @endif
                                                         <td>
                                                             {{ $orderDetail->quantity }}
                                                         </td>
@@ -185,16 +205,45 @@
                                                             <span class="font-italic">{{ single_price($order->orderDetails->sum('shipping_cost')) }}</span>
                                                         </td>
                                                     </tr> -->
-                                                    <tr>
-                                                        <th>{{ translate('Shipping')}}</th>
-                                                        <td class="text-right">
-                                                            <span class="font-italic">{{ single_price($order->shipping_courier_charge) }}</span>
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
+
+                                                    <!-- <tr>
                                                         <th>{{ translate('Tax')}}</th>
                                                         <td class="text-right">
                                                             <span class="font-italic">{{ single_price($order->orderDetails->sum('tax')) }}</span>
+                                                        </td>
+                                                    </tr> -->
+
+
+
+                                                    @if(!empty($checkUserAddress) && $checkUserAddress == 1)
+                <tr class="cart-shipping">
+                    <th>{{ translate('CGST') }}</th>
+                    <td class="text-right">
+                        <span class="font-italic">{{ single_price($order->orderDetails->sum('tax')/2) }}</span>
+                    </td>
+                </tr>
+                <tr class="cart-shipping">
+                    <th>{{ translate('SGST') }}</th>
+                    <td class="text-right">
+                        <span class="font-italic">{{ single_price($order->orderDetails->sum('tax')/2) }}</span>
+                    </td>
+                </tr>
+
+                @endif
+                @if(!empty($checkUserAddress) && $checkUserAddress == 2)
+                <tr class="cart-shipping">
+                    <th>{{ translate('IGST') }}</th>
+                    <td class="text-right">
+                        <span class="font-italic">{{ single_price($order->orderDetails->sum('tax')) }}</span>
+                    </td>
+                </tr>
+
+
+                @endif
+                <tr>
+                                                        <th>{{ translate('Shipping')}}</th>
+                                                        <td class="text-right">
+                                                            <span class="font-italic">{{ single_price($order->shipping_courier_charge) }}</span>
                                                         </td>
                                                     </tr>
                                                 {{--
@@ -205,6 +254,23 @@
                                                         </td>
                                                     </tr>
                                                     --}}
+                                                    @php
+                                                     $result = roundPrice($order->grand_total);
+          if($result){
+            $grandTotal = round($order->grand_total);
+            $roundingVal = $grandTotal - $order->grand_total;
+          }else{
+            $grandTotal = floor($order->grand_total);
+            $roundingVal =  $grandTotal - $order->grand_total;
+          }
+          $roundingFinalResult = number_format($roundingVal, 2);
+                                                    @endphp
+                                                    <tr>
+                                                        <th><span class="fw-600">{{ translate('Rounding')}}</span></th>
+                                                        <td class="text-right">
+                                                            <strong><span>{{$roundingFinalResult }}</span></strong>
+                                                        </td>
+                                                    </tr>
                                                     <tr>
                                                         <th><span class="fw-600">{{ translate('Total')}}</span></th>
                                                         <td class="text-right">

@@ -179,8 +179,17 @@ class CartController extends Controller
             $checkUserAddress = checkAuthUserAddress();
 
             $pproduct_tax = 0;
+
             foreach ($product->taxes as $product_tax) {
-                $tax_name = Tax::where('id',$product_tax->tax_id)->first();
+                if (Session::get('currency_code') == 'USD') {
+
+
+                    $tax_name = Tax::where('id',$product_tax->tax_id)->where('name','IGST')->first();
+                }else{
+                    $tax_name = Tax::where('id',$product_tax->tax_id)->where('name','GST')->first();
+                }
+
+
 
                 $pproduct_tax = $product_tax->tax;
                 $cut_pr = round($price * $pproduct_tax / (100 + $pproduct_tax),2);
@@ -192,7 +201,12 @@ class CartController extends Controller
                     $tax += $product_tax->tax;
                 }*/
 
+
                 if(!empty($tax_name) && $tax_name->name == 'GST'){
+                    $data['tax'] = $cut_pr;
+                    $data['tax_percentage'] =  $product_tax->tax;
+                }
+                if(!empty($tax_name) && $tax_name->name == 'IGST'){
                     $data['tax'] = $cut_pr;
                     $data['tax_percentage'] =  $product_tax->tax;
                 }
@@ -205,9 +219,17 @@ class CartController extends Controller
                     $data['tax2'] =  $splitTax;
                     $data['tax2_amount'] =(($cut_pr) / 2);
                 }
+
+                if(!empty($tax_name) && $tax_name->name == 'IGST'){
+                    $data['tax1'] =  $splitTax;
+                    $data['tax1_amount'] =(($cut_pr));
+
+                    $data['tax2'] =  $splitTax;
+                    $data['tax2_amount'] =(($cut_pr));
+                }
             }
 
-
+            //dd($data);
             $cut_pr = round($price * $pproduct_tax / (100 + $pproduct_tax),2);
 
             $total_show_product_price = round($price - $cut_pr,2);

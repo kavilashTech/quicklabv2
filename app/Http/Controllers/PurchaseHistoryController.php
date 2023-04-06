@@ -15,7 +15,7 @@ class PurchaseHistoryController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-    {   
+    {
         $orders = Order::whereHas('orderDetails' , function ($query) {
             $query->where('id','>', 0);
         })
@@ -45,7 +45,8 @@ class PurchaseHistoryController extends Controller
         $order->delivery_viewed = 1;
         $order->payment_status_viewed = 1;
         $order->save();
-        return view('frontend.user.order_details_customer', compact('order'));
+        $checkUserAddress = checkAuthUserAddress();
+        return view('frontend.user.order_details_customer', compact('order','checkUserAddress'));
     }
 
     /**
@@ -159,12 +160,12 @@ class PurchaseHistoryController extends Controller
         $orders = $orders->orderBy('orders.user_id', 'desc');
         $orders = $orders->orderBy('orders.code', 'desc');
         $orders = $orders->paginate(9);
-        
+
         return view('frontend.user.purchase_franchise_history', compact('orders','search','start_date','end_date'));
 
     }
-    
-   
+
+
     public function purchase_history_franchise_details($id)
     {
         $order = Order::findOrFail(decrypt($id));
@@ -203,10 +204,10 @@ class PurchaseHistoryController extends Controller
         # add headers for each column in the CSV download
         array_unshift($list, array_keys($list[0]));
 
-        $callback = function() use ($list) 
+        $callback = function() use ($list)
         {
             $FH = fopen('php://output', 'w');
-            foreach ($list as $row) { 
+            foreach ($list as $row) {
                 fputcsv($FH, $row);
             }
             fclose($FH);

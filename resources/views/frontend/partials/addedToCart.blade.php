@@ -17,7 +17,7 @@
                     <div class="h6 text-primary">
                         <strong>
                             @if(isset($data['tax']))
-                                {{ single_price(($data['price'] + $data['tax']) * $data['quantity']) }}
+                                {{ single_price(($data['price'] ) * $data['quantity']) }}
                             @else
                                 {{ single_price(($data['price']) * $data['quantity']) }}
                             @endif

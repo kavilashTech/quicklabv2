@@ -40,13 +40,13 @@
                                     $product = \App\Models\Product::find($cartItem['product_id']);
                                     $product_price = discounted_cart_variant_price($cartItem['variation'],$product,false);
                                     $product_stock = $product->stocks->where('variant', $cartItem['variation'])->first();
-                                    if(!empty($checkUserAddress)){
+                                    if(!empty($checkUserAddress) && $checkUserAddress != '0'){
                                        // $total = $total + ($cartItem['price']  + $cartItem['tax']) * $cartItem['quantity'];
                                        $total = $total + ( $product_price - $cartItem['tax'] + $cartItem['tax']) * $cartItem['quantity'];
                                     }
                                     else{
                                         //$total = $total + ($cartItem['price']) * $cartItem['quantity'];
-                                        $total = $total + cart_product_price($cartItem, $product, false) * $cartItem['quantity'];
+                                        $total = $total + ( $product_price - $cartItem['tax'] + $cartItem['tax']) * $cartItem['quantity'];
                                     }
                                     //$subTotal = $subTotal + ($cartItem['price']) * $cartItem['quantity'];
                                     $subTotal = $subTotal + ($product_price - $cartItem['tax']) * $cartItem['quantity'];
@@ -159,7 +159,8 @@
 
                                         <div class="col-lg col-4 order-3 order-lg-0 my-3 my-lg-0">
                                             <span class="opacity-60 fs-12 d-block d-lg-none">{{ translate('Total')}}</span>
-                                            <span class="fw-600 fs-16 text-primary">{{ single_price(($product_price) * $cartItem['quantity']) }}</span>
+                                            <!-- <span class="fw-600 fs-16 text-primary">{{ single_price(($product_price) * $cartItem['quantity']) }}</span> -->
+                                            <span class="fw-600 fs-16 text-primary">{{ single_price(($priceWithoutTax) * $cartItem['quantity']) }}</span>
                                         </div>
                                         <div class="col-lg-auto col-6 order-5 order-lg-0 text-right">
                                             <a href="javascript:void(0)" onclick="removeFromCartView(event, {{ $cartItem['id'] }})" class="btn btn-icon btn-sm btn-soft-primary btn-circle">
@@ -173,7 +174,7 @@
                     </div>
 
                     <div class="px-3 py-2 border-top d-flex justify-content-end">
-                        <span class="opacity-60 fs-15">{{translate('Subtotal')}}</span>
+                        <span class="opacity-60 fs-15">{{translate('Product Total')}}</span>
                         <span class="fw-600 fs-17 pl-2">{{ single_price($subTotal) }}</span>
                     </div>
 
@@ -198,10 +199,10 @@
                         <span class="opacity-60 fs-15">{{translate('Total')}}</span>
                         <span class="fw-600 fs-17 pl-2">{{ single_price($total) }}</span>
                     </div>
-                    <div class="px-3 py-2 d-flex justify-content-end mt-n3">
+                    <!-- <div class="px-3 py-2 d-flex justify-content-end mt-n3">
                         <span class="opacity-60 fs-15">{{translate('Balance Due')}}</span>
                         <span class="fw-600 fs-17 pl-2">{{ single_price($total) }}</span>
-                    </div>
+                    </div> -->
                     <div class="row align-items-center">
                         <div class="col-md-6 text-center text-md-left order-1 order-md-0">
                             <a href="{{ route('home') }}" class="btn btn-link">

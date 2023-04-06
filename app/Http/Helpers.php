@@ -338,6 +338,7 @@ if (!function_exists('cart_product_price')) {
             }
             $price = 0;
             $product_stock = $product->stocks->where('variant', $str)->first();
+
             if ($product_stock) {
                 if (Session::get('currency_code') == 'USD') {
                     $price = ($product_stock != '') ? $product_stock->usd_price : '99443'.$product->id;
@@ -366,9 +367,11 @@ if (!function_exists('cart_product_price')) {
                     $price -= $product->discount;
                 }
             }
+
         } else {
             $price = $product->bids->max('amount');
         }
+        //dd($tax);
 
         //calculation of taxes
         if ($tax) {
