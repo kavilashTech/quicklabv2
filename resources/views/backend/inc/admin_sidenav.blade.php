@@ -6,9 +6,8 @@
                     <img class="mw-100" src="{{ uploaded_asset(get_setting('system_logo_white')) }}" class="brand-icon"
                         alt="{{ get_setting('site_name') }}">
                 @else
-                    <img class="mw-100" src="{{ secure_asset('assets/img/logo.png') }}" class="brand-icon"
+                    <img class="mw-100" src="{{ static_asset('assets/img/logo.png') }}" class="brand-icon"
                         alt="{{ get_setting('site_name') }}">
-
                 @endif
             </a>
         </div>
@@ -302,6 +301,12 @@
                                     </a>
                                 </li>
                             @endcan
+                            <li class="aiz-side-nav-item">
+                                <a href="{{ route('all_orders.return') }}"
+                                    class="aiz-side-nav-link {{ areActiveRoutes(['all_orders.index', 'all_orders.show']) }}">
+                                    <span class="aiz-side-nav-text">Returns</span>
+                                </a>
+                            </li>
                             @can('view_inhouse_orders')
                                 <li class="aiz-side-nav-item">
                                     <a href="{{ route('inhouse_orders.index') }}"
