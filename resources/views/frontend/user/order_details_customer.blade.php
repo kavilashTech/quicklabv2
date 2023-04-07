@@ -56,12 +56,10 @@
                             <td>{{ single_price($order->orderDetails->sum('price') + $order->orderDetails->sum('tax')) }}
                             </td>
                         </tr>
-                        {{--
                         <tr>
                             <td class="w-50 fw-600">{{ translate('Shipping method') }}:</td>
                             <td>{{ translate('Flat shipping rate') }}</td>
                         </tr>
-                        --}}
                         <tr>
                             <td class="w-50 fw-600">{{ translate('Payment method') }}:</td>
                             <td>{{ translate(ucfirst(str_replace('_', ' ', $order->payment_type))) }}</td>
@@ -97,14 +95,12 @@
                                 <th width="30%">{{ translate('Product') }}</th>
                                 <th data-breakpoints="md">{{ translate('Variation') }}</th>
                                 <th>{{ translate('Quantity') }}</th>
-                                {{--
                                 <th data-breakpoints="md">{{ translate('Delivery Type') }}</th>
-                                --}}
                                 <th>{{ translate('Price') }}</th>
                                 @if (addon_is_activated('refund_request'))
                                     <th data-breakpoints="md">{{ translate('Refund') }}</th>
                                 @endif
-                                <th data-breakpoints="md" class="text-right">{{ translate('Status') }}</th>
+                                <th data-breakpoints="md" class="text-right">{{ translate('Review') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -128,7 +124,6 @@
                                     <td>
                                         {{ $orderDetail->quantity }}
                                     </td>
-                                 {{--
                                     <td>
                                         @if ($order->shipping_type != null && $order->shipping_type == 'home_delivery')
                                             {{ translate('Home Delivery') }}
@@ -148,7 +143,6 @@
                                             @endif
                                         @endif
                                     </td>
-                                    --}}
                                     <td>{{ single_price($orderDetail->price) }}</td>
                                     @if (addon_is_activated('refund_request'))
                                         @php
@@ -192,7 +186,7 @@
         <div class="col-md-3">
             <div class="card">
                 <div class="card-header">
-                    <b class="fs-15">{{ translate('Order Amount') }}</b>
+                    <b class="fs-15">{{ translate('Order Ammount') }}</b>
                 </div>
                 <div class="card-body pb-0">
                     <table class="table-borderless table">
@@ -218,13 +212,12 @@
                                         class="text-italic">{{ single_price($order->orderDetails->sum('tax')) }}</span>
                                 </td>
                             </tr>
-                          {{--  <tr>
+                            <tr>
                                 <td class="w-50 fw-600">{{ translate('Coupon') }}</td>
                                 <td class="text-right">
                                     <span class="text-italic">{{ single_price($order->coupon_discount) }}</span>
                                 </td>
                             </tr>
-                            --}}
                             <tr>
                                 <td class="w-50 fw-600">{{ translate('Total') }}</td>
                                 <td class="text-right">

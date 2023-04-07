@@ -118,9 +118,7 @@
                                                     <th width="30%">{{ translate('Product')}}</th>
                                                     <th>{{ translate('Variation')}}</th>
                                                     <th>{{ translate('Quantity')}}</th>
-                                                    {{--
                                                     <th>{{ translate('Delivery Type')}}</th>
-                                                    --}}
                                                     <th class="text-right">{{ translate('Price')}}</th>
                                                 </tr>
                                             </thead>
@@ -150,7 +148,6 @@
                                                         <td>
                                                             {{ $orderDetail->quantity }}
                                                         </td>
-                                                        {{--
                                                         <td>
                                                             @if ($order->shipping_type != null && $order->shipping_type == 'home_delivery')
                                                                 {{  translate('Home Delivery') }}
@@ -162,7 +159,6 @@
                                                                 @endif
                                                             @endif
                                                         </td>
-                                                        --}}
                                                         <td class="text-right">{{ single_price($orderDetail->price) }}</td>
                                                     </tr>
                                                 @endforeach
@@ -197,14 +193,12 @@
                                                             <span class="font-italic">{{ single_price($order->orderDetails->sum('tax')) }}</span>
                                                         </td>
                                                     </tr>
-                                                {{--
                                                     <tr>
                                                         <th>{{ translate('Coupon Discount')}}</th>
                                                         <td class="text-right">
                                                             <span class="font-italic">{{ single_price($order->coupon_discount) }}</span>
                                                         </td>
                                                     </tr>
-                                                    --}}
                                                     <tr>
                                                         <th><span class="fw-600">{{ translate('Total')}}</span></th>
                                                         <td class="text-right">

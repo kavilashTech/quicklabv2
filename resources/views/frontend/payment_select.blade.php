@@ -19,11 +19,11 @@
                             </div>
                         </div>
                         <!-- <div class="col done">
-                            <div class="text-success text-center">
-                                <i class="la-3x las la-truck mb-2"></i>
-                                <h3 class="fs-14 fw-600 d-none d-lg-block">{{ translate('3. Delivery info') }}</h3>
-                            </div>
-                        </div> -->
+                                    <div class="text-success text-center">
+                                        <i class="la-3x las la-truck mb-2"></i>
+                                        <h3 class="fs-14 fw-600 d-none d-lg-block">{{ translate('3. Delivery info') }}</h3>
+                                    </div>
+                                </div> -->
                         <div class="col active">
                             <div class="text-primary text-center">
                                 <i class="la-3x las la-credit-card mb-2"></i>
@@ -50,8 +50,10 @@
                         id="checkout-form">
                         @csrf
                         <input type="hidden" name="owner_id" value="{{ $carts[0]['owner_id'] }}">
-                        <input type="hidden" name="shipping_courier_cost" id="shipping_courier_cost" value="{{ $shippingCourierCost }}">
-                        <input type="hidden" name="shipping_courier_name" id="shipping_courier_name" value="{{ $shippingCourierName }}">
+                        <input type="hidden" name="shipping_courier_cost" id="shipping_courier_cost"
+                            value="{{ $shippingCourierCost }}">
+                        <input type="hidden" name="shipping_courier_name" id="shipping_courier_name"
+                            value="{{ $shippingCourierName }}">
 
                         <div class="card rounded border-0 shadow-sm">
                             <div class="card-header p-3">
@@ -60,8 +62,7 @@
                                 </h3>
                             </div>
                             <div class="form-group px-3 pt-3">
-                                <textarea name="additional_info" rows="5" class="form-control"
-                                    placeholder="{{ translate('Type your text') }}"></textarea>
+                                <textarea name="additional_info" rows="5" class="form-control" placeholder="{{ translate('Type your text') }}"></textarea>
                             </div>
 
                             <div class="card-header p-3">
@@ -79,7 +80,7 @@
                                                         <input value="paypal" class="online_payment" type="radio"
                                                             name="payment_option" checked>
                                                         <span class="d-block aiz-megabox-elem p-3">
-                                                            <img src="{{ static_asset('assets/img/cards/paypal.png') }}"
+                                                            <img src="{{ secure_asset('assets/img/cards/paypal.png') }}"
                                                                 class="img-fluid mb-2">
                                                             <span class="d-block text-center">
                                                                 <span
@@ -95,7 +96,7 @@
                                                         <input value="stripe" class="online_payment" type="radio"
                                                             name="payment_option" checked>
                                                         <span class="d-block aiz-megabox-elem p-3">
-                                                            <img src="{{ static_asset('assets/img/cards/stripe.png') }}"
+                                                            <img src="{{ secure_asset('assets/img/cards/stripe.png') }}"
                                                                 class="img-fluid mb-2">
                                                             <span class="d-block text-center">
                                                                 <span
@@ -111,7 +112,7 @@
                                                         <input value="mercadopago" class="online_payment" type="radio"
                                                             name="payment_option" checked>
                                                         <span class="d-block aiz-megabox-elem p-3">
-                                                            <img src="{{ static_asset('assets/img/cards/mercadopago.png') }}"
+                                                            <img src="{{ secure_asset('assets/img/cards/mercadopago.png') }}"
                                                                 class="img-fluid mb-2">
                                                             <span class="d-block text-center">
                                                                 <span
@@ -127,7 +128,7 @@
                                                         <input value="sslcommerz" class="online_payment" type="radio"
                                                             name="payment_option" checked>
                                                         <span class="d-block aiz-megabox-elem p-3">
-                                                            <img src="{{ static_asset('assets/img/cards/sslcommerz.png') }}"
+                                                            <img src="{{ secure_asset('assets/img/cards/sslcommerz.png') }}"
                                                                 class="img-fluid mb-2">
                                                             <span class="d-block text-center">
                                                                 <span
@@ -143,7 +144,7 @@
                                                         <input value="instamojo" class="online_payment" type="radio"
                                                             name="payment_option" checked>
                                                         <span class="d-block aiz-megabox-elem p-3">
-                                                            <img src="{{ static_asset('assets/img/cards/instamojo.png') }}"
+                                                            <img src="{{ secure_asset('assets/img/cards/instamojo.png') }}"
                                                                 class="img-fluid mb-2">
                                                             <span class="d-block text-center">
                                                                 <span
@@ -159,7 +160,7 @@
                                                         <input value="razorpay" class="online_payment" type="radio"
                                                             name="payment_option" checked>
                                                         <span class="d-block aiz-megabox-elem p-3">
-                                                            <img src="{{ static_asset('assets/img/cards/rozarpay.png') }}"
+                                                            <img src="{{ secure_asset('assets/img/cards/rozarpay.png') }}"
                                                                 class="img-fluid mb-2">
                                                             <span class="d-block text-center">
                                                                 <span
@@ -175,7 +176,7 @@
                                                         <input value="paystack" class="online_payment" type="radio"
                                                             name="payment_option" checked>
                                                         <span class="d-block aiz-megabox-elem p-3">
-                                                            <img src="{{ static_asset('assets/img/cards/paystack.png') }}"
+                                                            <img src="{{ secure_asset('assets/img/cards/paystack.png') }}"
                                                                 class="img-fluid mb-2">
                                                             <span class="d-block text-center">
                                                                 <span
@@ -191,7 +192,7 @@
                                                         <input value="voguepay" class="online_payment" type="radio"
                                                             name="payment_option" checked>
                                                         <span class="d-block aiz-megabox-elem p-3">
-                                                            <img src="{{ static_asset('assets/img/cards/vogue.png') }}"
+                                                            <img src="{{ secure_asset('assets/img/cards/vogue.png') }}"
                                                                 class="img-fluid mb-2">
                                                             <span class="d-block text-center">
                                                                 <span
@@ -207,7 +208,7 @@
                                                         <input value="payhere" class="online_payment" type="radio"
                                                             name="payment_option" checked>
                                                         <span class="d-block aiz-megabox-elem p-3">
-                                                            <img src="{{ static_asset('assets/img/cards/payhere.png') }}"
+                                                            <img src="{{ secure_asset('assets/img/cards/payhere.png') }}"
                                                                 class="img-fluid mb-2">
                                                             <span class="d-block text-center">
                                                                 <span
@@ -223,7 +224,7 @@
                                                         <input value="ngenius" class="online_payment" type="radio"
                                                             name="payment_option" checked>
                                                         <span class="d-block aiz-megabox-elem p-3">
-                                                            <img src="{{ static_asset('assets/img/cards/ngenius.png') }}"
+                                                            <img src="{{ secure_asset('assets/img/cards/ngenius.png') }}"
                                                                 class="img-fluid mb-2">
                                                             <span class="d-block text-center">
                                                                 <span
@@ -239,7 +240,7 @@
                                                         <input value="iyzico" class="online_payment" type="radio"
                                                             name="payment_option" checked>
                                                         <span class="d-block aiz-megabox-elem p-3">
-                                                            <img src="{{ static_asset('assets/img/cards/iyzico.png') }}"
+                                                            <img src="{{ secure_asset('assets/img/cards/iyzico.png') }}"
                                                                 class="img-fluid mb-2">
                                                             <span class="d-block text-center">
                                                                 <span
@@ -255,7 +256,7 @@
                                                         <input value="nagad" class="online_payment" type="radio"
                                                             name="payment_option" checked>
                                                         <span class="d-block aiz-megabox-elem p-3">
-                                                            <img src="{{ static_asset('assets/img/cards/nagad.png') }}"
+                                                            <img src="{{ secure_asset('assets/img/cards/nagad.png') }}"
                                                                 class="img-fluid mb-2">
                                                             <span class="d-block text-center">
                                                                 <span
@@ -271,7 +272,7 @@
                                                         <input value="bkash" class="online_payment" type="radio"
                                                             name="payment_option" checked>
                                                         <span class="d-block aiz-megabox-elem p-3">
-                                                            <img src="{{ static_asset('assets/img/cards/bkash.png') }}"
+                                                            <img src="{{ secure_asset('assets/img/cards/bkash.png') }}"
                                                                 class="img-fluid mb-2">
                                                             <span class="d-block text-center">
                                                                 <span
@@ -287,7 +288,7 @@
                                                         <input value="aamarpay" class="online_payment" type="radio"
                                                             name="payment_option" checked>
                                                         <span class="d-block aiz-megabox-elem p-3">
-                                                            <img src="{{ static_asset('assets/img/cards/aamarpay.png') }}"
+                                                            <img src="{{ secure_asset('assets/img/cards/aamarpay.png') }}"
                                                                 class="img-fluid mb-2">
                                                             <span class="d-block text-center">
                                                                 <span
@@ -303,7 +304,7 @@
                                                         <input value="authorizenet" class="online_payment" type="radio"
                                                             name="payment_option" checked>
                                                         <span class="d-block aiz-megabox-elem p-3">
-                                                            <img src="{{ static_asset('assets/img/cards/authorizenet.png') }}"
+                                                            <img src="{{ secure_asset('assets/img/cards/authorizenet.png') }}"
                                                                 class="img-fluid mb-2">
                                                             <span class="d-block text-center">
                                                                 <span
@@ -319,7 +320,7 @@
                                                         <input value="payku" class="online_payment" type="radio"
                                                             name="payment_option" checked>
                                                         <span class="d-block aiz-megabox-elem p-3">
-                                                            <img src="{{ static_asset('assets/img/cards/payku.png') }}"
+                                                            <img src="{{ secure_asset('assets/img/cards/payku.png') }}"
                                                                 class="img-fluid mb-2">
                                                             <span class="d-block text-center">
                                                                 <span
@@ -336,7 +337,7 @@
                                                             <input value="mpesa" class="online_payment" type="radio"
                                                                 name="payment_option" checked>
                                                             <span class="d-block aiz-megabox-elem p-3">
-                                                                <img src="{{ static_asset('assets/img/cards/mpesa.png') }}"
+                                                                <img src="{{ secure_asset('assets/img/cards/mpesa.png') }}"
                                                                     class="img-fluid mb-2">
                                                                 <span class="d-block text-center">
                                                                     <span
@@ -349,10 +350,10 @@
                                                 @if (get_setting('flutterwave') == 1)
                                                     <div class="col-6 col-md-4">
                                                         <label class="aiz-megabox d-block mb-3">
-                                                            <input value="flutterwave" class="online_payment" type="radio"
-                                                                name="payment_option" checked>
+                                                            <input value="flutterwave" class="online_payment"
+                                                                type="radio" name="payment_option" checked>
                                                             <span class="d-block aiz-megabox-elem p-3">
-                                                                <img src="{{ static_asset('assets/img/cards/flutterwave.png') }}"
+                                                                <img src="{{ secure_asset('assets/img/cards/flutterwave.png') }}"
                                                                     class="img-fluid mb-2">
                                                                 <span class="d-block text-center">
                                                                     <span
@@ -368,7 +369,7 @@
                                                             <input value="payfast" class="online_payment" type="radio"
                                                                 name="payment_option" checked>
                                                             <span class="d-block aiz-megabox-elem p-3">
-                                                                <img src="{{ static_asset('assets/img/cards/payfast.png') }}"
+                                                                <img src="{{ secure_asset('assets/img/cards/payfast.png') }}"
                                                                     class="img-fluid mb-2">
                                                                 <span class="d-block text-center">
                                                                     <span
@@ -385,7 +386,7 @@
                                                         <input value="paytm" class="online_payment" type="radio"
                                                             name="payment_option" checked>
                                                         <span class="d-block aiz-megabox-elem p-3">
-                                                            <img src="{{ static_asset('assets/img/cards/paytm.jpg') }}"
+                                                            <img src="{{ secure_asset('assets/img/cards/paytm.jpg') }}"
                                                                 class="img-fluid mb-2">
                                                             <span class="d-block text-center">
                                                                 <span
@@ -401,7 +402,7 @@
                                                         <input value="toyyibpay" class="online_payment" type="radio"
                                                             name="payment_option" checked>
                                                         <span class="d-block aiz-megabox-elem p-3">
-                                                            <img src="{{ static_asset('assets/img/cards/toyyibpay.png') }}"
+                                                            <img src="{{ secure_asset('assets/img/cards/toyyibpay.png') }}"
                                                                 class="img-fluid mb-2">
                                                             <span class="d-block text-center">
                                                                 <span
@@ -411,7 +412,7 @@
                                                     </label>
                                                 </div>
                                             @endif
-                                            @if (get_setting('cash_payment') == 1 )
+                                            @if (get_setting('cash_payment') == 1)
                                                 @php
                                                     $digital = 0;
                                                     $cod_on = 1;
@@ -431,7 +432,7 @@
                                                             <input value="cash_on_delivery" class="online_payment"
                                                                 type="radio" name="payment_option" checked>
                                                             <span class="d-block aiz-megabox-elem p-3">
-                                                                <img src="{{ static_asset('assets/img/cards/cod.png') }}"
+                                                                <img src="{{ secure_asset('assets/img/cards/cod.png') }}"
                                                                     class="img-fluid mb-2">
                                                                 <span class="d-block text-center">
                                                                     <span
@@ -464,8 +465,7 @@
                                                     @endforeach
 
                                                     @foreach (\App\Models\ManualPaymentMethod::all() as $method)
-                                                        <div id="manual_payment_info_{{ $method->id }}"
-                                                            class="d-none">
+                                                        <div id="manual_payment_info_{{ $method->id }}" class="d-none">
                                                             @php echo $method->description @endphp
                                                             @if ($method->bank_info != null)
                                                                 <ul>
@@ -497,10 +497,13 @@
                                         <br>
                                         <div class="row">
                                             <div class="col-md-3">
-                                                <label>{{ translate('Transaction ID')}} <span class="text-danger">*</span></label>
+                                                <label>{{ translate('Transaction ID') }} <span
+                                                        class="text-danger">*</span></label>
                                             </div>
                                             <div class="col-md-9">
-                                                <input type="text" class="form-control mb-3" name="trx_id" id="trx_id" placeholder="{{ translate('Transaction ID') }}" required>
+                                                <input type="text" class="form-control mb-3" name="trx_id"
+                                                    id="trx_id" placeholder="{{ translate('Transaction ID') }}"
+                                                    required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -508,9 +511,11 @@
                                             <div class="col-md-9">
                                                 <div class="input-group" data-toggle="aizuploader" data-type="image">
                                                     <div class="input-group-prepend">
-                                                        <div class="input-group-text bg-soft-secondary font-weight-medium">{{ translate('Browse')}}</div>
+                                                        <div class="input-group-text bg-soft-secondary font-weight-medium">
+                                                            {{ translate('Browse') }}</div>
                                                     </div>
-                                                    <div class="form-control file-amount">{{ translate('Choose image') }}</div>
+                                                    <div class="form-control file-amount">{{ translate('Choose image') }}
+                                                    </div>
                                                     <input type="hidden" name="photo" class="selected-files">
                                                 </div>
                                                 <div class="file-preview box sm">
@@ -528,8 +533,7 @@
                                     <div class="py-4 text-center">
                                         <div class="h6 mb-3">
                                             <span class="opacity-80">{{ translate('Your wallet balance :') }}</span>
-                                            <span
-                                                class="fw-600">{{ single_price(Auth::user()->balance) }}</span>
+                                            <span class="fw-600">{{ single_price(Auth::user()->balance) }}</span>
                                         </div>
                                         @if (Auth::user()->balance < $total)
                                             <button type="button" class="btn btn-secondary" disabled>
@@ -581,71 +585,77 @@
 @section('script')
     <script type="text/javascript">
         $(document).ready(function() {
-            console.log('<?php echo Session::get('currency_code') ?>');
-            if ('<?php echo Session::get('currency_code') ?>' == 'USD') {
+            console.log('<?php echo Session::get('currency_code'); ?>');
+            if ('<?php echo Session::get('currency_code'); ?>' == 'USD') {
                 //alert('hello');
 
 
-            var countryId = '<?php echo Session::get('currency_code') ?>';
-            var postcode = $("#postcode").val();
+                var countryId = '<?php echo Session::get('currency_code'); ?>';
+                var postcode = $("#postcode").val();
 
-            var grandTotal = $("#total").val();
-            var totalWithCurrency = $("#totalWithCurrency").val();
-            var shipWithCurrency = $("#shipWithCurrency").val();
+                var grandTotal = $("#total").val();
+                var totalWithCurrency = $("#totalWithCurrency").val();
+                var shipWithCurrency = $("#shipWithCurrency").val();
 
-            $("#grand_total").html(totalWithCurrency);
-            $("#shipping_charge").html(shipWithCurrency);
+                $("#grand_total").html(totalWithCurrency);
+                $("#shipping_charge").html(shipWithCurrency);
 
-            var prodTotalWeight = '<?= $prodDimensionDetails['totalWeight'] ?>';
-            var productTotalWidth = '<?=  $prodDimensionDetails['productTotalWidth'] ?>';
-            var productTotalHeight = '<?= $prodDimensionDetails['productTotalHeight'] ?>';
-            var productTotalBreadth = '<?= $prodDimensionDetails['productTotalBreadth'] ?>';
+                var prodTotalWeight = '<?= $prodDimensionDetails['totalWeight'] ?>';
+                var productTotalWidth = '<?= $prodDimensionDetails['productTotalWidth'] ?>';
+                var productTotalHeight = '<?= $prodDimensionDetails['productTotalHeight'] ?>';
+                var productTotalBreadth = '<?= $prodDimensionDetails['productTotalBreadth'] ?>';
 
-            if(countryId != ""){
+                if (countryId != "") {
 
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    url: "{{route('checkout.shipping_currency_couriers_list')}}",
-                    type: 'GET',
-                    data: {
-                        prodTotalWeight:prodTotalWeight,
+                    $.ajax({
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        url: "{{ route('checkout.shipping_currency_couriers_list') }}",
+                        type: 'GET',
+                        data: {
+                            prodTotalWeight: prodTotalWeight,
 
-                    },
-                    success: function (data) {
-                        var response = JSON.parse(data);
-                        //console.log(response);
-                        if(response != '' && response.status == "success") {
-                            $("#postcodeErr").html("");postcodeErr
-                            $("#shipping_couriers_list").html("");
-                            $.each(response.data, function(index, value){
-                                var courierName = value.courier_name;
-                                var rate = value.rate;
-                                $("#shipping_couriers_list").append('<tr class="courier-info" id="courier-list-'+ value.courier_name +'"><td class="text-right"><input type="radio" name="shipping-charge" id="shipping-charge-'+ value.courier_name +'" onclick="selectShippingCharge(this.value,\''+value.courier_name+'\')" value="'+value.rate+'"><span><b>'+ value.courier_name +'</span>(Delivery By '+ value.estimated_delivery_date +') :</td><td>'+ value.rate +'<b></td></tr>');
-                            });
-                        }else if(response.status == "invalid_delivery_postcode"){
-                            $("#postcodeErr_us").text(response.message);
-                            $("#postcodeErr").html(response.message);
-                            $(".overall_online_payment").html("");
-                            $('.overall_online_payment').append('<Span style="color: red;">Shipping is not available to the selected country. Please contact Quicklab</span>');
-                            $('.complete_order').html('');
-                            $('.complete_order').append('<button type="button" class="btn btn-primary fw-600 ">Contenct Admin</button>');
-
-                        }else if(response.status == "postcode_empty"){
-                            $("#postcodeErr").html("Delivery postcode required");
-                        }else if(response.status == "invalid_token"){
-                            $("#postcodeErr").html("Invalid token");
-                        }else if(response.status == "invalid_inputs_data"){
-                            $("#postcodeErr").html("Invalid inputs data");
-                        }else{
-                             $("#postcodeErr").html("Invalid data");
+                        },
+                        success: function(data) {
+                            var response = JSON.parse(data);
+                            //console.log(response);
+                            if (response != '' && response.status == "success") {
+                                $("#postcodeErr").html("");
+                                postcodeErr
+                                $("#shipping_couriers_list").html("");
+                                $.each(response.data, function(index, value) {
+                                    var courierName = value.courier_name;
+                                    var rate = value.rate;
+                                    $("#shipping_couriers_list").append(
+                                        '<tr class="courier-info" id="courier-list-' + value
+                                        .courier_name +
+                                        '"><td class="text-right"><input type="radio" name="shipping-charge" id="shipping-charge-' +
+                                        value.courier_name +
+                                        '" onclick="selectShippingCharge(this.value,\'' +
+                                        value.courier_name + '\')" value="' + value.rate +
+                                        '"><span><b>' + value.courier_name +
+                                        '</span>(Delivery By ' + value
+                                        .estimated_delivery_date + ') :</td><td>' + value
+                                        .rate + '<b></td></tr>');
+                                });
+                            } else if (response.status == "invalid_delivery_postcode") {
+                                $("#postcodeErr_us").text("Invalid delivery postcode");
+                                $("#postcodeErr").html("Invalid delivery postcode");
+                            } else if (response.status == "postcode_empty") {
+                                $("#postcodeErr").html("Delivery postcode required");
+                            } else if (response.status == "invalid_token") {
+                                $("#postcodeErr").html("Invalid token");
+                            } else if (response.status == "invalid_inputs_data") {
+                                $("#postcodeErr").html("Invalid inputs data");
+                            } else {
+                                $("#postcodeErr").html("Invalid data");
+                            }
                         }
-                    }
-                });
-            }else{
-                $("#postcodeErr").html("Delivery postcode required");
-            }
+                    });
+                } else {
+                    $("#postcodeErr").html("Delivery postcode required");
+                }
 
 
             }
@@ -684,7 +694,8 @@
                         '{{ translate('You order amount is less then the minimum order amount') }}');
                 } else {
                     var offline_payment_active = '{{ addon_is_activated('offline_payment') }}';
-                    if (offline_payment_active == 'true' && $('.offline_payment_option').is(":checked") && $('#trx_id').val() == '') {
+                    if (offline_payment_active == 'true' && $('.offline_payment_option').is(":checked") && $('#trx_id')
+                        .val() == '') {
                         AIZ.plugins.notify('danger',
                             '{{ translate('You need to put Transaction id') }}');
                         $(el).prop('disabled', false);
@@ -744,10 +755,11 @@
             })
         });
 
-         function calculateShipping(){
+        function calculateShipping() {
             $("#shipping_estimate").show();
         }
-        function getShippingCouriers(){
+
+        function getShippingCouriers() {
             var countryId = $("#country").val();
             var postcode = $("#postcode").val();
 
@@ -759,73 +771,84 @@
             $("#shipping_charge").html(shipWithCurrency);
 
             var prodTotalWeight = '<?= $prodDimensionDetails['totalWeight'] ?>';
-            var productTotalWidth = '<?=  $prodDimensionDetails['productTotalWidth'] ?>';
+            var productTotalWidth = '<?= $prodDimensionDetails['productTotalWidth'] ?>';
             var productTotalHeight = '<?= $prodDimensionDetails['productTotalHeight'] ?>';
             var productTotalBreadth = '<?= $prodDimensionDetails['productTotalBreadth'] ?>';
 
-            if(postcode != ""){
+            if (postcode != "") {
 
                 $.ajax({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: "{{route('checkout.shipping_couriers_list')}}",
+                    url: "{{ route('checkout.shipping_couriers_list') }}",
                     type: 'POST',
                     data: {
-                        countryId:countryId,
-                        postcode:postcode,
-                        prodTotalWeight:prodTotalWeight,
-                        productTotalWidth:productTotalWidth,
-                        productTotalHeight:productTotalHeight,
-                        productTotalBreadth:productTotalBreadth,
+                        countryId: countryId,
+                        postcode: postcode,
+                        prodTotalWeight: prodTotalWeight,
+                        productTotalWidth: productTotalWidth,
+                        productTotalHeight: productTotalHeight,
+                        productTotalBreadth: productTotalBreadth,
                     },
-                    success: function (data) {
+                    success: function(data) {
                         var response = JSON.parse(data);
                         //console.log(response);
-                        if(response != '' && response.status == "success") {
-                            $("#postcodeErr").html("");postcodeErr
+                        if (response != '' && response.status == "success") {
+                            $("#postcodeErr").html("");
+                            postcodeErr
                             $("#shipping_couriers_list").html("");
-                            $.each(response.data, function(index, value){
+                            $.each(response.data, function(index, value) {
                                 var courierName = value.courier_name;
                                 var rate = value.rate;
-                                $("#shipping_couriers_list").append('<tr class="courier-info" id="courier-list-'+ value.courier_name +'"><td class="text-right"><input type="radio" name="shipping-charge" id="shipping-charge-'+ value.courier_name +'" onclick="selectShippingCharge(this.value,\''+value.courier_name+'\')" value="'+value.rate+'"><span><b>'+ value.courier_name +'</span>(Delivery By '+ value.estimated_delivery_date +') :</td><td>'+ value.rate +'<b></td></tr>');
+                                $("#shipping_couriers_list").append(
+                                    '<tr class="courier-info" id="courier-list-' + value
+                                    .courier_name +
+                                    '"><td class="text-right"><input type="radio" name="shipping-charge" id="shipping-charge-' +
+                                    value.courier_name +
+                                    '" onclick="selectShippingCharge(this.value,\'' + value
+                                    .courier_name + '\')" value="' + value.rate + '"><span><b>' +
+                                    value.courier_name + '</span>(Delivery By ' + value
+                                    .estimated_delivery_date + ') :</td><td>' + value.rate +
+                                    '<b></td></tr>');
                             });
-                        }else if(response.status == "invalid_delivery_postcode"){
+                        } else if (response.status == "invalid_delivery_postcode") {
                             $("#postcodeErr").html("Invalid delivery postcode");
-                        }else if(response.status == "postcode_empty"){
+                        } else if (response.status == "postcode_empty") {
                             $("#postcodeErr").html("Delivery postcode required");
-                        }else if(response.status == "invalid_token"){
+                        } else if (response.status == "invalid_token") {
                             $("#postcodeErr").html("Invalid token");
-                        }else if(response.status == "invalid_inputs_data"){
+                        } else if (response.status == "invalid_inputs_data") {
                             $("#postcodeErr").html("Invalid inputs data");
-                        }else{
-                             $("#postcodeErr").html("Invalid data");
+                        } else {
+                            $("#postcodeErr").html("Invalid data");
                         }
                     }
                 });
-            }else{
+            } else {
                 $("#postcodeErr").html("Delivery postcode required");
             }
         }
-        function selectShippingCharge(shipCost,courierName){
+
+        function selectShippingCharge(shipCost, courierName) {
             var grandTotal = $("#total").val();
             var shipDefaultCost = $("#shipping_courier_default_cost").val();
-            if(grandTotal > 0 && shipDefaultCost != "" && shipCost != "" && courierName != ""){
+            if (grandTotal > 0 && shipDefaultCost != "" && shipCost != "" && courierName != "") {
                 $.ajax({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: "{{route('checkout.apply_shipping_charge')}}",
+                    url: "{{ route('checkout.apply_shipping_charge') }}",
                     type: 'POST',
                     data: {
-                        grandTotal:grandTotal,
-                        shipDefaultCost:shipDefaultCost,
-                        shipCost:shipCost,
-                        courierName:courierName,
+                        grandTotal: grandTotal,
+                        shipDefaultCost: shipDefaultCost,
+                        shipCost: shipCost,
+                        courierName: courierName,
                     },
-                    success: function (data) {
+                    success: function(data) {
                         var response = JSON.parse(data);
-                        if(response != '' && response.status == "success") {
+                        if (response != '' && response.status == "success") {
                             $("#grand_total").html(response.grandTotal);
                             $("#shipping_charge").html(response.shippingCost);
                             $("#shipping_courier_cost").val(shipCost);
@@ -835,6 +858,5 @@
                 });
             }
         }
-
     </script>
 @endsection

@@ -15,7 +15,8 @@
     <meta name="twitter:site" content="@publisher_handle">
     <meta name="twitter:title" content="{{ $shop->meta_title }}">
     <meta name="twitter:description" content="{{ $shop->meta_description }}">
-    <meta name="twitter:creator" content="@author_handle">
+    <meta name="twitter:creator"
+        content="@author_handle">
     <meta name="twitter:image" content="{{ uploaded_asset($shop->meta_img) }}">
 
     <!-- Open Graph data -->
@@ -36,8 +37,8 @@
                         <img
                             height="70"
                             class="lazyload"
-                            src="{{ static_asset('assets/img/placeholder.jpg') }}"
-                            data-src="@if ($shop->logo !== null) {{ uploaded_asset($shop->logo) }} @else {{ static_asset('assets/img/placeholder.jpg') }} @endif"
+                            src="{{ secure_asset('assets/img/placeholder.jpg') }}"
+                            data-src="@if ($shop->logo !== null) {{ uploaded_asset($shop->logo) }} @else {{ secure_asset('assets/img/placeholder.jpg') }} @endif"
                             alt="{{ $shop->name }}"
                         >
                         <div class="pl-4 text-left">
@@ -61,13 +62,13 @@
                 <div class="col-lg-6 order-2 order-lg-0">
                     <ul class="list-inline mb-0 text-center text-lg-left">
                         <li class="list-inline-item ">
-                            <a class="text-reset d-inline-block fw-600 fs-15 p-3 @if(!isset($type)) border-bottom border-primary border-width-2 @endif" href="{{ route('shop.visit', $shop->slug) }}">{{ translate('Store Home')}}</a>
+                            <a class="text-reset d-inline-block fw-600 fs-15 p-3 @if (!isset($type)) border-bottom border-primary border-width-2 @endif" href="{{ route('shop.visit', $shop->slug) }}">{{ translate('Store Home') }}</a>
                         </li>
                         <li class="list-inline-item ">
-                            <a class="text-reset d-inline-block fw-600 fs-15 p-3 @if(isset($type) && $type == 'top-selling') border-bottom border-primary border-width-2 @endif" href="{{ route('shop.visit.type', ['slug'=>$shop->slug, 'type'=>'top-selling']) }}">{{ translate('Top Selling')}}</a>
+                            <a class="text-reset d-inline-block fw-600 fs-15 p-3 @if (isset($type) && $type == 'top-selling') border-bottom border-primary border-width-2 @endif" href="{{ route('shop.visit.type', ['slug' => $shop->slug, 'type' => 'top-selling']) }}">{{ translate('Top Selling') }}</a>
                         </li>
                         <li class="list-inline-item ">
-                            <a class="text-reset d-inline-block fw-600 fs-15 p-3 @if(isset($type) && $type == 'all-products') border-bottom border-primary border-width-2 @endif" href="{{ route('shop.visit.type', ['slug'=>$shop->slug, 'type'=>'all-products']) }}">{{ translate('All Products')}}</a>
+                            <a class="text-reset d-inline-block fw-600 fs-15 p-3 @if (isset($type) && $type == 'all-products') border-bottom border-primary border-width-2 @endif" href="{{ route('shop.visit.type', ['slug' => $shop->slug, 'type' => 'all-products']) }}">{{ translate('All Products') }}</a>
                         </li>
                     </ul>
                 </div>
@@ -119,9 +120,9 @@
             <div class="container">
                 <div class="aiz-carousel dots-inside-bottom mobile-img-auto-height" data-arrows="true" data-dots="true" data-autoplay="true">
                     @if ($shop->sliders != null)
-                        @foreach (explode(',',$shop->sliders) as $key => $slide)
+                        @foreach (explode(',', $shop->sliders) as $key => $slide)
                             <div class="carousel-box">
-                                <img class="d-block w-100 lazyload rounded h-200px h-lg-380px img-fit" src="{{ static_asset('assets/img/placeholder-rect.jpg') }}" data-src="{{ uploaded_asset($slide) }}" alt="{{ $key }} offer">
+                                <img class="d-block w-100 lazyload rounded h-200px h-lg-380px img-fit" src="{{ secure_asset('assets/img/placeholder-rect.jpg') }}" data-src="{{ uploaded_asset($slide) }}" alt="{{ $key }} offer">
                             </div>
                         @endforeach
                     @endif
@@ -132,7 +133,7 @@
             <div class="container">
                 <div class="text-center mb-4">
                     <h3 class="h3 fw-600 border-bottom">
-                        <span class="border-bottom border-primary border-width-2 pb-3 d-inline-block">{{ translate('Featured Products')}}</span>
+                        <span class="border-bottom border-primary border-width-2 pb-3 d-inline-block">{{ translate('Featured Products') }}</span>
                     </h3>
                 </div>
                 <div class="row">
@@ -156,37 +157,46 @@
                 <h3 class="h3 fw-600 border-bottom">
                     <span class="border-bottom border-primary border-width-2 pb-3 d-inline-block">
                         @if (!isset($type))
-                            {{ translate('New Arrival Products')}}
+                            {{ translate('New Arrival Products') }}
                         @elseif ($type == 'top-selling')
-                            {{ translate('Top Selling')}}
+                            {{ translate('Top Selling') }}
                         @elseif ($type == 'all-products')
-                            {{ translate('All Products')}}
-                        @endif
+                            {{ translate('All Products') }} @endif
                     </span>
                 </h3>
             </div>
-            <div class="row gutters-5 row-cols-xxl-5 row-cols-lg-4 row-cols-md-3 row-cols-2">
-                @php
-                    if (!isset($type)){
-                        $products = \App\Models\Product::where('user_id', $shop->user->id)->where('published', 1)->where('approved', 1)->orderBy('created_at', 'desc')->paginate(24);
-                    }
-                    elseif ($type == 'top-selling'){
-                        $products = \App\Models\Product::where('user_id', $shop->user->id)->where('published', 1)->where('approved', 1)->orderBy('num_of_sale', 'desc')->paginate(24);
-                    }
-                    elseif ($type == 'all-products'){
-                        $products = \App\Models\Product::where('user_id', $shop->user->id)->where('published', 1)->where('approved', 1)->paginate(24);
-                    }
-                @endphp
-                @foreach ($products as $key => $product)
-                    <div class="col mb-3">
-                        @include('frontend.partials.product_box_1',['product' => $product])
-                    </div>
-                @endforeach
-            </div>
-            <div class="aiz-pagination aiz-pagination-center mb-4">
-                {{ $products->links() }}
-            </div>
+            <div class="row
+        gutters-5 row-cols-xxl-5 row-cols-lg-4 row-cols-md-3 row-cols-2">
+    @php
+        if (!isset($type)) {
+            $products = \App\Models\Product::where('user_id', $shop->user->id)
+                ->where('published', 1)
+                ->where('approved', 1)
+                ->orderBy('created_at', 'desc')
+                ->paginate(24);
+        } elseif ($type == 'top-selling') {
+            $products = \App\Models\Product::where('user_id', $shop->user->id)
+                ->where('published', 1)
+                ->where('approved', 1)
+                ->orderBy('num_of_sale', 'desc')
+                ->paginate(24);
+        } elseif ($type == 'all-products') {
+            $products = \App\Models\Product::where('user_id', $shop->user->id)
+                ->where('published', 1)
+                ->where('approved', 1)
+                ->paginate(24);
+        }
+    @endphp
+    @foreach ($products as $key => $product)
+        <div class="col mb-3">
+            @include('frontend.partials.product_box_1', ['product' => $product])
         </div>
+    @endforeach
+    </div>
+    <div class="aiz-pagination aiz-pagination-center mb-4">
+        {{ $products->links() }}
+    </div>
+    </div>
     </section>
 
 
