@@ -4,10 +4,10 @@
             <span class="avatar avatar-md mb-3">
                 @if (Auth::user()->avatar_original != null)
                     <img src="{{ uploaded_asset(Auth::user()->avatar_original) }}"
-                        onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/avatar-place.png') }}';">
+                        onerror="this.onerror=null;this.src='{{ asset('assets/img/avatar-place.png') }}';">
                 @else
-                    <img src="{{ secure_asset('assets/img/avatar-place.png') }}" class="image rounded-circle"
-                        onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/avatar-place.png') }}';">
+                    <img src="{{ asset('assets/img/avatar-place.png') }}" class="image rounded-circle"
+                        onerror="this.onerror=null;this.src='{{ asset('assets/img/avatar-place.png') }}';">
                 @endif
             </span>
             <h4 class="h5 fs-16 mb-1 fw-600">{{ Auth::user()->name }}</h4>

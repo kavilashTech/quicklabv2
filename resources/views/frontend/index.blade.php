@@ -27,7 +27,7 @@
                                             @if (count($featured_categories) == 0) height="457"
                                             @else
                                             height="315" @endif
-                                            onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder-rect.jpg') }}';">
+                                            onerror="this.onerror=null;this.src='{{ asset('assets/img/placeholder-rect.jpg') }}';">
                                     </a>
                                 </div>
                             @endforeach
@@ -39,11 +39,11 @@
                                 <li class="minw-0 col-4 col-md mt-3">
                                     <a href="{{ route('products.category', $category->slug) }}"
                                         class="d-block rounded bg-white p-2 text-reset shadow-sm">
-                                        <img src="{{ secure_asset('assets/img/placeholder.jpg') }}"
+                                        <img src="{{ asset('assets/img/placeholder.jpg') }}"
                                             data-src="{{ uploaded_asset($category->banner) }}"
                                             alt="{{ $category->getTranslation('name') }}" class="lazyload img-fit"
                                             height="78"
-                                            onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder-rect.jpg') }}';">
+                                            onerror="this.onerror=null;this.src='{{ asset('assets/img/placeholder-rect.jpg') }}';">
                                         <div class="text-truncate fs-12 fw-600 mt-2 opacity-70">
                                             {{ $category->getTranslation('name') }}</div>
                                     </a>
@@ -73,10 +73,10 @@
                                                         <div class="col-xxl">
                                                             <div class="img">
                                                                 <img class="lazyload img-fit h-140px h-lg-80px"
-                                                                    src="{{ secure_asset('assets/img/placeholder.jpg') }}"
+                                                                    src="{{ asset('assets/img/placeholder.jpg') }}"
                                                                     data-src="{{ uploaded_asset($product->thumbnail_img) }}"
                                                                     alt="{{ $product->getTranslation('name') }}"
-                                                                    onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';">
+                                                                    onerror="this.onerror=null;this.src='{{ asset('assets/img/placeholder.jpg') }}';">
                                                             </div>
                                                         </div>
                                                         <div class="col-xxl">
@@ -116,7 +116,7 @@
                             <div class="mb-3 mb-lg-0">
                                 <a href="{{ json_decode(get_setting('home_banner1_links'), true)[$key] }}"
                                     class="d-block text-reset">
-                                    <img src="{{ secure_asset('assets/img/placeholder-rect.jpg') }}"
+                                    <img src="{{ asset('assets/img/placeholder-rect.jpg') }}"
                                         data-src="{{ uploaded_asset($banner_1_imags[$key]) }}"
                                         alt="{{ env('APP_NAME') }} promo" class="img-fluid lazyload w-100">
                                 </a>
@@ -231,7 +231,7 @@
                             <div class="mb-3 mb-lg-0">
                                 <a href="{{ json_decode(get_setting('home_banner2_links'), true)[$key] }}"
                                     class="d-block text-reset">
-                                    <img src="{{ secure_asset('assets/img/placeholder-rect.jpg') }}"
+                                    <img src="{{ asset('assets/img/placeholder-rect.jpg') }}"
                                         data-src="{{ uploaded_asset($banner_2_imags[$key]) }}"
                                         alt="{{ env('APP_NAME') }} promo" class="img-fluid lazyload w-100">
                                 </a>
@@ -278,10 +278,10 @@
                                             <a href="{{ route('customer.product', $classified_product->slug) }}"
                                                 class="d-block">
                                                 <img class="img-fit lazyload mx-auto h-140px h-md-210px"
-                                                    src="{{ secure_asset('assets/img/placeholder.jpg') }}"
+                                                    src="{{ asset('assets/img/placeholder.jpg') }}"
                                                     data-src="{{ uploaded_asset($classified_product->thumbnail_img) }}"
                                                     alt="{{ $classified_product->getTranslation('name') }}"
-                                                    onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';">
+                                                    onerror="this.onerror=null;this.src='{{ asset('assets/img/placeholder.jpg') }}';">
                                             </a>
                                             <div class="absolute-top-left pt-2 pl-2">
                                                 @if ($classified_product->conditon == 'new')
@@ -324,7 +324,7 @@
                             <div class="mb-3 mb-lg-0">
                                 <a href="{{ json_decode(get_setting('home_banner3_links'), true)[$key] }}"
                                     class="d-block text-reset">
-                                    <img src="{{ secure_asset('assets/img/placeholder-rect.jpg') }}"
+                                    <img src="{{ asset('assets/img/placeholder-rect.jpg') }}"
                                         data-src="{{ uploaded_asset($banner_3_imags[$key]) }}"
                                         alt="{{ env('APP_NAME') }} promo" class="img-fluid lazyload w-100">
                                 </a>
@@ -366,11 +366,11 @@
                                                 class="bg-white border d-block text-reset rounded p-2 hov-shadow-md mb-2">
                                                 <div class="row align-items-center no-gutters">
                                                     <div class="col-3 text-center">
-                                                        <img src="{{ secure_asset('assets/img/placeholder.jpg') }}"
+                                                        <img src="{{ asset('assets/img/placeholder.jpg') }}"
                                                             data-src="{{ uploaded_asset($category->banner) }}"
                                                             alt="{{ $category->getTranslation('name') }}"
                                                             class="img-fluid img lazyload h-60px"
-                                                            onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';">
+                                                            onerror="this.onerror=null;this.src='{{ asset('assets/img/placeholder.jpg') }}';">
                                                     </div>
                                                     <div class="col-7">
                                                         <div class="text-truncat-2 pl-3 fs-14 fw-600 text-left">
@@ -407,11 +407,11 @@
                                                 class="bg-white border d-block text-reset rounded p-2 hov-shadow-md mb-2">
                                                 <div class="row align-items-center no-gutters">
                                                     <div class="col-4 text-center">
-                                                        <img src="{{ secure_asset('assets/img/placeholder.jpg') }}"
+                                                        <img src="{{ asset('assets/img/placeholder.jpg') }}"
                                                             data-src="{{ uploaded_asset($brand->logo) }}"
                                                             alt="{{ $brand->getTranslation('name') }}"
                                                             class="img-fluid img lazyload h-60px"
-                                                            onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';">
+                                                            onerror="this.onerror=null;this.src='{{ asset('assets/img/placeholder.jpg') }}';">
                                                     </div>
                                                     <div class="col-6">
                                                         <div class="text-truncate-2 pl-3 fs-14 fw-600 text-left">

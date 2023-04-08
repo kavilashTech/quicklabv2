@@ -13,7 +13,7 @@
                                     <img src="{{ uploaded_asset(get_setting('system_logo_black')) }}" class="mw-100 mb-4"
                                         height="40">
                                 @else
-                                    <img src="{{ secure_asset('assets/img/logo.png') }}" class="mw-100 mb-4" height="40">
+                                    <img src="{{ asset('assets/img/logo.png') }}" class="mw-100 mb-4" height="40">
                                 @endif
                                 <h1 class="h3 text-primary mb-0">{{ translate('Welcome to') }} {{ env('APP_NAME') }}</h1>
                                 <p>{{ translate('Login to your account.') }}</p>
