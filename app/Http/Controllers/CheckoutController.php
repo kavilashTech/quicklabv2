@@ -32,6 +32,7 @@ class CheckoutController extends Controller
     //check the selected payment gateway and redirect to that controller accordingly
     public function checkout(Request $request)
     {
+
         // echo "<pre>"; print_r($request->all()); die();
         // Minumum order amount check
         if(get_setting('minimum_order_amount_check') == 1){
@@ -60,11 +61,15 @@ class CheckoutController extends Controller
 
                 // If block for Online payment, wallet and cash on delivery. Else block for Offline payment
                 $decorator = __NAMESPACE__ . '\\Payment\\' . str_replace(' ', '', ucwords(str_replace('_', ' ', $request->payment_option))) . "Controller";
+
+
                 if (class_exists($decorator)) {
                     return (new $decorator)->pay($request);
                 }
                 else {
                     $combined_order = CombinedOrder::findOrFail($request->session()->get('combined_order_id'));
+
+                    //dd($combined_order);
                     $manual_payment_data = array(
                         'name'   => $request->payment_option,
                         'amount' => $combined_order->grand_total,
@@ -244,8 +249,9 @@ class CheckoutController extends Controller
             $total = $subtotal + $tax + $shipping;
 
             $countries = Country::where('id',101)->get();
+            $checkUserAddress = checkAuthUserAddress();
 
-            return view('frontend.payment_select', compact('carts', 'shipping_info', 'total','countries','shippingCourierCost','shippingCourierName','prodDimensionDetails'));
+            return view('frontend.payment_select', compact('carts', 'shipping_info', 'total','countries','shippingCourierCost','shippingCourierName','prodDimensionDetails','checkUserAddress'));
 
         } else {
             flash(translate('Your Cart was empty'))->warning();

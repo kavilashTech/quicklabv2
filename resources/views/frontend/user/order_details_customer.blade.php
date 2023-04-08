@@ -244,25 +244,55 @@
                                     <span class="strong-600">{{ single_price($order->orderDetails->sum('price')) }}</span>
                                 </td>
                             </tr>
-                            <tr>
+
+
+                            @if(!empty($checkUserAddress) && $checkUserAddress == 1)
+                <tr class="cart-shipping">
+                    <th>{{ translate('CGST') }}</th>
+                    <td class="text-right">
+                        <span class="font-italic">{{ single_price($order->orderDetails->sum('tax')/2) }}</span>
+                    </td>
+                </tr>
+                <tr class="cart-shipping">
+                    <th>{{ translate('SGST') }}</th>
+                    <td class="text-right">
+                        <span class="font-italic">{{ single_price($order->orderDetails->sum('tax')/2) }}</span>
+                    </td>
+                </tr>
+
+                @endif
+                @if(!empty($checkUserAddress) && $checkUserAddress == 2)
+                <tr class="cart-shipping">
+                    <th>{{ translate('IGST') }}</th>
+                    <td class="text-right">
+                        <span class="font-italic">{{ single_price($order->orderDetails->sum('tax')) }}</span>
+                    </td>
+                </tr>
+
+
+                @endif
+                <tr>
                                 <td class="w-50 fw-600">{{ translate('Shipping') }}</td>
                                 <td class="text-right">
                                     <span
-                                        class="text-italic">{{ single_price($order->orderDetails->sum('shipping_cost')) }}</span>
+                                        class="text-italic">{{single_price($order->shipping_courier_charge) }}</span>
                                 </td>
                             </tr>
-                            <tr>
+
+                            <!-- <tr>
                                 <td class="w-50 fw-600">{{ translate('Tax') }}</td>
                                 <td class="text-right">
                                     <span class="text-italic">{{ single_price($order->orderDetails->sum('tax')) }}</span>
                                 </td>
-                            </tr>
-                            <tr>
+                            </tr> -->
+                          {{--  <tr>
+
                                 <td class="w-50 fw-600">{{ translate('Coupon') }}</td>
                                 <td class="text-right">
                                     <span class="text-italic">{{ single_price($order->coupon_discount) }}</span>
                                 </td>
                             </tr>
+                            --}}
                             <tr>
                                 <td class="w-50 fw-600">{{ translate('Total') }}</td>
                                 <td class="text-right">
