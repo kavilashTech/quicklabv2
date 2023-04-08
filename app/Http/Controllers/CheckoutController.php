@@ -456,7 +456,8 @@ class CheckoutController extends Controller
                         $rate = (!empty($value['rate']) && $loggedCountryId == 101) ? $value['rate'] : $value['rate']['rate'];
                         $data['data'][$key]['estimated_delivery_date'] = $value['etd'];
                         $data['data'][$key]['courier_name'] = $value['courier_name'];
-                        $data['data'][$key]['rate'] = $rate;
+                        $usdConvertPrice = exchangeRateApi($rate);
+                        $data['data'][$key]['rate'] = !empty($usdConvertPrice) ? $usdConvertPrice : $rate;
                         $data['data'][$key]['freight_charge'] = $value['freight_charge'] ?? "";
                     }
                     $data['status']="success";
@@ -511,7 +512,8 @@ class CheckoutController extends Controller
                         $rate = (!empty($value['rate']) && $loggedCountryId == 101) ? $value['rate'] : $value['rate']['rate'];
                         $data['data'][$key]['estimated_delivery_date'] = $value['etd'];
                         $data['data'][$key]['courier_name'] = $value['courier_name'];
-                        $data['data'][$key]['rate'] = $rate;
+                        $usdConvertPrice = exchangeRateApi($rate);
+                        $data['data'][$key]['rate'] = !empty($usdConvertPrice) ? $usdConvertPrice : $rate;
                         $data['data'][$key]['freight_charge'] = $value['freight_charge'] ?? "";
                     }
                     $data['status']="success";
@@ -703,8 +705,8 @@ class CheckoutController extends Controller
                     $rate = (!empty($courier[0]['rate']) && $loggedCountryId == 101) ? $courier[0]['rate'] : $courier[0]['rate']['rate'];
 
                     $data['courier_name'] = $courier[0]['courier_name'];
-                    $data['rate'] = $courier[0]['rate'];
-
+                    $usdConvertPrice = exchangeRateApi($courier[0]['rate']);
+                    $data['rate'] = !empty($usdConvertPrice) ? $usdConvertPrice : $courier[0]['rate'];
                     $data['status']="success";
                 }else{
                     $data['status'] = "failure";
