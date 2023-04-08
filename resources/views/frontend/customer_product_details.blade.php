@@ -43,9 +43,9 @@
                                         <div class="carousel-box img-zoom rounded">
                                             <img
                                                 class="img-fluid lazyload"
-                                                src="{{ secure_asset('assets/img/placeholder.jpg') }}"
+                                                src="{{ asset('assets/img/placeholder.jpg') }}"
                                                 data-src="{{ uploaded_asset($photo) }}"
-                                                onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';"
+                                                onerror="this.onerror=null;this.src='{{ asset('assets/img/placeholder.jpg') }}';"
                                             >
                                         </div>
                                         @endforeach
@@ -57,9 +57,9 @@
                                         <div class="carousel-box c-pointer border p-1 rounded">
                                             <img
                                                 class="lazyload mw-100 size-60px mx-auto"
-                                                src="{{ secure_asset('assets/img/placeholder.jpg') }}"
+                                                src="{{ asset('assets/img/placeholder.jpg') }}"
                                                 data-src="{{ uploaded_asset($photo) }}"
-                                                onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';"
+                                                onerror="this.onerror=null;this.src='{{ asset('assets/img/placeholder.jpg') }}';"
                                             >
                                         </div>
                                         @endforeach
@@ -208,10 +208,10 @@
                                     <a href="{{ route('customer.product', $product->slug) }}" class="d-block">
                                         <img
                                             class="img-fit lazyload mx-auto h-140px h-md-210px"
-                                            src="{{ secure_asset('assets/img/placeholder.jpg') }}"
+                                            src="{{ asset('assets/img/placeholder.jpg') }}"
                                             data-src="{{ uploaded_asset($product->thumbnail_img) }}"
                                             alt="{{ $product->getTranslation('name') }}"
-                                            onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';"
+                                            onerror="this.onerror=null;this.src='{{ asset('assets/img/placeholder.jpg') }}';"
                                         >
                                     </a>
                                     <div class="absolute-top-left pt-2 pl-2">

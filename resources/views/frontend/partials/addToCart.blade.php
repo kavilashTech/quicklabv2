@@ -10,18 +10,18 @@
                         data-auto-height='true'>
                         @foreach ($photos as $key => $photo)
                             <div class="carousel-box img-zoom rounded">
-                                <img class="img-fluid lazyload" src="{{ secure_asset('assets/img/placeholder.jpg') }}"
+                                <img class="img-fluid lazyload" src="{{ asset('assets/img/placeholder.jpg') }}"
                                     data-src="{{ uploaded_asset($photo) }}"
-                                    onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';">
+                                    onerror="this.onerror=null;this.src='{{ asset('assets/img/placeholder.jpg') }}';">
                             </div>
                         @endforeach
                         @foreach ($product->stocks as $key => $stock)
                             @if ($stock->image != null)
                                 <div class="carousel-box img-zoom rounded">
                                     <img class="img-fluid lazyload"
-                                        src="{{ secure_asset('assets/img/placeholder.jpg') }}"
+                                        src="{{ asset('assets/img/placeholder.jpg') }}"
                                         data-src="{{ uploaded_asset($stock->image) }}"
-                                        onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';">
+                                        onerror="this.onerror=null;this.src='{{ asset('assets/img/placeholder.jpg') }}';">
                                 </div>
                             @endif
                         @endforeach
@@ -33,9 +33,9 @@
                         @foreach ($photos as $key => $photo)
                             <div class="carousel-box c-pointer border p-1 rounded">
                                 <img class="lazyload mw-100 size-60px mx-auto"
-                                    src="{{ secure_asset('assets/img/placeholder.jpg') }}"
+                                    src="{{ asset('assets/img/placeholder.jpg') }}"
                                     data-src="{{ uploaded_asset($photo) }}"
-                                    onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';">
+                                    onerror="this.onerror=null;this.src='{{ asset('assets/img/placeholder.jpg') }}';">
                             </div>
                         @endforeach
                         @foreach ($product->stocks as $key => $stock)
@@ -43,9 +43,9 @@
                                 <div class="carousel-box c-pointer border p-1 rounded"
                                     data-variation="{{ $stock->variant }}">
                                     <img class="lazyload mw-100 size-50px mx-auto"
-                                        src="{{ secure_asset('assets/img/placeholder.jpg') }}"
+                                        src="{{ asset('assets/img/placeholder.jpg') }}"
                                         data-src="{{ uploaded_asset($stock->image) }}"
-                                        onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';">
+                                        onerror="this.onerror=null;this.src='{{ asset('assets/img/placeholder.jpg') }}';">
                                 </div>
                             @endif
                         @endforeach

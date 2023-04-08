@@ -50,9 +50,9 @@
                                         <div class="carousel-box img-zoom rounded">
                                             <img
                                                 class="img-fluid lazyload"
-                                                src="{{ secure_asset('assets/img/placeholder.jpg') }}"
+                                                src="{{ asset('assets/img/placeholder.jpg') }}"
                                                 data-src="{{ uploaded_asset($photo) }}"
-                                                onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';"
+                                                onerror="this.onerror=null;this.src='{{ asset('assets/img/placeholder.jpg') }}';"
                                             >
                                         </div>
                                         @endforeach
@@ -64,9 +64,9 @@
                                         <div class="carousel-box c-pointer border p-1 rounded">
                                             <img
                                                 class="lazyload mw-100 size-60px mx-auto"
-                                                src="{{ secure_asset('assets/img/placeholder.jpg') }}"
+                                                src="{{ asset('assets/img/placeholder.jpg') }}"
                                                 data-src="{{ uploaded_asset($photo) }}"
-                                                onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';"
+                                                onerror="this.onerror=null;this.src='{{ asset('assets/img/placeholder.jpg') }}';"
                                             >
                                         </div>
                                         @endforeach
@@ -326,7 +326,7 @@
                                             @if ($refund_sticker != null) 
                                                 <img src="{{ uploaded_asset($refund_sticker) }}" height="36"> 
                                             @else 
-                                                <img src="{{ secure_asset('assets/img/refund-sticker.jpg') }}" height="36"> 
+                                                <img src="{{ asset('assets/img/refund-sticker.jpg') }}" height="36"> 
                                             @endif</a>
                                         <a href="{{ route('returnpolicy') }}" class="ml-2" target="_blank">{{ translate('View Policy') }}</a>
                                     </div>
@@ -445,10 +445,10 @@
                                             <a href="{{ route('product', $top_product->slug) }}" class="d-block text-reset">
                                                 <img
                                                     class="img-fit lazyload h-110px"
-                                                    src="{{ secure_asset('assets/img/placeholder.jpg') }}"
+                                                    src="{{ asset('assets/img/placeholder.jpg') }}"
                                                     data-src="{{ uploaded_asset($top_product->thumbnail_img) }}"
                                                     alt="{{ $top_product->getTranslation('name') }}"
-                                                    onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';"
+                                                    onerror="this.onerror=null;this.src='{{ asset('assets/img/placeholder.jpg') }}';"
                                                 >
                                             </a>
                                         </div>
@@ -521,8 +521,8 @@
                                                 <span class="avatar avatar-md mr-3">
                                                     <img
                                                         class="lazyload"
-                                                        src="{{ secure_asset('assets/img/placeholder.jpg') }}"
-                                                        onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';"
+                                                        src="{{ asset('assets/img/placeholder.jpg') }}"
+                                                        onerror="this.onerror=null;this.src='{{ asset('assets/img/placeholder.jpg') }}';"
                                                         @if ($review->user->avatar_original != null)
                                                             data-src="{{ uploaded_asset($review->user->avatar_original) }}"
                                                         @else
@@ -656,10 +656,10 @@
                                             <a href="{{ route('product', $related_product->slug) }}" class="d-block">
                                                 <img
                                                     class="img-fit lazyload mx-auto h-140px h-md-210px"
-                                                    src="{{ secure_asset('assets/img/placeholder.jpg') }}"
+                                                    src="{{ asset('assets/img/placeholder.jpg') }}"
                                                     data-src="{{ uploaded_asset($related_product->thumbnail_img) }}"
                                                     alt="{{ $related_product->getTranslation('name') }}"
-                                                    onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';"
+                                                    onerror="this.onerror=null;this.src='{{ asset('assets/img/placeholder.jpg') }}';"
                                                 >
                                             </a>
                                         </div>

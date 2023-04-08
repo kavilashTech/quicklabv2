@@ -4,7 +4,7 @@
         <h3>{{ translate('Item added to your cart!') }}</h3>
     </div>
     <div class="media mb-4">
-        <img src="{{ secure_asset('assets/img/placeholder.jpg') }}"
+        <img src="{{ asset('assets/img/placeholder.jpg') }}"
             data-src="{{ uploaded_asset($product->thumbnail_img) }}" class="mr-3 lazyload size-100px img-fit rounded"
             alt="Product Image">
         <div class="media-body pt-3 text-left">
@@ -46,10 +46,10 @@
                             <div class="">
                                 <a href="{{ route('product', $related_product->slug) }}" class="d-block">
                                     <img class="img-fit lazyload mx-auto h-140px h-md-210px"
-                                        src="{{ secure_asset('assets/img/placeholder.jpg') }}"
+                                        src="{{ asset('assets/img/placeholder.jpg') }}"
                                         data-src="{{ uploaded_asset($related_product->thumbnail_img) }}"
                                         alt="{{ $related_product->getTranslation('name') }}"
-                                        onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';">
+                                        onerror="this.onerror=null;this.src='{{ asset('assets/img/placeholder.jpg') }}';">
                                 </a>
                             </div>
                             <div class="p-md-3 p-2 text-left">

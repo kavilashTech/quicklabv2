@@ -31,7 +31,7 @@
                         <div class="media mb-2">
                             <img class="avatar avatar-xs mr-3"
                                 @if ($message->user != null) src="{{ uploaded_asset($message->user->avatar_original) }}" @endif
-                                onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/avatar-place.png') }}';">
+                                onerror="this.onerror=null;this.src='{{ asset('assets/img/avatar-place.png') }}';">
                             <div class="media-body">
                                 <h6 class="mb-0 fw-600">
                                     @if ($message->user != null)

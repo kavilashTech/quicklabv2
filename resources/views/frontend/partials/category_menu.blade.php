@@ -8,10 +8,10 @@
         <li class="category-nav-element" data-id="{{ $category->id }}">
             <a href="{{ route('products.category', $category->slug) }}"
                 class="text-truncate text-reset py-2 px-3 d-block">
-                <img class="cat-image lazyload mr-2 opacity-60" src="{{ secure_asset('assets/img/placeholder.jpg') }}"
+                <img class="cat-image lazyload mr-2 opacity-60" src="{{ asset('assets/img/placeholder.jpg') }}"
                     data-src="{{ uploaded_asset($category->icon) }}" width="16"
                     alt="{{ $category->getTranslation('name') }}"
-                    onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';">
+                    onerror="this.onerror=null;this.src='{{ asset('assets/img/placeholder.jpg') }}';">
                 <span class="cat-name">{{ $category->getTranslation('name') }}</span>
             </a>
             @if (count(\App\Utility\CategoryUtility::get_immediate_children_ids($category->id)) > 0)
@@ -48,10 +48,10 @@
                             @foreach ($all_category as $category)
                                 <div class="col-lg-3 col-md-6">
                                     <img class="cat-image lazyload mr-2 opacity-60"
-                                        src="{{ secure_asset('assets/img/placeholder.jpg') }}"
+                                        src="{{ asset('assets/img/placeholder.jpg') }}"
                                         data-src="{{ uploaded_asset($category->icon) }}" width="16"
                                         alt="{{ $category->getTranslation('name') }}"
-                                        onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/placeholder.jpg') }}';">
+                                        onerror="this.onerror=null;this.src='{{ asset('assets/img/placeholder.jpg') }}';">
                                     <h4 class="h6 allCategory" data-slug="{{ $category->slug }}">
                                         {{ $category->getTranslation('name') }}</h4>
 

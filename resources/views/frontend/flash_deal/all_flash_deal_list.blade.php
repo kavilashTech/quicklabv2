@@ -32,7 +32,7 @@
                     <div class="col">
                         <div class="bg-white rounded shadow-sm mb-3">
                             <a href="{{ route('flash-deal-details', $single->slug) }}" class="d-block text-reset">
-                                <img src="{{ secure_asset('assets/img/placeholder-rect.jpg') }}"
+                                <img src="{{ asset('assets/img/placeholder-rect.jpg') }}"
                                     data-src="{{ uploaded_asset($single->banner) }}" alt="{{ $single->title }}"
                                     class="img-fluid lazyload rounded w-100">
                             </a>

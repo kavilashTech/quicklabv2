@@ -16,8 +16,8 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700">
 
     <!-- aiz core css -->
-    <link rel="stylesheet" href="{{ secure_asset('assets/css/vendors.css') }}">
-    <link rel="stylesheet" href="{{ secure_asset('assets/css/aiz-core.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/vendors.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/aiz-core.css') }}">
 
     <script>
         var AIZ = AIZ || {};

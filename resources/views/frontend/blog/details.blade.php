@@ -36,7 +36,7 @@
     <div class="container">
         <div class="mb-4">
             <img
-                src="{{ secure_asset('assets/img/placeholder-rect.jpg') }}"
+                src="{{ asset('assets/img/placeholder-rect.jpg') }}"
                 data-src="{{ uploaded_asset($blog->banner) }}"
                 alt="{{ $blog->title }}"
                 class="img-fluid lazyload w-100"

@@ -27,8 +27,8 @@
                             @endphp
                             <a href="javascript:void(0)" class="dropdown-toggle text-reset py-2" data-toggle="dropdown"
                                 data-display="static">
-                                <img src="{{ secure_asset('assets/img/placeholder.jpg') }}"
-                                    data-src="{{ secure_asset('assets/img/flags/' . $locale . '.png') }}"
+                                <img src="{{ asset('assets/img/placeholder.jpg') }}"
+                                    data-src="{{ asset('assets/img/flags/' . $locale . '.png') }}"
                                     class="mr-2 lazyload"
                                     alt="{{ \App\Models\Language::where('code', $locale)->first()->name }}"
                                     height="11">
@@ -40,8 +40,8 @@
                                     <li>
                                         <a href="javascript:void(0)" data-flag="{{ $language->code }}"
                                             class="dropdown-item @if ($locale == $language) active @endif">
-                                            <img src="{{ secure_asset('assets/img/placeholder.jpg') }}"
-                                                data-src="{{ secure_asset('assets/img/flags/' . $language->code . '.png') }}"
+                                            <img src="{{ asset('assets/img/placeholder.jpg') }}"
+                                                data-src="{{ asset('assets/img/flags/' . $language->code . '.png') }}"
                                                 class="mr-1 lazyload" alt="{{ $language->name }}" height="11">
                                             <span class="language">{{ $language->name }}</span>
                                         </a>
@@ -266,7 +266,7 @@
                             <img src="{{ uploaded_asset($header_logo) }}" alt="{{ env('APP_NAME') }}"
                                 class="mw-100 h-30px h-md-40px" height="40">
                         @else
-                            <img src="{{ secure_asset('assets/img/logo.png') }}" alt="{{ env('APP_NAME') }}"
+                            <img src="{{ asset('assets/img/logo.png') }}" alt="{{ env('APP_NAME') }}"
                                 class="mw-100 h-30px h-md-40px" height="40">
                         @endif
                     </a>
