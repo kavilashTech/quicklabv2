@@ -166,6 +166,7 @@ if (!function_exists('get_system_default_currency')) {
 	}
 	function get_system_default_currency()
 	{
+
 		return Cache::remember('system_default_currency', 86400, function () {
 			//$ip = getRealUserIp();
 			$ip = '152.58.214.63'; //india
@@ -230,7 +231,7 @@ if (!function_exists('convert_price')) {
 if (!function_exists('currency_symbol')) {
 	function currency_symbol()
 	{
-		if (auth()->user() != null) {
+		if (auth()->user() != null && auth()->user()->user_type == 'customer') {
 			$code = auth()->user()->country;
 			$country_data = Country::find(auth()->user()->country);
 			$code = ($country_data->code == 'IN') ? 'INR' : 'USD';
@@ -1328,9 +1329,10 @@ if (!function_exists('uploaded_asset')) {
 	function uploaded_asset($id)
 	{
 		if (($asset = \App\Models\Upload::find($id)) != null) {
+
 			return $asset->external_link == null ? my_asset($asset->file_name) : $asset->external_link;
 		}
-		return static_asset('assets/img/placeholder.jpg');
+		return static_asset('../assets/img/placeholder.jpg');
 	}
 }
 
@@ -1347,7 +1349,7 @@ if (!function_exists('my_asset')) {
 		if (env('FILESYSTEM_DRIVER') == 's3') {
 			return Storage::disk('s3')->url($path);
 		} else {
-			return app('url')->asset('public/' . $path, $secure);
+			return app('url')->asset('../public/' . $path, $secure);
 		}
 	}
 }
@@ -1362,7 +1364,7 @@ if (!function_exists('static_asset')) {
 	 */
 	function static_asset($path, $secure = null)
 	{
-		return app('url')->asset('public/' . $path, $secure);
+		return app('url')->asset('../public/' . $path, $secure);
 	}
 }
 
@@ -1391,7 +1393,7 @@ if (!function_exists('getFileBaseURL')) {
 		if (env('FILESYSTEM_DRIVER') == 's3') {
 			return env('AWS_URL') . '/';
 		} else {
-			return getBaseURL() . 'public/';
+			return getBaseURL() . '../public/';
 		}
 	}
 }
