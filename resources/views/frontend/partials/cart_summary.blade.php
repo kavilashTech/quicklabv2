@@ -77,6 +77,12 @@
                     $product_shipping_cost = 0;
                     $shipping_region = $shipping_info['city'];
                     $shipWithCurrency = single_price($shipping_courier_cost);
+
+                    $CGST_total = '0.00';
+                        $SGST_total = '0.00';
+                        $IGST_total = 0.00;
+                        $GST_total = 0;
+
                 @endphp
                 @foreach ($carts as $key => $cartItem)
                     @php
@@ -87,7 +93,13 @@
                         $product_price = cart_product_price($cartItem, $product, false, false);
                         $product_txt = cart_product_tax($cartItem, $product,false);
                         $product_qty = $cartItem['quantity'];
-                        $org_product_price = $cartItem['price'];
+                        if (Session::get('currency_code') == 'USD') {
+                                                            $org_product_price = $cartItem['price'] ;
+
+                                                        }else{
+                                                            $org_product_price = $cartItem['price'] - $cartItem['tax'];
+                                                        }
+                       // $org_product_price = $cartItem['price'];
 
                        // $subtotal += $org_product_price * $cartItem['quantity'];
                         $subtotal = $subtotal + ($product_price - $cartItem['tax']) * $cartItem['quantity'];
@@ -102,7 +114,19 @@
                         }
 
 
+
                     @endphp
+                    @if(!empty($checkUserAddress) && $checkUserAddress == 1)
+                    @php
+                        $CGST_total += $cartItem->tax1_amount * $cartItem['quantity'];
+                        $SGST_total += $cartItem->tax2_amount * $cartItem['quantity'];
+                    @endphp
+                @endif
+                @if(!empty($checkUserAddress) && $checkUserAddress == 2)
+                    @php
+                    $IGST_total += $cartItem->tax * $cartItem['quantity'];
+                    @endphp
+                @endif
                     <tr class="cart_item">
                         <td class="product-name">
                             {{ $product_name_with_choice }}
@@ -112,7 +136,7 @@
                         </td>
                         <td class="product-total text-right">
                             <span
-                                class="pl-4 pr-0">{{ $org_product_price }}</span>
+                                class="pl-4 pr-0">{{ number_format ($org_product_price,2) }}</span>
                         </td>
                     </tr>
                 @endforeach
@@ -123,7 +147,7 @@
 
             <tfoot>
                 <tr class="cart-subtotal">
-                    <th>{{ translate('Subtotal') }}</th>
+                    <th>{{ translate('Product Total') }}</th>
                     <td class="text-right">
                         <span class="fw-600">{{ single_price($subtotal) }}</span>
                     </td>
@@ -133,15 +157,46 @@
 
                 @endphp
 
+                @if(!empty($checkUserAddress) && $checkUserAddress == 1)
                 <tr class="cart-shipping">
-                    <th>{{ translate('Tax') }}</th>
+                    <th>{{ translate('CGST') }}</th>
                     <td class="text-right">
-                        <span class="font-italic">{{ single_price($tax) }}</span>
+                        <span class="font-italic">{{ single_price($CGST_total) }}</span>
                     </td>
                 </tr>
+                <tr class="cart-shipping">
+                    <th>{{ translate('SGST') }}</th>
+                    <td class="text-right">
+                        <span class="font-italic">{{ single_price($SGST_total) }}</span>
+                    </td>
+                </tr>
+
+                @endif
+                @if(!empty($checkUserAddress) && $checkUserAddress == 2)
+                <tr class="cart-shipping">
+                    <th>{{ translate('IGST') }}</th>
+                    <td class="text-right">
+                        <span class="font-italic">{{ single_price($IGST_total) }}</span>
+                    </td>
+                </tr>
+
+
+                @endif
+
+
+
                 @php
                     }
+                    $sub_total = $subtotal + $CGST_total + $SGST_total + $IGST_total;
+                   // $sub_total =
                 @endphp
+
+                <tr class="cart-shipping">
+                    <th>{{ translate('Subtotal') }}</th>
+                    <td class="text-right">
+                        <span class="font-italic">{{ single_price($sub_total) }}</span>
+                    </td>
+                </tr>
 
                 <tr class="cart-shipping">
                     <th>{{ translate('Total Shipping') }}</th>
