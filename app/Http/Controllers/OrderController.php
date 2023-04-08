@@ -22,9 +22,11 @@ use App\Utility\NotificationUtility;
 use CoreComponentRepository;
 use App\Utility\SmsUtility;
 use Illuminate\Support\Facades\Route;
+use Session;
 
 class OrderController extends Controller
 {
+
 
     public function __construct() {
         // Staff Permission Check
@@ -35,17 +37,17 @@ class OrderController extends Controller
         $this->middleware(['permission:view_order_details'])->only('show');
         $this->middleware(['permission:delete_order'])->only('destroy');
     }
-    
+
     // All Orders
     public function all_orders(Request $request)
     {
         CoreComponentRepository::instantiateShopRepository();
-        
+
         $date = $request->date;
         $sort_search = null;
         $delivery_status = null;
         $payment_status = '';
-        
+
         $orders = Order::orderBy('id', 'desc');
         $admin_user_id = User::where('user_type', 'admin')->first()->id;
         if(Route::currentRouteName() == 'inhouse_orders.index') {
@@ -112,6 +114,7 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
+
         $carts = Cart::where('user_id', Auth::user()->id)
             ->get();
 
@@ -142,6 +145,8 @@ class OrderController extends Controller
         $combined_order->shipping_address = json_encode($shippingAddress);
         $combined_order->save();
 
+
+
         $seller_products = array();
         foreach ($carts as $cartItem){
             $product_ids = array();
@@ -160,7 +165,7 @@ class OrderController extends Controller
             $order->shipping_address = $combined_order->shipping_address;
 
             $order->additional_info = $request->additional_info;
-            
+
             //======== Closed By Kiron ==========
             // $order->shipping_type = $carts[0]['shipping_type'];
             // if ($carts[0]['shipping_type'] == 'pickup_point') {
@@ -182,6 +187,7 @@ class OrderController extends Controller
             $order->code = date('Ymd-His') . rand(10, 99);
             $order->date = strtotime('now');
             $order->franchisee_id = Auth::user()->franchisee_id > 0 ? Auth::user()->franchisee_id : '' ;
+
             $order->save();
 
             $subtotal = 0;
@@ -192,11 +198,15 @@ class OrderController extends Controller
             //Order Details Storing
             foreach ($seller_product as $cartItem) {
                 $product = Product::find($cartItem['product_id']);
+                $product_price = cart_product_price($cartItem, $product, false, false);
 
-                $pp_price =  $cartItem['price'] * $cartItem['quantity'];
+                $pp_price =  ($product_price - $cartItem['tax']) * $cartItem['quantity'];
                 $pp_text = $cartItem['tax'] * $cartItem['quantity'];
 
-                $subtotal += $pp_price + $pp_text;
+                //$subtotal += $pp_price + $pp_text;
+                $product_price = cart_product_price($cartItem, $product, false, false);
+                $subtotal = $subtotal + ($product_price - $cartItem['tax']) * $cartItem['quantity'];
+
                 $tax +=  $pp_text;
                 $coupon_discount += $cartItem['discount'];
 
@@ -257,10 +267,19 @@ class OrderController extends Controller
                     }
                 }
             }
+           // dd($subtotal);
 
             $shippingCourierCost = $request->shipping_courier_cost ?? 0;
 
-            $order->grand_total = $subtotal + $shipping + $shippingCourierCost;
+            if(Session::get('currency_code') == 'INR'){
+                $order->grand_total = $subtotal + $tax + $shipping + $shippingCourierCost;
+
+            }else{
+                $order->grand_total = $subtotal + $shipping + $shippingCourierCost;
+            }
+            //dd( $order->grand_total);
+
+            //$order->grand_total = $subtotal + $shipping + $shippingCourierCost;
 
             if ($seller_product[0]->coupon_code != null) {
                 $order->coupon_discount = $coupon_discount;
@@ -280,10 +299,10 @@ class OrderController extends Controller
             if($request->payment_option == "cash_on_delivery"){
                 updateInvoiceNumber($order->id);
             }
-            
+
         }
 
-       
+
 
         $combined_order->save();
 
@@ -575,7 +594,7 @@ class OrderController extends Controller
             $delivery_history->save();
 
             if (env('MAIL_USERNAME') != null && get_setting('delivery_boy_mail_notification') == '1') {
-                $array['view'] = 'emails.invoice'; 
+                $array['view'] = 'emails.invoice';
                 $array['subject'] = translate('You are assigned to delivery an order. Order code') . ' - ' . $order->code;
                 $array['from'] = env('MAIL_FROM_ADDRESS');
                 $array['order'] = $order;
@@ -598,4 +617,5 @@ class OrderController extends Controller
 
         return 1;
     }
+
 }

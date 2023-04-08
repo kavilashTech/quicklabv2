@@ -168,6 +168,7 @@ if (!function_exists('get_system_default_currency')) {
 	}
 	function get_system_default_currency()
 	{
+
 		return Cache::remember('system_default_currency', 86400, function () {
 			//$ip = getRealUserIp();
 			$ip = '152.58.214.63'; //india
@@ -232,7 +233,7 @@ if (!function_exists('convert_price')) {
 if (!function_exists('currency_symbol')) {
 	function currency_symbol()
 	{
-		if (auth()->user() != null) {
+		if (auth()->user() != null && auth()->user()->user_type == 'customer') {
 			$code = auth()->user()->country;
 			$country_data = Country::find(auth()->user()->country);
 			$code = ($country_data->code == 'IN') ? 'INR' : 'USD';
@@ -326,66 +327,71 @@ if (!function_exists('discount_in_percentage')) {
 
 //Shows Price on page based on carts
 if (!function_exists('cart_product_price')) {
-	function cart_product_price($cart_product, $product, $formatted = true, $tax = true)
-	{
-		if ($product->auction_product == 0) {
-			$str = '';
-			if ($cart_product['variation'] != null) {
-				$str = $cart_product['variation'];
-			}
-			$price = 0;
-			$product_stock = $product->stocks->where('variant', $str)->first();
-			if ($product_stock) {
-				if (Session::get('currency_code') == 'USD') {
-					$price = ($product_stock != '') ? $product_stock->usd_price : '99443' . $product->id;
-				} else {
-					$price = $product_stock->price;
-				}
-			}
+
+    function cart_product_price($cart_product, $product, $formatted = true, $tax = true)
+    {
+        if ($product->auction_product == 0) {
+            $str = '';
+            if ($cart_product['variation'] != null) {
+                $str = $cart_product['variation'];
+            }
+            $price = 0;
+            $product_stock = $product->stocks->where('variant', $str)->first();
+
+            if ($product_stock) {
+                if (Session::get('currency_code') == 'USD') {
+                    $price = ($product_stock != '') ? $product_stock->usd_price : '99443'.$product->id;
+                }else{
+                    $price = $product_stock->price;
+                }
+            }
 
 
-			//discount calculation
-			$discount_applicable = false;
+            //discount calculation
+            $discount_applicable = false;
 
-			if ($product->discount_start_date == null) {
-				$discount_applicable = true;
-			} elseif (
-				strtotime(date('d-m-Y H:i:s')) >= $product->discount_start_date &&
-				strtotime(date('d-m-Y H:i:s')) <= $product->discount_end_date
-			) {
-				$discount_applicable = true;
-			}
+            if ($product->discount_start_date == null) {
+                $discount_applicable = true;
+            } elseif (
+                strtotime(date('d-m-Y H:i:s')) >= $product->discount_start_date &&
+                strtotime(date('d-m-Y H:i:s')) <= $product->discount_end_date
+            ) {
+                $discount_applicable = true;
+            }
 
-			if ($discount_applicable) {
-				if ($product->discount_type == 'percent') {
-					$price -= ($price * $product->discount) / 100;
-				} elseif ($product->discount_type == 'amount') {
-					$price -= $product->discount;
-				}
-			}
-		} else {
-			$price = $product->bids->max('amount');
-		}
+            if ($discount_applicable) {
+                if ($product->discount_type == 'percent') {
+                    $price -= ($price * $product->discount) / 100;
+                } elseif ($product->discount_type == 'amount') {
+                    $price -= $product->discount;
+                }
+            }
 
-		//calculation of taxes
-		if ($tax) {
-			$taxAmount = 0;
-			foreach ($product->taxes as $product_tax) {
-				if ($product_tax->tax_type == 'percent') {
-					$taxAmount += ($price * $product_tax->tax) / 100;
-				} elseif ($product_tax->tax_type == 'amount') {
-					$taxAmount += $product_tax->tax;
-				}
-			}
-			$price += $taxAmount;
-		}
+        } else {
+            $price = $product->bids->max('amount');
+        }
+        //dd($tax);
 
-		if ($formatted) {
-			return format_price(convert_price($price));
-		} else {
-			return $price;
-		}
-	}
+        //calculation of taxes
+        if ($tax) {
+            $taxAmount = 0;
+            foreach ($product->taxes as $product_tax) {
+                if ($product_tax->tax_type == 'percent') {
+                    $taxAmount += ($price * $product_tax->tax) / 100;
+                } elseif ($product_tax->tax_type == 'amount') {
+                    $taxAmount += $product_tax->tax;
+                }
+            }
+            $price += $taxAmount;
+        }
+
+        if ($formatted) {
+            return format_price(convert_price($price));
+        } else {
+            return $price;
+        }
+    }
+
 }
 
 if (!function_exists('cart_product_tax')) {
@@ -1325,9 +1331,10 @@ if (!function_exists('uploaded_asset')) {
 	function uploaded_asset($id)
 	{
 		if (($asset = \App\Models\Upload::find($id)) != null) {
+
 			return $asset->external_link == null ? my_asset($asset->file_name) : $asset->external_link;
 		}
-		return static_asset('assets/img/placeholder.jpg');
+		return static_asset('../assets/img/placeholder.jpg');
 	}
 }
 
@@ -1344,7 +1351,7 @@ if (!function_exists('my_asset')) {
 		if (env('FILESYSTEM_DRIVER') == 's3') {
 			return Storage::disk('s3')->url($path);
 		} else {
-			return app('url')->asset('public/' . $path, $secure);
+			return app('url')->asset('../public/' . $path, $secure);
 		}
 	}
 }
@@ -1359,7 +1366,7 @@ if (!function_exists('static_asset')) {
 	 */
 	function static_asset($path, $secure = null)
 	{
-		return app('url')->asset('public/' . $path, $secure);
+		return app('url')->asset('../public/' . $path, $secure);
 	}
 }
 
@@ -1388,7 +1395,7 @@ if (!function_exists('getFileBaseURL')) {
 		if (env('FILESYSTEM_DRIVER') == 's3') {
 			return env('AWS_URL') . '/';
 		} else {
-			return getBaseURL() . 'public/';
+			return getBaseURL() . '../public/';
 		}
 	}
 }

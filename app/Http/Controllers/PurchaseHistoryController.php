@@ -2,20 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Order;
-use Auth;
 use DB;
+use Auth;
+use Carbon\Carbon;
+use App\Models\Order;
+use App\Models\Product;
+use App\Models\OrderDetail;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+use Symfony\Component\HttpFoundation\InputBag;
 
 class PurchaseHistoryController extends Controller
 {
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request)
-    {   
+    {
         $orders = Order::whereHas('orderDetails' , function ($query) {
             $query->where('id','>', 0);
         })
@@ -45,7 +51,8 @@ class PurchaseHistoryController extends Controller
         $order->delivery_viewed = 1;
         $order->payment_status_viewed = 1;
         $order->save();
-        return view('frontend.user.order_details_customer', compact('order'));
+        $checkUserAddress = checkAuthUserAddress();
+        return view('frontend.user.order_details_customer', compact('order','checkUserAddress'));
     }
 
     /**
@@ -159,12 +166,12 @@ class PurchaseHistoryController extends Controller
         $orders = $orders->orderBy('orders.user_id', 'desc');
         $orders = $orders->orderBy('orders.code', 'desc');
         $orders = $orders->paginate(9);
-        
+
         return view('frontend.user.purchase_franchise_history', compact('orders','search','start_date','end_date'));
 
     }
-    
-   
+
+
     public function purchase_history_franchise_details($id)
     {
         $order = Order::findOrFail(decrypt($id));
@@ -203,10 +210,10 @@ class PurchaseHistoryController extends Controller
         # add headers for each column in the CSV download
         array_unshift($list, array_keys($list[0]));
 
-        $callback = function() use ($list) 
+        $callback = function() use ($list)
         {
             $FH = fopen('php://output', 'w');
-            foreach ($list as $row) { 
+            foreach ($list as $row) {
                 fputcsv($FH, $row);
             }
             fclose($FH);
@@ -214,4 +221,5 @@ class PurchaseHistoryController extends Controller
 
         return response()->stream($callback, 200, $headers);
     }
+
 }

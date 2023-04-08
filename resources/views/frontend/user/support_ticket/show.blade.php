@@ -52,11 +52,11 @@
                                     @if ($ticketreply->user->avatar_original != null)
                                         <span class="avatar avatar-sm mr-3">
                                             <img src="{{ uploaded_asset($ticketreply->user->avatar_original) }}"
-                                                onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/avatar-place.png') }}';">
+                                                onerror="this.onerror=null;this.src='{{ asset('assets/img/avatar-place.png') }}';">
                                         </span>
                                     @else
                                         <span class="avatar avatar-sm mr-3">
-                                            <img src="{{ secure_asset('assets/img/avatar-place.png') }}">
+                                            <img src="{{ asset('assets/img/avatar-place.png') }}">
                                         </span>
                                     @endif
                                 </a>
@@ -90,11 +90,11 @@
                                 @if ($ticket->user->avatar_original != null)
                                     <span class="avatar avatar-sm mr-3">
                                         <img src="{{ uploaded_asset($ticket->user->avatar_original) }}"
-                                            onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/avatar-place.png') }}';">
+                                            onerror="this.onerror=null;this.src='{{ asset('assets/img/avatar-place.png') }}';">
                                     </span>
                                 @else
                                     <span class="avatar avatar-sm mr-3">
-                                        <img src="{{ secure_asset('assets/img/avatar-place.png') }}">
+                                        <img src="{{ asset('assets/img/avatar-place.png') }}">
                                     </span>
                                 @endif
                             </a>

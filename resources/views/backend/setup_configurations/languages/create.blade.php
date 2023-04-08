@@ -33,7 +33,7 @@
                                     @foreach (\File::files(base_path('public/assets/img/flags')) as $path)
                                         @if (!in_array(pathinfo($path)['filename'], $languagesArray))
                                             <option value="{{ pathinfo($path)['filename'] }}"
-                                                data-content="<div class=''><img src='{{ secure_asset('assets/img/flags/' . pathinfo($path)['filename'] . '.png') }}' class='mr-2'><span>{{ strtoupper(pathinfo($path)['filename']) }}</span></div>">
+                                                data-content="<div class=''><img src='{{ asset('assets/img/flags/' . pathinfo($path)['filename'] . '.png') }}' class='mr-2'><span>{{ strtoupper(pathinfo($path)['filename']) }}</span></div>">
                                             </option>
                                         @endif
                                     @endforeach

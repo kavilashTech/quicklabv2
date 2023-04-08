@@ -20,12 +20,12 @@
                                     <div class="media">
                                         <span class="avatar avatar-sm flex-shrink-0">
                                             @if (Auth::user()->id == $conversation->sender_id)
-                                                <img @if ($conversation->receiver->avatar_original == null) src="{{ secure_asset('assets/img/avatar-place.png') }}" @else src="{{ uploaded_asset($conversation->receiver->avatar_original) }}" @endif
-                                                    onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/avatar-place.png') }}';">
+                                                <img @if ($conversation->receiver->avatar_original == null) src="{{ asset('assets/img/avatar-place.png') }}" @else src="{{ uploaded_asset($conversation->receiver->avatar_original) }}" @endif
+                                                    onerror="this.onerror=null;this.src='{{ asset('assets/img/avatar-place.png') }}';">
                                             @else
-                                                <img @if ($conversation->sender->avatar_original == null) src="{{ secure_asset('assets/img/avatar-place.png') }}" @else src="{{ uploaded_asset($conversation->sender->avatar_original) }}" @endif
+                                                <img @if ($conversation->sender->avatar_original == null) src="{{ asset('assets/img/avatar-place.png') }}" @else src="{{ uploaded_asset($conversation->sender->avatar_original) }}" @endif
                                                     class="rounded-circle"
-                                                    onerror="this.onerror=null;this.src='{{ secure_asset('assets/img/avatar-place.png') }}';">
+                                                    onerror="this.onerror=null;this.src='{{ asset('assets/img/avatar-place.png') }}';">
                                             @endif
                                         </span>
                                     </div>
