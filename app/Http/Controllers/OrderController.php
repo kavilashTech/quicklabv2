@@ -27,7 +27,6 @@ use Session;
 class OrderController extends Controller
 {
 
-
     public function __construct() {
         // Staff Permission Check
         $this->middleware(['permission:view_all_orders'])->only('all_orders');
@@ -617,5 +616,4 @@ class OrderController extends Controller
 
         return 1;
     }
-
 }
