@@ -1919,14 +1919,14 @@ if (!function_exists('updateQuotationEstimateNumber')) {
 if (!function_exists('exchangeRateApi')) {
 	function exchangeRateApi($rate)
 	{
-		$exchangeRateApiKey = '5508dc5d8caf80e01b2d9e16';
+		$exchangeRateApiKey = get_setting('exchange_rate_api_key');
         $exchangeRateApiUrl = 'https://v6.exchangerate-api.com/v6/'.$exchangeRateApiKey.'/latest/USD';
-
 		$exchangeRateRes = Http::get($exchangeRateApiUrl);
         $exchangeRateResult = json_decode($exchangeRateRes,true);
         $exchangeRateVal = "";
         if(!empty($exchangeRateResult) && !empty($exchangeRateResult['conversion_rates']) && !empty($exchangeRateResult['conversion_rates']['INR'])){
-            $exchangeRateVal = $rate / $exchangeRateResult['conversion_rates']['INR'];
+            $exchangeRateVal = $rate/$exchangeRateResult['conversion_rates']['INR'];
+            $exchangeRateVal = number_format($exchangeRateVal,2);
         }
         return $exchangeRateVal;
 	}
