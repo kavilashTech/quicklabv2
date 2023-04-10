@@ -33,6 +33,8 @@ use App\Http\Resources\V2\CarrierCollection;
 use App\Http\Controllers\AffiliateController;
 use App\Http\Controllers\ClubPointController;
 use App\Http\Controllers\CommissionController;
+use Illuminate\Support\Facades\Http;
+
 
 //sensSMS function for OTP
 if (!function_exists('sendSMS')) {
@@ -1909,6 +1911,24 @@ if (!function_exists('updateQuotationEstimateNumber')) {
         // Update next invoice no in business settings table
         BusinessSetting::where('id', 147)->update(['value' => $estimateNextNumber]); // 147 - id of quotation_next_number(type column)
 
-        return $estimateFullNumber;
-    }
+		return $estimateFullNumber;
+	}
 }
+
+// Currency exchange rate api 
+if (!function_exists('exchangeRateApi')) {
+	function exchangeRateApi($rate)
+	{
+		$exchangeRateApiKey = get_setting('exchange_rate_api_key');
+        $exchangeRateApiUrl = 'https://v6.exchangerate-api.com/v6/'.$exchangeRateApiKey.'/latest/USD';
+		$exchangeRateRes = Http::get($exchangeRateApiUrl);
+        $exchangeRateResult = json_decode($exchangeRateRes,true);
+        $exchangeRateVal = "";
+        if(!empty($exchangeRateResult) && !empty($exchangeRateResult['conversion_rates']) && !empty($exchangeRateResult['conversion_rates']['INR'])){
+            $exchangeRateVal = $rate/$exchangeRateResult['conversion_rates']['INR'];
+            $exchangeRateVal = number_format($exchangeRateVal,2);
+        }
+        return $exchangeRateVal;
+	}
+}
+
