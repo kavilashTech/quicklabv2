@@ -390,6 +390,7 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
             );
 
             var data = AIZ.uploader.data.allFiles;
+            //console.log(data);
 
             setTimeout(function () {
                 $(".aiz-uploader-all").html(null);
@@ -402,7 +403,7 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                             thumb =
                                 '<img src="' +
                                 AIZ.data.fileBaseUrl +
-                                data[i].file_name +
+                                '../'+data[i].file_name +
                                 '" class="img-fit">';
                         } else {
                             thumb = '<i class="la la-file-text"></i>';
@@ -839,7 +840,7 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                     }
                     $this.selectpicker({
                         size: 5,
-                        noneSelectedText: AIZ.local.nothing_selected,                     
+                        noneSelectedText: AIZ.local.nothing_selected,
                         virtualScroll: false
                     });
                 }
@@ -927,8 +928,8 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
 
                 var nativeHtmlBuilderFunc = $this.summernote('module', 'videoDialog').createVideoNode;
 
-                $this.summernote('module', 'videoDialog').createVideoNode =  function(url) 
-                {   
+                $this.summernote('module', 'videoDialog').createVideoNode =  function(url)
+                {
                     var wrap = $('<div class="embed-responsive embed-responsive-16by9"></div>');
                     var html = nativeHtmlBuilderFunc(url);
                         html = $(html).addClass('embed-responsive-item');
@@ -1341,7 +1342,7 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                             max: parseInt(c.getAttribute("data-range-value-max")),
                         },
                     }),
-                    
+
                     c.noUiSlider.on("update", function (a, b) {
                         f[b].textContent = a[b];
                     }),
@@ -1729,7 +1730,7 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                             $(this).attr("disabled", true);
                         }
                     }
-                    
+
                 } else {
                     input.val(0);
                 }
@@ -1756,7 +1757,7 @@ $.fn.toggleAttr = function (attr, attr1, attr2) {
                 if(typeof getVariantPrice === "function"){
                     getVariantPrice();
                 }
-                
+
             });
         },
         hovCategoryMenu: function(){
