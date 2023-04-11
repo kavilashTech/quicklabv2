@@ -6,7 +6,7 @@
                     <img class="mw-100" src="{{ uploaded_asset(get_setting('system_logo_white')) }}" class="brand-icon"
                         alt="{{ get_setting('site_name') }}">
                 @else
-                    <img class="mw-100" src="{{ static_asset('assets/img/logo.png') }}" class="brand-icon"
+                    <img class="mw-100" src="{{ secure_asset('assets/img/logo.png') }}" class="brand-icon"
                         alt="{{ get_setting('site_name') }}">
                 @endif
             </a>
