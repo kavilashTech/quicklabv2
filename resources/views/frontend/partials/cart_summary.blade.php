@@ -198,6 +198,39 @@
                     </td>
                 </tr>
 
+
+
+
+<?php
+
+if(Session::get('currency_code') == 'INR'){
+    $total = $subtotal + $tax + $shipping + $shipping_courier_cost;
+
+}else{
+    $total = $subtotal + $shipping + $shipping_courier_cost;
+}
+
+
+    if (Session::has('club_point')) {
+        $total -= Session::get('club_point');
+    }
+    if ($coupon_discount > 0) {
+        $total -= $coupon_discount;
+    }
+    $result = roundPrice($total);
+            if ($result) {
+                $grandTotal = round($total);
+                $roundingVal = $grandTotal - $total;
+            } else {
+                $grandTotal = floor($total);
+                $roundingVal = $grandTotal - $total;
+            }
+
+            $roundingFinalResult = number_format($roundingVal, 2);
+            ?>
+
+
+
                 <tr class="cart-shipping">
                     <th>{{ translate('Total Shipping') }}</th>
 
@@ -219,6 +252,12 @@
                             <span id="postcodeErr" style="color: red;"></span>
                             <button onclick="getShippingCouriers()">Update</button>
                         </div>
+                    </td>
+                </tr>
+                <tr class="cart-shipping">
+                    <th>{{ translate('Rounding') }}</th>
+                    <td class="text-right">
+                        <span class="font-italic">{{ single_price($roundingFinalResult) }}</span>
                     </td>
                 </tr>
                 @if (!empty(Auth::user()->country) && Auth::user()->country == 101)
@@ -251,30 +290,18 @@
                 @endif
 
                 @php
-                if(Session::get('currency_code') == 'INR'){
-                    $total = $subtotal + $tax + $shipping + $shipping_courier_cost;
 
-                }else{
-                    $total = $subtotal + $shipping + $shipping_courier_cost;
-                }
-
-
-                    if (Session::has('club_point')) {
-                        $total -= Session::get('club_point');
-                    }
-                    if ($coupon_discount > 0) {
-                        $total -= $coupon_discount;
-                    }
                     $totalWithCurrency = single_price($total);
                 @endphp
                 <input type="hidden" name="totalWithCurrency" id="totalWithCurrency" value='<?= $totalWithCurrency ?>'>
                 <input type="hidden" name="total" id="total" value='<?= $total ?>'>
                 <input type="hidden" name="shipping_courier_default_cost" id="shipping_courier_default_cost" value='<?= $shipping_courier_cost ?>'>
                 <input type="hidden" name="shipWithCurrency" id="shipWithCurrency" value='<?= $shipWithCurrency ?>'>
+
                 <tr class="cart-total">
                     <th><span class="strong-600">{{ translate('Total') }}</span></th>
                     <td class="text-right">
-                        <strong><span id="grand_total">{{ single_price($total) }}</span></strong>
+                        <strong><span id="grand_total">{{ single_price($total + $roundingFinalResult) }}</span></strong>
                     </td>
                 </tr>
             </tfoot>

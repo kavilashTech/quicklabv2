@@ -274,7 +274,7 @@
                                                     <tr>
                                                         <th><span class="fw-600">{{ translate('Total')}}</span></th>
                                                         <td class="text-right">
-                                                            <strong><span>{{ single_price($order->grand_total) }}</span></strong>
+                                                            <strong><span>{{ single_price($order->grand_total + $roundingFinalResult) }}</span></strong>
                                                         </td>
                                                     </tr>
                                                 </tbody>
