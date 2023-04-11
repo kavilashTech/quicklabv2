@@ -105,6 +105,7 @@
                                     <th data-breakpoints="md">{{ translate('Refund') }}</th>
                                 @endif
                                 <th data-breakpoints="md" class="text-right">{{ translate('Status') }}</th>
+                                <th data-breakpoints="md" class="text-right">{{ translate('Return') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -128,7 +129,7 @@
                                     <td>
                                         {{ $orderDetail->quantity }}
                                     </td>
-                                 {{--
+                                    {{--
                                     <td>
                                         @if ($order->shipping_type != null && $order->shipping_type == 'home_delivery')
                                             {{ translate('Home Delivery') }}
@@ -157,7 +158,13 @@
                                             $today_date = Carbon\Carbon::now();
                                         @endphp
                                         <td>
-                                            @if ($orderDetail->product != null && $orderDetail->product->refundable != 0 && $orderDetail->refund_request == null && $today_date <= $last_refund_date && $orderDetail->payment_status == 'paid' && $orderDetail->delivery_status == 'delivered')
+                                            @if (
+                                                $orderDetail->product != null &&
+                                                    $orderDetail->product->refundable != 0 &&
+                                                    $orderDetail->refund_request == null &&
+                                                    $today_date <= $last_refund_date &&
+                                                    $orderDetail->payment_status == 'paid' &&
+                                                    $orderDetail->delivery_status == 'delivered')
                                                 <a href="{{ route('refund_request_send_page', $orderDetail->id) }}"
                                                     class="btn btn-primary btn-sm">{{ translate('Send') }}</a>
                                             @elseif ($orderDetail->refund_request != null && $orderDetail->refund_request->refund_status == 0)
@@ -174,6 +181,7 @@
                                         </td>
                                     @endif
                                     <td class="text-right">
+
                                         @if ($orderDetail->delivery_status == 'delivered')
                                             <a href="javascript:void(0);"
                                                 onclick="product_review('{{ $orderDetail->product_id }}')"
@@ -182,6 +190,50 @@
                                             <span class="text-danger">{{ translate('Not Delivered Yet') }}</span>
                                         @endif
                                     </td>
+                                    <td>
+                                        @if ($orderDetail->delivery_status == 'Pending Approval')
+                                            <span
+                                                class="badge badge-inline badge-warning">{{ translate('Pending') }}</span>
+                                        @elseif($orderDetail->delivery_status == 'Approved')
+                                            <span
+                                                class="badge badge-inline badge-success">{{ translate('Approved') }}</span>
+                                        @elseif($orderDetail->delivery_status == 'Rejected')
+                                            <span
+                                                class="badge badge-inline badge-danger">{{ translate('Rejected') }}</span>
+                                        @elseif (in_array($orderDetail->product_id, $array, true))
+                                            <a class="btn btn-primary" href="/return-product/{{ $orderDetail->id }}"
+                                                style="padding: 3px;font-size:13px;">{{ translate('Return') }}
+                                            </a>
+                                        @else
+                                            {{ translate('Not Returnable') }}
+                                        @endif
+                                    </td>
+                                    {{-- @if ($orderDetail->delivery_status == 'Pending Approval')
+                                        <td>
+                                            <span
+                                                class="badge badge-inline badge-warning">{{ translate('Pending') }}</span>
+                                        </td>
+                                    @elseif($orderDetail->delivery_status == 'Approved')
+                                        <td>
+                                            <span
+                                                class="badge badge-inline badge-success">{{ translate('Approved') }}</span>
+                                        </td>
+                                    @elseif($orderDetail->delivery_status == 'Rejected')
+                                        <td>
+                                            <span
+                                                class="badge badge-inline badge-danger">{{ translate('Rejected') }}</span>
+                                        </td>
+                                    @elseif (in_array($orderDetail->product_id, $array, true))
+                                        <td>
+                                            <a class="btn btn-primary" href="/return-product/{{ $orderDetail->id }}"
+                                                style="padding: 3px;font-size:13px;">{{ translate('Return') }}
+                                            </a>
+                                        </td>
+                                    @else
+                                        <td>
+                                            {{ translate('Not Returnable') }}
+                                        </td>
+                                    @endif --}}
                                 </tr>
                             @endforeach
                         </tbody>
@@ -200,53 +252,51 @@
                             <tr>
                                 <td class="w-50 fw-600">{{ translate('Subtotal') }}</td>
                                 <td class="text-right">
-                                    <span
-                                        class="strong-600">{{ single_price($order->orderDetails->sum('price')) }}</span>
+                                    <span class="strong-600">{{ single_price($order->orderDetails->sum('price')) }}</span>
                                 </td>
                             </tr>
 
 
-                            @if(!empty($checkUserAddress) && $checkUserAddress == 1)
-                <tr class="cart-shipping">
-                    <th>{{ translate('CGST') }}</th>
-                    <td class="text-right">
-                        <span class="font-italic">{{ single_price($order->orderDetails->sum('tax')/2) }}</span>
-                    </td>
-                </tr>
-                <tr class="cart-shipping">
-                    <th>{{ translate('SGST') }}</th>
-                    <td class="text-right">
-                        <span class="font-italic">{{ single_price($order->orderDetails->sum('tax')/2) }}</span>
-                    </td>
-                </tr>
-
-                @endif
-                @if(!empty($checkUserAddress) && $checkUserAddress == 2)
-                <tr class="cart-shipping">
-                    <th>{{ translate('IGST') }}</th>
-                    <td class="text-right">
-                        <span class="font-italic">{{ single_price($order->orderDetails->sum('tax')) }}</span>
-                    </td>
-                </tr>
-
-
-                @endif
-                <tr>
+                            @if (!empty($checkUserAddress) && $checkUserAddress == 1)
+                                <tr class="cart-shipping">
+                                    <th>{{ translate('CGST') }}</th>
+                                    <td class="text-right">
+                                        <span
+                                            class="font-italic">{{ single_price($order->orderDetails->sum('tax') / 2) }}</span>
+                                    </td>
+                                </tr>
+                                <tr class="cart-shipping">
+                                    <th>{{ translate('SGST') }}</th>
+                                    <td class="text-right">
+                                        <span
+                                            class="font-italic">{{ single_price($order->orderDetails->sum('tax') / 2) }}</span>
+                                    </td>
+                                </tr>
+                            @endif
+                            @if (!empty($checkUserAddress) && $checkUserAddress == 2)
+                                <tr class="cart-shipping">
+                                    <th>{{ translate('IGST') }}</th>
+                                    <td class="text-right">
+                                        <span
+                                            class="font-italic">{{ single_price($order->orderDetails->sum('tax')) }}</span>
+                                    </td>
+                                </tr>
+                            @endif
+                            <tr>
                                 <td class="w-50 fw-600">{{ translate('Shipping') }}</td>
                                 <td class="text-right">
-                                    <span
-                                        class="text-italic">{{single_price($order->shipping_courier_charge) }}</span>
+                                    <span class="text-italic">{{ single_price($order->shipping_courier_charge) }}</span>
                                 </td>
                             </tr>
 
                             <!-- <tr>
-                                <td class="w-50 fw-600">{{ translate('Tax') }}</td>
-                                <td class="text-right">
-                                    <span
-                                        class="text-italic">{{ single_price($order->orderDetails->sum('tax')) }}</span>
-                                </td>
-                            </tr> -->
-                          {{--  <tr>
+                                                                            <td class="w-50 fw-600">{{ translate('Tax') }}</td>
+                                                                            <td class="text-right">
+                                                                                <span
+                                                                                    class="text-italic">{{ single_price($order->orderDetails->sum('tax')) }}</span>
+                                                                            </td>
+                                                                        </tr> -->
+                            {{--  <tr>
                                 <td class="w-50 fw-600">{{ translate('Coupon') }}</td>
                                 <td class="text-right">
                                     <span class="text-italic">{{ single_price($order->coupon_discount) }}</span>
