@@ -118,7 +118,7 @@
                     <a class="dropdown-toggle no-arrow" data-toggle="dropdown" href="javascript:void(0);" role="button"
                         aria-haspopup="false" aria-expanded="false">
                         <span class="btn btn-icon">
-                            <img src="{{ secure_asset('assets/img/flags/' . $locale . '.png') }}" height="11">
+                            <img src="{{ asset('assets/img/flags/' . $locale . '.png') }}" height="11">
                         </span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right dropdown-menu-animated dropdown-menu-xs">

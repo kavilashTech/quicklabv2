@@ -190,7 +190,25 @@
                                             <span class="text-danger">{{ translate('Not Delivered Yet') }}</span>
                                         @endif
                                     </td>
-                                    @if ($orderDetail->delivery_status == 'Pending Approval')
+                                    <td>
+                                        @if ($orderDetail->delivery_status == 'Pending Approval')
+                                            <span
+                                                class="badge badge-inline badge-warning">{{ translate('Pending') }}</span>
+                                        @elseif($orderDetail->delivery_status == 'Approved')
+                                            <span
+                                                class="badge badge-inline badge-success">{{ translate('Approved') }}</span>
+                                        @elseif($orderDetail->delivery_status == 'Rejected')
+                                            <span
+                                                class="badge badge-inline badge-danger">{{ translate('Rejected') }}</span>
+                                        @elseif (in_array($orderDetail->product_id, $array, true))
+                                            <a class="btn btn-primary" href="/return-product/{{ $orderDetail->id }}"
+                                                style="padding: 3px;font-size:13px;">{{ translate('Return') }}
+                                            </a>
+                                        @else
+                                            {{ translate('Not Returnable') }}
+                                        @endif
+                                    </td>
+                                    {{-- @if ($orderDetail->delivery_status == 'Pending Approval')
                                         <td>
                                             <span
                                                 class="badge badge-inline badge-warning">{{ translate('Pending') }}</span>
@@ -215,7 +233,7 @@
                                         <td>
                                             {{ translate('Not Returnable') }}
                                         </td>
-                                    @endif
+                                    @endif --}}
                                 </tr>
                             @endforeach
                         </tbody>
@@ -272,12 +290,12 @@
                             </tr>
 
                             <!-- <tr>
-                                                                <td class="w-50 fw-600">{{ translate('Tax') }}</td>
-                                                                <td class="text-right">
-                                                                    <span
-                                                                        class="text-italic">{{ single_price($order->orderDetails->sum('tax')) }}</span>
-                                                                </td>
-                                                            </tr> -->
+                                                                            <td class="w-50 fw-600">{{ translate('Tax') }}</td>
+                                                                            <td class="text-right">
+                                                                                <span
+                                                                                    class="text-italic">{{ single_price($order->orderDetails->sum('tax')) }}</span>
+                                                                            </td>
+                                                                        </tr> -->
                             {{--  <tr>
                                 <td class="w-50 fw-600">{{ translate('Coupon') }}</td>
                                 <td class="text-right">
