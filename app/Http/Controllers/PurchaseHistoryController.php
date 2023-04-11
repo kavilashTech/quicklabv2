@@ -2,19 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use DB;
-use Auth;
-use Carbon\Carbon;
-use App\Models\Order;
-use App\Models\Product;
-use App\Models\OrderDetail;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
-use Symfony\Component\HttpFoundation\InputBag;
+use App\Models\Order;
+use Auth;
+use DB;
 
 class PurchaseHistoryController extends Controller
 {
-
     /**
      * Display a listing of the resource.
      *
@@ -221,5 +215,4 @@ class PurchaseHistoryController extends Controller
 
         return response()->stream($callback, 200, $headers);
     }
-
 }

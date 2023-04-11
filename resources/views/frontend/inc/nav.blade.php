@@ -3,10 +3,10 @@
         <a href="{{ get_setting('topbar_banner_link') }}" class="d-block text-reset">
             <img src="{{ uploaded_asset(get_setting('topbar_banner')) }}" class="w-100 mw-100 h-50px h-lg-auto img-fit">
         </a>
-        <button class="btn text-white absolute-top-right set-session" data-key="top-banner" data-value="removed"
+        <!-- <button class="btn text-white absolute-top-right set-session" data-key="top-banner" data-value="removed"
             data-toggle="remove-parent" data-parent=".top-banner">
             <i class="la la-close la-2x"></i>
-        </button>
+        </button> -->
     </div>
 @endif
 <!-- Top Bar -->

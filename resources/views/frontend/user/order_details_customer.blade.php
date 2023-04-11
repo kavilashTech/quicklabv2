@@ -1,20 +1,6 @@
 @extends('frontend.layouts.user_panel')
 
 @section('panel_content')
-    <div>
-        @if (Session::has('message-sucess'))
-            <p class="alert {{ Session::get('alert-class', 'alert-success') }}">
-                {{ Session::get('message-sucess') }}
-            </p>
-        @endif
-    </div>
-    <div>
-        @if (Session::has('message-return'))
-            <p class="alert {{ Session::get('alert-class', 'alert-danger') }}">
-                {{ Session::get('message-return') }}
-            </p>
-        @endif
-    </div>
     <div class="aiz-titlebar mt-2 mb-4">
         <div class="row align-items-center">
             <div class="col-md-6">
@@ -70,10 +56,12 @@
                             <td>{{ single_price($order->orderDetails->sum('price') + $order->orderDetails->sum('tax')) }}
                             </td>
                         </tr>
+                        {{--
                         <tr>
                             <td class="w-50 fw-600">{{ translate('Shipping method') }}:</td>
                             <td>{{ translate('Flat shipping rate') }}</td>
                         </tr>
+                        --}}
                         <tr>
                             <td class="w-50 fw-600">{{ translate('Payment method') }}:</td>
                             <td>{{ translate(ucfirst(str_replace('_', ' ', $order->payment_type))) }}</td>
@@ -109,13 +97,14 @@
                                 <th width="30%">{{ translate('Product') }}</th>
                                 <th data-breakpoints="md">{{ translate('Variation') }}</th>
                                 <th>{{ translate('Quantity') }}</th>
+                                {{--
                                 <th data-breakpoints="md">{{ translate('Delivery Type') }}</th>
+                                --}}
                                 <th>{{ translate('Price') }}</th>
                                 @if (addon_is_activated('refund_request'))
                                     <th data-breakpoints="md">{{ translate('Refund') }}</th>
                                 @endif
-                                <th data-breakpoints="md" class="text-right">{{ translate('Review') }}</th>
-                                <th data-breakpoints="md" class="text-right">Return</th>
+                                <th data-breakpoints="md" class="text-right">{{ translate('Status') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -139,6 +128,7 @@
                                     <td>
                                         {{ $orderDetail->quantity }}
                                     </td>
+                                 {{--
                                     <td>
                                         @if ($order->shipping_type != null && $order->shipping_type == 'home_delivery')
                                             {{ translate('Home Delivery') }}
@@ -152,12 +142,13 @@
                                             @if ($order->carrier != null)
                                                 {{ $order->carrier->name }} ({{ translate('Carrier') }})
                                                 <br>
-                                                {{ translate('Transit Time') . ' - ' . $order->carrier->transit_time . ' ' . translate('days') }}
+                                                {{ translate('Transit Time').' - '.$order->carrier->transit_time.' '.translate('days') }}
                                             @else
                                                 {{ translate('Carrier') }}
                                             @endif
                                         @endif
                                     </td>
+                                    --}}
                                     <td>{{ single_price($orderDetail->price) }}</td>
                                     @if (addon_is_activated('refund_request'))
                                         @php
@@ -166,13 +157,7 @@
                                             $today_date = Carbon\Carbon::now();
                                         @endphp
                                         <td>
-                                            @if (
-                                                $orderDetail->product != null &&
-                                                    $orderDetail->product->refundable != 0 &&
-                                                    $orderDetail->refund_request == null &&
-                                                    $today_date <= $last_refund_date &&
-                                                    $orderDetail->payment_status == 'paid' &&
-                                                    $orderDetail->delivery_status == 'delivered')
+                                            @if ($orderDetail->product != null && $orderDetail->product->refundable != 0 && $orderDetail->refund_request == null && $today_date <= $last_refund_date && $orderDetail->payment_status == 'paid' && $orderDetail->delivery_status == 'delivered')
                                                 <a href="{{ route('refund_request_send_page', $orderDetail->id) }}"
                                                     class="btn btn-primary btn-sm">{{ translate('Send') }}</a>
                                             @elseif ($orderDetail->refund_request != null && $orderDetail->refund_request->refund_status == 0)
@@ -197,32 +182,6 @@
                                             <span class="text-danger">{{ translate('Not Delivered Yet') }}</span>
                                         @endif
                                     </td>
-                                    @if ($orderDetail->delivery_status == 'Pending Approval')
-                                        <td>
-                                            <span
-                                                class="badge badge-inline badge-warning">{{ translate('Pending') }}</span>
-                                        </td>
-                                    @elseif($orderDetail->delivery_status == 'Approved')
-                                        <td>
-                                            <span
-                                                class="badge badge-inline badge-success">{{ translate('Approved') }}</span>
-                                        </td>
-                                    @elseif($orderDetail->delivery_status == 'Rejected')
-                                        <td>
-                                            <span
-                                                class="badge badge-inline badge-danger">{{ translate('Rejected') }}</span>
-                                        </td>
-                                    @elseif (in_array($orderDetail->product_id, $array, true))
-                                        <td>
-                                            <a class="btn btn-primary" href="/return-product/{{ $orderDetail->id }}"
-                                                style="padding: 3px;font-size:13px;">{{ translate('Return') }}
-                                            </a>
-                                        </td>
-                                    @else
-                                        <td>
-                                            {{ translate('Not Returnable') }}
-                                        </td>
-                                    @endif
                                 </tr>
                             @endforeach
                         </tbody>
@@ -233,7 +192,7 @@
         <div class="col-md-3">
             <div class="card">
                 <div class="card-header">
-                    <b class="fs-15">{{ translate('Order Ammount') }}</b>
+                    <b class="fs-15">{{ translate('Order Amount') }}</b>
                 </div>
                 <div class="card-body pb-0">
                     <table class="table-borderless table">
@@ -241,7 +200,8 @@
                             <tr>
                                 <td class="w-50 fw-600">{{ translate('Subtotal') }}</td>
                                 <td class="text-right">
-                                    <span class="strong-600">{{ single_price($order->orderDetails->sum('price')) }}</span>
+                                    <span
+                                        class="strong-600">{{ single_price($order->orderDetails->sum('price')) }}</span>
                                 </td>
                             </tr>
 
@@ -282,11 +242,11 @@
                             <!-- <tr>
                                 <td class="w-50 fw-600">{{ translate('Tax') }}</td>
                                 <td class="text-right">
-                                    <span class="text-italic">{{ single_price($order->orderDetails->sum('tax')) }}</span>
+                                    <span
+                                        class="text-italic">{{ single_price($order->orderDetails->sum('tax')) }}</span>
                                 </td>
                             </tr> -->
                           {{--  <tr>
-
                                 <td class="w-50 fw-600">{{ translate('Coupon') }}</td>
                                 <td class="text-right">
                                     <span class="text-italic">{{ single_price($order->coupon_discount) }}</span>
