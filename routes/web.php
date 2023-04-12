@@ -469,4 +469,4 @@ Route::controller(GenerateQuoteController::class)->group(function () {
 // Order Return
 
 Route::get('/return-product/{id}', [PurchaseHistoryController::class, 'returnOrder'])->name('return-product');
-Route::post('/return', [PurchaseHistoryController::class, 'return']);
+Route::post('/return', [PurchaseHistoryController::class, 'return'])->name('return');

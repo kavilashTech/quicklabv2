@@ -52,7 +52,7 @@
             <hr>
             <div>
                 {{-- <h5 class="mb-0 h6">Return Reson</h5> --}}
-                <form action="/return" method="POST">
+                <form action="{{ route('return') }}" method="POST">
                     @csrf
                     <h5 class="mb-4 h6">{{ translate('Reason for Return') }}</h5>
                     <input type="hidden" name="seller_id" value="{{ $order[0]->seller_id }}">
