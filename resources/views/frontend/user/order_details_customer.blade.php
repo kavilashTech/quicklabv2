@@ -110,6 +110,7 @@
                         </thead>
                         <tbody>
                             @foreach ($order->orderDetails as $key => $orderDetail)
+                                {{-- {{ dd($orderDetail) }} --}}
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
                                     <td>
@@ -191,6 +192,7 @@
                                         @endif
                                     </td>
                                     <td>
+
                                         @if ($orderDetail->delivery_status == 'Pending Approval')
                                             <span
                                                 class="badge badge-inline badge-warning">{{ translate('Pending') }}</span>
@@ -200,8 +202,9 @@
                                         @elseif($orderDetail->delivery_status == 'Rejected')
                                             <span
                                                 class="badge badge-inline badge-danger">{{ translate('Rejected') }}</span>
-                                        @elseif (in_array($orderDetail->product_id, $array, true))
-                                            <a class="btn btn-primary" href="/return-product/{{ $orderDetail->id }}"
+                                        @elseif ($orderDetail->delivery_status == 'delivered' && in_array($orderDetail->product_id, $array, true))
+                                            <a class="btn btn-primary"
+                                                href="{{ route('return-product', ['id' => $orderDetail->id]) }}"
                                                 style="padding: 3px;font-size:13px;">{{ translate('Return') }}
                                             </a>
                                         @else
@@ -290,12 +293,12 @@
                             </tr>
 
                             <!-- <tr>
-                                                                            <td class="w-50 fw-600">{{ translate('Tax') }}</td>
-                                                                            <td class="text-right">
-                                                                                <span
-                                                                                    class="text-italic">{{ single_price($order->orderDetails->sum('tax')) }}</span>
-                                                                            </td>
-                                                                        </tr> -->
+                                                                                                                            <td class="w-50 fw-600">{{ translate('Tax') }}</td>
+                                                                                                                            <td class="text-right">
+                                                                                                                                <span
+                                                                                                                                    class="text-italic">{{ single_price($order->orderDetails->sum('tax')) }}</span>
+                                                                                                                            </td>
+                                                                                                                        </tr> -->
                             {{--  <tr>
                                 <td class="w-50 fw-600">{{ translate('Coupon') }}</td>
                                 <td class="text-right">
