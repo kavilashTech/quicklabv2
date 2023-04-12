@@ -278,13 +278,19 @@
                                     $product_stock = json_decode($orderDetail->product->stocks->first(), true);
                                     $taxDetails = getProductTaxDetails($orderDetail);
                                 @endphp
-                                <p style="margin: 0;padding: 2px 0;"> {{ $orderDetail->product->name }} </p>
+                                <p style="margin: 0;padding: 2px 0;"> {{ $orderDetail->product->name }} - {{($orderDetail->variation != '') ? $orderDetail->variation : '' }} </p>
+                                @if($product_stock['batch_number'] != '')
                                 <p style="margin: 0;padding: 2px 0;"> {{ translate('Batch') }}:
                                     {{ $product_stock['batch_number'] }} </p>
+                                    @endif
+                                    @if($product_stock['expiry_year'] != '')
                                 <p style="margin: 0;padding: 2px 0;">{{ translate('Expiry') }}:
                                     {{ $product_stock['expiry_month'] }}-{{ $product_stock['expiry_year'] }} </p>
+                                    @endif
+                                    @if($product_stock['hsn_code'] != '')
                                 <p style="margin: 0;padding: 2px 0;">{{ translate('HSN') }}:
                                     {{ $product_stock['hsn_code'] }} </p>
+                                    @endif
                             </td>
                             <td style="padding: 4px 8px;border-bottom: 1px solid;border-left: 1px solid; ">
                                 <p style="margin: 0;padding: 2px 0;text-align: right;"> {{ $orderDetail->quantity }}
@@ -360,16 +366,17 @@
             $taxTotalDetails = getOrderTaxDetails($order);
             $bankAcc = get_setting('bank_account_details');
             $bankAccountDetails = json_decode($bankAcc, true);
-            
+
             $result = roundPrice($order->grand_total);
-            if ($result) {
-                $grandTotal = round($order->grand_total + $taxDetails['cgstAmt'] + $taxDetails['sgstAmt']);
-                $roundingVal = $grandTotal - $order->grand_total;
-            } else {
-                $grandTotal = floor($order->grand_total);
-                $roundingVal = $grandTotal - $order->grand_total;
-            }
-            $roundingFinalResult = number_format($roundingVal, 2);
+
+			if($result){
+			$grandTotal = round($order->grand_total);
+			$roundingVal = $grandTotal - $order->grand_total;
+			}else{
+			$grandTotal = floor($order->grand_total);
+			$roundingVal = $grandTotal - $order->grand_total;
+			}
+			$roundingFinalResult = number_format($roundingVal, 2);
         @endphp
         <td style="padding-bottom: 100px;">
             <table align="center" border="0" cellspacing="0" cellpadding="0" style="width: 100%;">
