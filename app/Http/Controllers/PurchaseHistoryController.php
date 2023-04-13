@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use DB;
 use Auth;
+use App\Models\User;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\OrderDetail;
+use App\Notifications\returnNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 
@@ -55,7 +57,7 @@ class PurchaseHistoryController extends Controller
 				array_push($array, $value->product->id);
 			}
 		}
-		// dd($array);
+		//dd($array);
 		$order->delivery_viewed = 1;
 		$order->payment_status_viewed = 1;
 		$order->save();
@@ -236,8 +238,10 @@ class PurchaseHistoryController extends Controller
 
 		$seller_id = $request->input('seller_id');
 		$order_id = $request->input('order_id');
+
 		$product_id = $request->input('product_id');
 		$order  = OrderDetail::find($order_id);
+		$order_name = $request->input('order_name');
 		$order_date = $order->created_at;
 		//dd($request->return_reason);
 		$now = Carbon::now();
@@ -253,9 +257,23 @@ class PurchaseHistoryController extends Controller
 				'return_request_date' => $now->format('d/m/Y')
 			]);
 
-			return redirect('/purchase_history')->with('message-sucess', "Your Return Request is Process.");
+			return PurchaseHistoryController::returnMail($order, $order_name);
+
+			// return redirect('/purchase_history')->with('message-sucess', "Your Return Request is Process.");
 		} else {
 			return redirect('/purchase_history')->with('message-return', "Sorry We Can't Proceed your request Maximum Time Reached!");
 		}
+	}
+
+	public function returnMail($order, $order_name)
+	{
+		$admin =  User::where('user_type', 'admin')->get();
+
+		foreach ($admin as $user) {
+			$user->notify(new returnNotification($order, $user, $order_name));
+		}
+
+		//dd($order);
+		return redirect('/purchase_history')->with('message-sucess', "Your Return Request is Process.");
 	}
 }
