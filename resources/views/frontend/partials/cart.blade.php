@@ -47,9 +47,19 @@ if (auth()->user() != null) {
             @foreach ($cart as $key => $cartItem)
                 @php
                     $product = \App\Models\Product::find($cartItem['product_id']);
+
                     $product_price = discounted_variant_price($product,false);
-                    $product_price2 = home_discounted_price2($product);
-                    $total = $total + ($product_price) * $cartItem['quantity'];
+
+
+                    $product_price2 = discounted_cart_variant_price($cartItem['variation'],$product,false);
+
+                    if(!empty($cartItem['variation'])){
+                        $producttotal = $product_price2 * $cartItem['quantity'];
+                        $total = $total + $producttotal;
+                    }else{
+                        $total = $total + ($product_price) * $cartItem['quantity'];
+                    }
+
                 @endphp
                 @if ($product != null)
                     <li class="list-group-item">
@@ -62,12 +72,12 @@ if (auth()->user() != null) {
                                     alt="{{ $product->getTranslation('name') }}">
                                 <span class="minw-0 pl-2 flex-grow-1">
                                     <span class="fw-600 mb-1 text-truncate-2">
-                                        {{ $product->getTranslation('name') }}
+                                        {{ $product->getTranslation('name') }}-{{($cartItem['variation'] != '') ? $cartItem['variation'] : ''}}
                                     </span>
                                     <span class="">{{ $cartItem['quantity'] }}x</span>
                                     {{-- <span
                                         class="">{{ single_price($cartItem['price'] + $cartItem['quantity']) }}</span> --}}
-                                    <span class="">{{ $product_price2 }}</span>
+                                    <span class="">{{ $product_price2 * $cartItem['quantity']}}</span>
                                 </span>
                             </a>
                             <span class="">

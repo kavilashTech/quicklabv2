@@ -94,10 +94,10 @@
                         $product_txt = cart_product_tax($cartItem, $product,false);
                         $product_qty = $cartItem['quantity'];
                         if (Session::get('currency_code') == 'USD') {
-                                                            $org_product_price = $cartItem['price'] ;
+                                                            $org_product_price = $cartItem['price'] * $cartItem['quantity'] ;
 
                                                         }else{
-                                                            $org_product_price = $cartItem['price'] - $cartItem['tax'];
+                                                            $org_product_price = ($cartItem['price'] - $cartItem['tax']) * $cartItem['quantity'] ;
                                                         }
                        // $org_product_price = $cartItem['price'];
 
@@ -109,8 +109,8 @@
                         $shipping += $product_shipping_cost;
 
                         $product_name_with_choice = $product->getTranslation('name');
-                        if ($cartItem['variant'] != null) {
-                            $product_name_with_choice = $product->getTranslation('name') . ' - ' . $cartItem['variant'];
+                        if ($cartItem['variation'] != null) {
+                            $product_name_with_choice = $product->getTranslation('name') . ' - ' . $cartItem['variation'];
                         }
 
 

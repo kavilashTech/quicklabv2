@@ -213,13 +213,15 @@
                             @php
                                 $product = \App\Models\Product::find($cartItem['product_id']);
                                 $product_stock = $product->stocks->where('variant', $cartItem['variation'])->first();
-                                $total = $total + cart_product_price($cartItem, $product, false) * $cartItem['quantity'];
+                                $product_price = discounted_cart_variant_price($cartItem['variation'],$product,false);
+                                //$total = $total + cart_product_price($cartItem, $product, false) * $cartItem['quantity'];
+                                $total = $total + ( $product_price - $cartItem['tax'] + $cartItem['tax']) * $cartItem['quantity'];
                                 $subTotal = $subTotal + $cartItem['price'] * $cartItem['quantity'];
                                 $product_name_with_choice = $product->getTranslation('name');
                                 if ($cartItem['variation'] != null) {
                                     $product_name_with_choice = $product->getTranslation('name') . ' - ' . $cartItem['variation'];
                                 }
-                                
+
                                 $CGST_total += $cartItem->tax1_amount * $cartItem['quantity'];
                                 $SGST_total += $cartItem->tax2_amount * $cartItem['quantity'];
                                 $IGST_total += $cartItem->tax * $cartItem['quantity'];
@@ -284,7 +286,7 @@
                                 @endif
                                 <td style="padding: 4px 8px;border-bottom: 1px solid;border-left: 1px solid; ">
                                     <p style="margin: 0;padding: 2px 0;text-align: right;">
-                                        {{ single_price($cartItem['price'] * $cartItem['quantity']) }} </p>
+                                        {{ single_price($priceWithoutTax * $cartItem['quantity']) }} </p>
                                 </td>
                             </tr>
                         @endforeach

@@ -42,7 +42,18 @@
                                     </td>
                                     <td>{{ date('d-m-Y', $order->date) }}</td>
                                     <td>
-                                        {{ single_price($order->grand_total) }}
+                                        <?php
+                                    $result = roundPrice($order->grand_total);
+
+if($result){
+$grandTotal = round($order->grand_total);
+$roundingVal = $grandTotal - $order->grand_total;
+}else{
+$grandTotal = floor($order->grand_total);
+$roundingVal = $grandTotal - $order->grand_total;
+}
+$roundingFinalResult = number_format($roundingVal, 2);?>
+                                        {{ single_price($order->grand_total + $roundingFinalResult) }}
                                     </td>
                                     <td>
                                         {{ translate(ucfirst(str_replace('_', ' ', $order->delivery_status))) }}
