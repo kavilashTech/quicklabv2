@@ -18,7 +18,7 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.SSH_HOST }} > ~/.ssh/known_hosts
       - name: connect and pull
-        run: ssh kavilashtech@18.60.207.218 "cd /var/www/quicklabsv2 && git checkout staging && git pull && exit"
+        run: ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd ${{ secrets.WORK_DIR }} && git checkout ${{ secrets.STAGING_BRANCH }} && git pull && exit"
 
       - name: cleanup
         run: rm -rf ~/.ssh
