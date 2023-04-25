@@ -462,8 +462,12 @@ class CheckoutController extends Controller
                         $rate = (!empty($value['rate']) && $loggedCountryId == 101) ? $value['rate'] : $value['rate']['rate'];
                         $data['data'][$key]['estimated_delivery_date'] = $value['etd'];
                         $data['data'][$key]['courier_name'] = $value['courier_name'];
-                        $usdConvertPrice = exchangeRateApi($rate);
-                        $data['data'][$key]['rate'] = !empty($usdConvertPrice) ? $usdConvertPrice : $rate;
+                        if($loggedCountryId != 101){
+                            $usdConvertPrice = exchangeRateApi($rate);
+                            $data['data'][$key]['rate'] = !empty($usdConvertPrice) ? $usdConvertPrice : $rate;
+                        }else{
+                            $data['data'][$key]['rate'] = $rate;
+                        }
                         $data['data'][$key]['freight_charge'] = $value['freight_charge'] ?? "";
                     }
                     $data['status']="success";
@@ -506,8 +510,6 @@ class CheckoutController extends Controller
                     'weight' => ($prodTotalWeight > 0) ? $prodTotalWeight : 1,
                     'cod' =>  ($loggedCountryId == 101) ? '1' : '0',  //Todo - To check in future
                     'delivery_country' => $country->code,
-
-
                 ]);
 
                 $result = json_decode($response,true);
@@ -518,8 +520,12 @@ class CheckoutController extends Controller
                         $rate = (!empty($value['rate']) && $loggedCountryId == 101) ? $value['rate'] : $value['rate']['rate'];
                         $data['data'][$key]['estimated_delivery_date'] = $value['etd'];
                         $data['data'][$key]['courier_name'] = $value['courier_name'];
-                        $usdConvertPrice = exchangeRateApi($rate);
-                        $data['data'][$key]['rate'] = !empty($usdConvertPrice) ? $usdConvertPrice : $rate;
+                        if($loggedCountryId != 101){
+                            $usdConvertPrice = exchangeRateApi($rate);
+                            $data['data'][$key]['rate'] = !empty($usdConvertPrice) ? $usdConvertPrice : $rate;
+                        }else{
+                            $data['data'][$key]['rate'] = $rate;
+                        }
                         $data['data'][$key]['freight_charge'] = $value['freight_charge'] ?? "";
                     }
                     $data['status']="success";
@@ -710,8 +716,12 @@ class CheckoutController extends Controller
 
                     $rate = (!empty($courier[0]['rate']) && $loggedCountryId == 101) ? $courier[0]['rate'] : $courier[0]['rate']['rate'];
                     $data['courier_name'] = $courier[0]['courier_name'];
-                    $usdConvertPrice = exchangeRateApi($rate);
-                    $data['rate'] = !empty($usdConvertPrice) ? $usdConvertPrice : $rate;
+                    if($loggedCountryId != 101){
+                        $usdConvertPrice = exchangeRateApi($rate);
+                        $data['rate'] = !empty($usdConvertPrice) ? $usdConvertPrice : $rate;
+                    }else{
+                        $data['rate'] = $rate;
+                    }
                     $data['status']="success";
                 }else{
                     $data['status'] = "failure";
