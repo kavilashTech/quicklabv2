@@ -444,16 +444,27 @@ class CheckoutController extends Controller
                     $data['status'] = "postcode_empty";
                     echo json_encode($data);
                 }*/
-                $response = Http::withToken($result['token'])->get($apiUrl,[
-                    'pickup_postcode' => ($loggedCountryId == 101) ? $pickupPostcode : "",
-                    'delivery_postcode' => ($loggedCountryId == 101) ? $deliveryPostcode : "",
-                    'weight' => ($prodTotalWeight > 0) ? $prodTotalWeight : 1,
-                    'cod' =>  ($loggedCountryId == 101) ? '1' : '0',  //Todo - To check in future
-                    'delivery_country' => ($loggedCountryId != 101) ? $country->code : "",
-                    'breadth' => $productBreadth ?? "",
-                    'height' => $productHeight ?? "",
-                    'length' => $productWidth ?? "",
-                ]);
+                if($loggedCountryId == 101){
+                    $response = Http::withToken($result['token'])->get($apiUrl,[
+                        'pickup_postcode' => ($loggedCountryId == 101) ? $pickupPostcode : "",
+                        'delivery_postcode' => ($loggedCountryId == 101) ? $deliveryPostcode : "",
+                        'weight' => ($prodTotalWeight > 0) ? $prodTotalWeight : 1,
+                        'cod' =>  ($loggedCountryId == 101) ? '1' : '0',  //Todo - To check in future
+                        'delivery_country' => ($loggedCountryId != 101) ? $country->code : $country->code,
+                        'breadth' => $productBreadth ?? "",
+                        'height' => $productHeight ?? "",
+                        'length' => $productWidth ?? "",
+                    ]);
+                }
+                else{
+                    $response = Http::withToken($result['token'])->get($apiUrl,[
+
+                        'weight' => ($prodTotalWeight > 0) ? $prodTotalWeight : 1,
+                        'cod' =>  ($loggedCountryId == 101) ? '1' : '0',  //Todo - To check in future
+                        'delivery_country' => $country->code,
+                    ]);
+                }
+
 
                 $result = json_decode($response,true);
                 $data = [];
@@ -487,6 +498,7 @@ class CheckoutController extends Controller
         //Get Auth token
         $result = $this->shiprocketAuthToken();
 
+
         if(!empty($result) && !empty($result['token'])){
 
             $productWidth = $request->productWidth;
@@ -495,9 +507,12 @@ class CheckoutController extends Controller
 
             $loggedCountryId = Auth::user()->country;
 
+
+
             if(!empty($loggedCountryId)){
 
                 $country = Country::where('id', $loggedCountryId)->first();
+
 
                 $apiUrl = ($loggedCountryId == 101) ? 'https://apiv2.shiprocket.in/v1/external/courier/serviceability' : 'https://apiv2.shiprocket.in/v1/external/international/courier/serviceability';  // 101 - india country id
 
@@ -511,6 +526,8 @@ class CheckoutController extends Controller
                     'cod' =>  ($loggedCountryId == 101) ? '1' : '0',  //Todo - To check in future
                     'delivery_country' => $country->code,
                 ]);
+
+                //dd($response);
 
                 $result = json_decode($response,true);
                 //dd($result);
@@ -696,19 +713,32 @@ class CheckoutController extends Controller
                 $country = Country::where('id', $loggedCountryId)->first();
 
                 $apiUrl = ($loggedCountryId == 101) ? 'https://apiv2.shiprocket.in/v1/external/courier/serviceability' : 'https://apiv2.shiprocket.in/v1/external/courier/international/serviceability';  // 101 - india country id
-
+                if($loggedCountryId == 101){
                 $response = Http::withToken($result['token'])->get($apiUrl,[
                     'pickup_postcode' => ($loggedCountryId == 101) ? $pickupPostcode : "",
-                    'delivery_postcode' => ($loggedCountryId == 101) ? $deliveryPostcode : "",
+                    //'delivery_postcode' => ($loggedCountryId == 101) ? $deliveryPostcode : "",
                     'weight' => ($prodDimensionDetails['totalWeight'] > 0) ? $prodDimensionDetails['totalWeight'] : 1,
                     'cod' =>  ($loggedCountryId == 101) ? '1' : '0',  //Todo - To check in future
-                    'delivery_country' => ($loggedCountryId != 101) ? $country->code : "",
+                    'delivery_country' => ($loggedCountryId != 101) ? $country->code : $country->code,
                     'breadth' => $prodDimensionDetails['productTotalBreadth'] ?? "",
                     'height' => $prodDimensionDetails['productTotalHeight'] ?? "",
                     'length' => $prodDimensionDetails['productTotalWidth'] ?? ""
                 ]);
+            }
+
+
+                else{
+                    $response = Http::withToken($result['token'])->get($apiUrl,[
+
+                        'weight' =>  ($prodDimensionDetails['totalWeight'] > 0) ? $prodDimensionDetails['totalWeight'] : 1,
+                        'cod' =>  ($loggedCountryId == 101) ? '1' : '0',  //Todo - To check in future
+                        'delivery_country' => $country->code,
+                    ]);
+                }
+
 
                 $result = json_decode($response,true);
+                //dd($result);
                 $data = [];
                 if(!empty($result) && !empty($result['data']['available_courier_companies'])){
 
