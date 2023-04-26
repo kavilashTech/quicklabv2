@@ -13,7 +13,7 @@
             Thank you for submitting your enquiry to our team. We have received your message and will respond as soon as possible.  We look forward to connecting with you soon. 
         <br>
             Best regards
-            Stay Teller
+            Quicklab
     </p>
 </body>
 </html>
