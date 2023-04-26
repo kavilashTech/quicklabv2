@@ -53,6 +53,7 @@ class GenerateQuoteController extends Controller
      */
     public function store(Request $request)
     {
+
         $product = Product::find($request->id);
         $carts = array();
         $data = array();
@@ -160,7 +161,11 @@ class GenerateQuoteController extends Controller
             }
 
             foreach ($product->taxes as $product_tax) {
-                $tax_name = Tax::where('id',$product_tax->tax_id)->first();
+                if (Session::get('currency_code') == 'USD') {
+                $tax_name = Tax::where('id',$product_tax->tax_id)->where('name','IGST')->first();
+                }else{
+                    $tax_name = Tax::where('id',$product_tax->tax_id)->where('name','GST')->first();
+                }
 
                 $pproduct_tax = $product_tax->tax;
                 $cut_pr = round($price * $pproduct_tax / (100 + $pproduct_tax),2);
