@@ -1350,7 +1350,7 @@ if (!function_exists('uploaded_asset')) {
     function uploaded_asset($id)
     {
         if (($asset = \App\Models\Upload::find($id)) != null) {
-            return $asset->external_link == null ? my_asset($asset->file_name) : $asset->external_link;
+            return $asset->external_link == null ? url($asset->file_name) : $asset->external_link;
         }
         return static_asset('../assets/img/placeholder.jpg');
     }
@@ -1842,7 +1842,7 @@ if (!function_exists('checkAuthUserAddress')) {
                 if($currency->code == 'INR'){
                     $userWithinTamilnadu = 1;
                 }else{
-                    $userWithinTamilnadu = 0;
+                    $userWithinTamilnadu = 2;
                 }
 
             }
@@ -1915,7 +1915,7 @@ if (!function_exists('updateQuotationEstimateNumber')) {
 	}
 }
 
-// Currency exchange rate api 
+// Currency exchange rate api
 if (!function_exists('exchangeRateApi')) {
 	function exchangeRateApi($rate)
 	{
