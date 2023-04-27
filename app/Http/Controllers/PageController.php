@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Page;
 use App\Models\PageTranslation;
 use App\Models\Enquiry;
+use App\Models\User;
 use Mail;
 
 
@@ -192,12 +193,17 @@ class PageController extends Controller
 
         try{
             Enquiry::create($validated);
-            // Mail::send('mailTemplate.enquiry',['name'=>$validated['first_name'].$validated['last_name']], function($message) use ($validated)
-            // {
-            //   $message->from(env('MAIL_FROM_ADDRESS'));
-            //   $message->to($validated['email']);
-            //   $message->subject($validated['message']);
-            // });
+
+            //To get all admin user emails
+            $adminUsers = User::where("user_type", 'admin')->get();
+            $adminEmails = $adminUsers->pluck('email')->all();
+
+            Mail::send('frontend.mailTemplate.enquiry',['name'=>$validated['first_name'].$validated['last_name']], function($message) use ($validated,$adminEmails)
+            {
+              $message->from(env('MAIL_FROM_ADDRESS'));
+              $message->to($adminEmails);   //Mail send to all admin users 
+              $message->subject($validated['message']);
+            });
           
             return redirect()->back()->withSuccess('Your enquire has been send to admin. We will contact you shortly!');
         }catch (\Exception $e){
