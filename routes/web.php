@@ -470,3 +470,5 @@ Route::controller(GenerateQuoteController::class)->group(function () {
 
 Route::get('/return-product/{id}', [PurchaseHistoryController::class, 'returnOrder'])->name('return-product');
 Route::post('/return', [PurchaseHistoryController::class, 'return'])->name('return');
+
+Route::get('/re-order/{id}', [PurchaseHistoryController::class, 'reOrder'])->name('reorder-product');

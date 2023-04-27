@@ -4,13 +4,16 @@ namespace App\Http\Controllers;
 
 use DB;
 use Auth;
+use App\Models\Tax;
+use App\Models\Cart;
 use App\Models\User;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\OrderDetail;
-use App\Notifications\returnNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Session;
+use App\Notifications\returnNotification;
 
 class PurchaseHistoryController extends Controller
 {
@@ -275,5 +278,122 @@ class PurchaseHistoryController extends Controller
 
 		//dd($order);
 		return redirect('/purchase_history')->with('message-sucess', "Your Return Request is Process.");
+	}
+
+	public function reOrder($id)
+	{
+		$order_details = OrderDetail::find($id);
+		$carts = Cart::where('user_id', Auth::id())->get();
+		//dd($order_details);
+		$product_id =  $order_details->product_id;
+		$product = Product::where('id', $product_id)->get();
+		$insertcart = array();
+		$insertcart['user_id'] = Auth::id();
+		$insertcart['owner_id'] = $product[0]->user_id;
+		$insertcart['product_id'] = $product_id;
+		$insertcart['price'] = $order_details->price;
+		$insertcart['variation'] = $order_details->variation;
+		//dd($product);
+		$product_stock = $product[0]->stocks->where('variant', $insertcart['variation'])->first();
+		if (Session::get('currency_code') == 'USD') {
+
+			$price = $product_stock->usd_price;
+		} else {
+			$price = $product_stock->price;
+		}
+		$quantity = $product_stock->qty;
+		if ($quantity < $order_details->quantity) {
+			return array(
+				'status' => 0,
+				'cart_count' => count($carts),
+				'modal_view' => view('frontend.partials.outOfStockCart')->render(),
+				'nav_cart_view' => view('frontend.partials.cart')->render(),
+			);
+		}
+		$discount_applicable = false;
+		// dd($product[0]->discount_start_date);
+		if ($product[0]->discount_start_date == null) {
+			$discount_applicable = true;
+		} elseif (
+			strtotime(date('d-m-Y H:i:s')) >= $product->discount_start_date &&
+			strtotime(date('d-m-Y H:i:s')) <= $product->discount_end_date
+		) {
+			$discount_applicable = true;
+		}
+
+		if ($discount_applicable) {
+			if ($product[0]->discount_type == 'percent') {
+				$price -= ($price * $product[0]->discount) / 100;
+			} elseif ($product[0]->discount_type == 'amount') {
+				$price -= $product[0]->discount;
+			}
+		}
+		$insertcart['price'] = $price;
+		$insertcart['tax1'] =  0.00;
+		$insertcart['tax1_amount'] =  0.00;
+		$insertcart['tax2'] = 0.00;
+		$insertcart['tax2_amount'] =  0.00;
+		$insertcart['quantity'] = $order_details->quantity;
+
+		$pproduct_tax = 0;
+
+		$checkUserAddress = checkAuthUserAddress();
+
+
+		foreach ($product[0]->taxes as $product_tax) {
+			if (Session::get('currency_code') == 'USD') {
+
+
+				$tax_name = Tax::where('id', $product_tax->tax_id)->where('name', 'IGST')->first();
+			} else {
+				$tax_name = Tax::where('id', $product_tax->tax_id)->where('name', 'GST')->first();
+			}
+
+
+
+			$pproduct_tax = $product_tax->tax;
+			$cut_pr = round($price * $pproduct_tax / (100 + $pproduct_tax), 2);
+			$tax = 0;
+			if ($product_tax->tax_type == 'percent') {
+				$tax += ($price * $product_tax->tax) / 100;
+			}
+			/* elseif($product_tax->tax_type == 'amount'){
+                    $tax += $product_tax->tax;
+                }*/
+
+
+			if (!empty($tax_name) && $tax_name->name == 'GST') {
+				$insertcart['tax'] = $cut_pr;
+				$insertcart['tax_percentage'] =  $product_tax->tax;
+			}
+			if (!empty($tax_name) && $tax_name->name == 'IGST') {
+				$insertcart['tax'] = $cut_pr;
+				$insertcart['tax_percentage'] =  $product_tax->tax;
+			}
+
+			$splitTax = $product_tax->tax / 2;
+			if (!empty($tax_name) && $tax_name->name == 'GST') {
+				$insertcart['tax1'] =  $splitTax;
+				$insertcart['tax1_amount'] = (($cut_pr) / 2);
+
+				$insertcart['tax2'] =  $splitTax;
+				$insertcart['tax2_amount'] = (($cut_pr) / 2);
+			}
+
+			if (!empty($tax_name) && $tax_name->name == 'IGST') {
+				$insertcart['tax1'] =  $splitTax;
+				$insertcart['tax1_amount'] = (($cut_pr));
+
+				$insertcart['tax2'] =  $splitTax;
+				$insertcart['tax2_amount'] = (($cut_pr));
+			}
+		}
+		$insertcart['shipping_cost'] = 0;
+		$insertcart['cash_on_delivery'] = $product[0]->cash_on_delivery;
+		$insertcart['digital'] = $product[0]->digital;
+		// dd($insertcart);
+		Cart::create($insertcart);
+
+		return back()->with('message-success', 'Item added to the cart Successfully!');
 	}
 }
