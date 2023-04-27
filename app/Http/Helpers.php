@@ -1352,7 +1352,7 @@ if (!function_exists('uploaded_asset')) {
         if (($asset = \App\Models\Upload::find($id)) != null) {
             return $asset->external_link == null ? url($asset->file_name) : $asset->external_link;
         }
-        return static_asset('../assets/img/placeholder.jpg');
+        return static_asset('assets/img/placeholder.jpg');
     }
 }
 
