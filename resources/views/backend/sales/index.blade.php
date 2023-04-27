@@ -86,7 +86,7 @@
                             <th>{{ translate('Order Code') }}</th>
                             <th data-breakpoints="md">{{ translate('Num. of Products') }}</th>
                             <th data-breakpoints="md">{{ translate('Customer') }}</th>
-                            <th data-breakpoints="md">{{ translate('Seller') }}</th>
+                            {{-- <th data-breakpoints="md">{{ translate('Seller') }}</th> --}}
                             <th data-breakpoints="md">{{ translate('Amount') }}</th>
                             <th data-breakpoints="md">{{ translate('Delivery Status') }}</th>
                             <th data-breakpoints="md">{{ translate('Payment method') }}</th>
@@ -126,6 +126,7 @@
                                         Guest ({{ $order->guest_id }})
                                     @endif
                                 </td>
+                                {{--
                                 <td>
                                     @if ($order->shop)
                                         {{ $order->shop->name }}
@@ -133,6 +134,7 @@
                                         {{ translate('Inhouse Order') }}
                                     @endif
                                 </td>
+                                --}}
                                 <td>
                                     {{ single_price($order->grand_total) }}
                                 </td>
