@@ -93,13 +93,14 @@
                     </div>
                 @endif
             </div>
-            <div class="mb-3">
+          {{--  <div class="mb-3">
                 @php
                     $removedXML = '<?xml version="1.0" encoding="UTF-8"?>';
                 @endphp
                 {!! str_replace($removedXML, '', QrCode::size(100)->generate($order->code)) !!}
             </div>
-            <div class="row gutters-5">
+            --}}
+            <div class="row gutters-5 mt-5">
                 <div class="col text-md-left text-center">
                     @if(json_decode($order->shipping_address))
                         <address>
@@ -189,7 +190,9 @@
                                 <th data-breakpoints="lg" class="min-col">#</th>
                                 <th width="10%">{{ translate('Photo') }}</th>
                                 <th class="text-uppercase">{{ translate('Description') }}</th>
+                                {{--
                                 <th data-breakpoints="lg" class="text-uppercase">{{ translate('Delivery Type') }}</th>
+                                --}}
                                 <th data-breakpoints="lg" class="min-col text-uppercase text-center">
                                     {{ translate('Qty') }}
                                 </th>
@@ -245,6 +248,7 @@
                                             <strong>{{ translate('Product Unavailable') }}</strong>
                                         @endif
                                     </td>
+                                    {{--
                                     <td>
                                         @if ($order->shipping_type != null && $order->shipping_type == 'home_delivery')
                                             {{ translate('Home Delivery') }}
@@ -265,6 +269,7 @@
                                             @endif
                                         @endif
                                     </td>
+                                    --}}
                                     <td class="text-center">
                                         {{ $orderDetail->quantity }}
                                     </td>
@@ -307,6 +312,7 @@
                                 {{ single_price($order->orderDetails->sum('shipping_cost')) }}
                             </td>
                         </tr>
+                        {{--
                         <tr>
                             <td>
                                 <strong class="text-muted">{{ translate('Coupon') }} :</strong>
@@ -315,6 +321,7 @@
                                 {{ single_price($order->coupon_discount) }}
                             </td>
                         </tr>
+                        --}}
                         <tr>
                             <td>
                                 <strong class="text-muted">{{ translate('TOTAL') }} :</strong>
