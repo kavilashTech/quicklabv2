@@ -845,6 +845,7 @@
                         shipDefaultCost: shipDefaultCost,
                         shipCost: shipCost,
                         courierName: courierName,
+
                     },
                     success: function(data) {
                         var response = JSON.parse(data);
@@ -853,6 +854,8 @@
                             $("#shipping_charge").html(response.shippingCost);
                             $("#shipping_courier_cost").val(shipCost);
                             $("#shipping_courier_name").val(courierName);
+                            $("#rounding_charge").html(response.roundingCost);
+
                         }
                     }
                 });

@@ -218,10 +218,12 @@ if(Session::get('currency_code') == 'INR'){
         $total -= $coupon_discount;
     }
     $result = roundPrice($total);
+
             if ($result) {
                 $grandTotal = round($total);
                 $roundingVal = $grandTotal - $total;
             } else {
+
                 $grandTotal = floor($total);
                 $roundingVal = $grandTotal - $total;
             }
@@ -257,7 +259,7 @@ if(Session::get('currency_code') == 'INR'){
                 <tr class="cart-shipping">
                     <th>{{ translate('Rounding') }}</th>
                     <td class="text-right">
-                        <span class="font-italic">{{ single_price($roundingFinalResult) }}</span>
+                        <span class="font-italic" id="rounding_charge">{{ single_price($roundingFinalResult) }}</span>
                     </td>
                 </tr>
                 @if (!empty(Auth::user()->country) && Auth::user()->country == 101)

@@ -203,7 +203,8 @@
                                         @elseif($orderDetail->delivery_status == 'Rejected')
                                             <span
                                                 class="badge badge-inline badge-danger">{{ translate('Rejected') }}</span>
-                                        @elseif (in_array($orderDetail->product_id, $array, true) && $orderDetail->delivery_status == 'delivered')
+                                        {{-- @elseif (in_array($orderDetail->product_id, $array, true) && $orderDetail->delivery_status == 'delivered') --}}
+                                        @elseif ( $orderDetail->delivery_status == 'delivered')
                                             <a class="btn btn-primary"
                                                 href="{{ route('return-product', ['id' => $orderDetail->id]) }}"
                                                 style="padding: 3px;font-size:13px;">{{ translate('Return') }}

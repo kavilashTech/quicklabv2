@@ -566,14 +566,30 @@ class CheckoutController extends Controller
 
         $withoutShipCostTotal = $grandTotal - $shipDefaultCost;
 
+
+
+
+
         $total = $withoutShipCostTotal + $shipCost;
         $grandTotal = single_price($total);
         $shippingCost = single_price($shipCost);
+
+        $result = roundPrice($total);
+
+        if($result){
+        $grandTotal = round($total);
+        $roundingVal = $grandTotal - $total;
+        }else{
+        $grandTotal = floor($total);
+        $roundingVal = $grandTotal - $total;
+        }
+        $roundingFinalResult = number_format($roundingVal, 2);
 
 
         $data['status'] = "success";
         $data['grandTotal'] = $grandTotal;
         $data['shippingCost'] = $shippingCost;
+        $data['roundingCost'] = $roundingFinalResult;
 
         echo json_encode($data);
     }
