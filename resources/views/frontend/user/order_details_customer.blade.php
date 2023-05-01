@@ -1,6 +1,13 @@
 @extends('frontend.layouts.user_panel')
 
 @section('panel_content')
+    <div>
+        @if (Session::has('message-success'))
+            <p class="alert {{ Session::get('alert-class', 'alert-success') }}">
+                {{ Session::get('message-success') }}
+            </p>
+        @endif
+    </div>
     <div class="aiz-titlebar mt-2 mb-4">
         <div class="row align-items-center">
             <div class="col-md-6">
@@ -105,7 +112,9 @@
                                     <th data-breakpoints="md">{{ translate('Refund') }}</th>
                                 @endif
                                 <th data-breakpoints="md" class="text-right">{{ translate('Status') }}</th>
-                                <th data-breakpoints="md" class="text-right">{{ translate('Return') }}</th>
+                                {{-- <th data-breakpoints="md" class="text-right">{{ translate('Return') }}</th>
+                                <th data-breakpoints="md" class="text-right">{{ translate('Re Order') }}</th> --}}
+                                <th data-breakpoints="md" class="ext-center">{{ translate('Actions') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -184,7 +193,7 @@
                                     <td class="text-right">
 
                                         @if ($orderDetail->delivery_status == 'delivered')
-                                            <a href="javascript:void(0);"
+                                            <a href="javascript:void(0);" style="padding: 3px;font-size:13px;"
                                                 onclick="product_review('{{ $orderDetail->product_id }}')"
                                                 class="btn btn-primary btn-sm"> {{ translate('Review') }} </a>
                                         @else
@@ -193,6 +202,7 @@
                                     </td>
                                     {{-- {{ dd(in_array($orderDetail->product_id, $array, true) && $orderDetail->delivery_status == 'delivered') }} --}}
                                     <td>
+
 
                                         @if ($orderDetail->delivery_status == 'Pending Approval')
                                             <span
@@ -214,8 +224,8 @@
                                         @else
                                             {{ translate('Not Returnable') }}
                                         @endif
-                                    </td>
-                                    {{-- @if ($orderDetail->delivery_status == 'Pending Approval')
+
+                                        {{-- @if ($orderDetail->delivery_status == 'Pending Approval')
                                         <td>
                                             <span
                                                 class="badge badge-inline badge-warning">{{ translate('Pending') }}</span>
@@ -241,6 +251,11 @@
                                             {{ translate('Not Returnable') }}
                                         </td>
                                     @endif --}}
+
+                                        <a class="btn btn-primary"
+                                            href="{{ route('reorder-product', ['id' => $orderDetail->id]) }}"
+                                            style="padding: 3px;font-size:13px;">{{ translate('Re Order') }}
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -297,12 +312,12 @@
                             </tr>
 
                             <!-- <tr>
-                                                                                                                                                            <td class="w-50 fw-600">{{ translate('Tax') }}</td>
-                                                                                                                                                            <td class="text-right">
-                                                                                                                                                                <span
-                                                                                                                                                                    class="text-italic">{{ single_price($order->orderDetails->sum('tax')) }}</span>
-                                                                                                                                                            </td>
-                                                                                                                                                        </tr> -->
+                                                                                                                                                                                                                                                                        <td class="w-50 fw-600">{{ translate('Tax') }}</td>
+                                                                                                                                                                                                                                                                        <td class="text-right">
+                                                                                                                                                                                                                                                                            <span
+                                                                                                                                                                                                                                                                                class="text-italic">{{ single_price($order->orderDetails->sum('tax')) }}</span>
+                                                                                                                                                                                                                                                                        </td>
+                                                                                                                                                                                                                                                                    </tr> -->
                             {{--  <tr>
                                 <td class="w-50 fw-600">{{ translate('Coupon') }}</td>
                                 <td class="text-right">
